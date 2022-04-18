@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  Please see the license.html file included with this distribution for 
+  attribution and copyright information.
+-->
+
+<root>
+	<string name="charselect_button_warningfix">FIX</string>
+	<string name="charwizard_label_senses">SENSES</string>
+	<string name="charwizard_label_feats">FEAT CHOICES AVAILABLE</string>
+	
+	<!--string name="charwizard_tooltip_raceability_default">Use default racial modifiers or Tasha's option for one ability score of your choice increases by 2, and one other ability score of your choice increases by 1.</string>
+	<string name="charwizard_tooltip_raceability_option1">One ability score of your choice increases by 2, and one other ability score of your choice increases by 1.</string>
+	<string name="charwizard_tooltip_raceability_option2">Increase three different ability scores by 1.</string-->
+	<string name="charwizard_tooltip_raceability_choice1">One ability score of your choice increases by 2, and one other ability score of your choice increases by 1.</string>
+	<string name="charwizard_tooltip_raceability_choice2">Increase three different ability scores by 1.</string>
+	<string name="charwizard_message_abilities">Ability score '%s %d' set for '%s'.</string>
+
+	<!-- Character Wizard -->
+	<string name="charselect_button_wizard">Character Wizard</string>
+	<string name="charwizard_tooltip_commit">Save Character and Close</string>
+	<string name="charwizard_commit">COMMIT</string>
+	<string name="charwizard_racecheck_label">RACE</string>
+	<string name="charwizard_statscheck_label">STATS</string>
+	<string name="charwizard_abilitycheck_label">ABILITY SCORES</string>
+	<string name="charwizard_backgroundcheck_label">BKGD</string>
+	<string name="charwizard_classcheck_label">CLASS</string>
+	<string name="charwizard_domain_label">DOMAIN:</string>
+	<string name="charwizard_origin_label">ORIGIN:</string>
+	<string name="charwizard_patron_label">PATRON:</string>
+	<string name="charwizard_circle_label">CIRCLE:</string>
+	<string name="charwizard_trad_label">TRADITION:</string>
+	<string name="charwizard_arch_label">ARCHETYPE:</string>
+	<string name="charwizard_path_label">PATH:</string>
+	<string name="charwizard_college_label">COLLEGE:</string>
+	<string name="charwizard_monk_label">TRADITION:</string>
+	<string name="charwizard_oath_label">OATH:</string>
+	<string name="charwizard_ranger_label">ARCHETYPE:</string>
+	<string name="charwizard_rogue_label">ARCHETYPE:</string>
+	<string name="charwizard_invcheck_label">INV</string>
+	<string name="charwizard_spellcheck_label">SPELLS</string>
+	<string name="charwizard_featcheck_label">FEATS</string>
+	<string name="char_abilities_label_skills">SKILLS</string>
+	<string name="char_abilities_label_traits">TRAITS</string>
+	<string name="charwizard_label_speedspecial">SPECIAL MOVE</string>
+	<string name="charwizard_options">OPTIONS</string>
+	<string name="charwizard_racecheck_tooltip">Race Has Not Been Selected</string>
+	<string name="charwizard_racecheckfail_tooltip">Race Has Not Been Selected</string>
+	<string name="charwizard_racecheckpass_tooltip">Race Has Been Selected</string>
+	<string name="charwizard_abilitycheckfail_tooltip">Ability Scores Have Not Been Generated</string>
+	<string name="charwizard_abilitycheckpass_tooltip">Ability Scores Have Been Generated</string>
+	<string name="charwizard_backgroundcheckfail_tooltip">Background Has Not Been Selected</string>
+	<string name="charwizard_backgroundcheckpass_tooltip">Background Has Been Selected</string>
+	<string name="charwizard_classfail_tooltip">Class Has Not Been Selected</string>
+	<string name="charwizard_classpass_tooltip">Class Has Been Selected</string>
+	<string name="charwizard_tooltip_next">Next Page</string>
+	<string name="charwizard_nextpage">NEXT</string>
+	<string name="charwizard_tooltip_back">Previous Page</string>
+	<string name="charwizard_prevpage">BACK</string>
+	<string name="alert_pointbuy_low">STATS:POINTS UNSPENT</string>
+	<string name="alert_pointbuy_high">STATS:POINTS OVERSPENT</string>
+	<string name="error_missing_data">Could not find record for:</string>
+
+	<!-- Character Wizard - Races -->
+	<string name="charwizard_races_title">SELECT RACE</string>
+	<string name="charwizard_subraces_title">SELECT SUBRACE</string>
+	<string name="charwizard_label_races">SELECT A RACE AND SUBRACE</string>
+	<string name="charwizard_races_optionsremain">Select Options</string>
+	<string name="charwizard_races_optionscomplete">Option Selection Complete</string>
+	<string name="char_races_tooltip_edit">Edit Races</string>
+	<string name="char_subraces_windowlist_empty">Subraces will appear here when race is selected.</string>
+
+	<!-- Character Wizard - Stats -->
+	<string name="charwizard_stats_title">GENERATE STATS</string>
+	<string name="charwizard_label_stats">SELECT A METHOD FOR DETERMINING ABILITY SCORES</string>
+	<string name="charwizard_label_benefits">ABILITY SCORE BENEFITS</string>
+	<string name="char_stats_tooltip_edit">Edit Stats</string>
+	<string name="charwizard_manual">MANUAL ENTRY</string>
+	<string name="charwizard_statup_tooltip">Increase this Ability Score</string>
+	<string name="charwizard_statdown_tooltip">Decrease this Ability Score</string>
+	<string name="charwizard_dice">Dice</string>
+	<string name="charwizard_drop">Drop</string>
+	<string name="charwizard_reroll">Reroll</string>
+	<string name="charwizard_buytotal">Point Buy Total</string>
+	<string name="charwizard_raceadj_label">RACIAL ADJUSTMENT</string>
+	<string name="charwizard_abilityimp_label">ABILITY SCORE IMPROVEMENTS</string>
+	<string name="stats_improvement_notice">Character may select Ability Score Improvements at 4th level and higher.</string>
+
+	<!-- Character Wizard - Background and Class -->
+	<string name="charwizard_label_class">SELECT A CLASS AND CLASS FEATURES</string>
+	<string name="charwizard_label_background">SELECT A BACKGROUND AND BACKGROUND FEATURES</string>
+	<string name="charwizard_class_title">SELECT CLASS</string>
+	<string name="charwizard_class_level">LEVEL</string>
+
+	<!-- Character Wizard - Inventory -->
+	<string name="charwizard_label_items">INVENTORY SELECTION</string>
+	<string name="charwizard_itemlist_title">ITEMS LIST</string>
+	<string name="charwizard_inventory_title">INVENTORY</string>
+	<string name="button_kit_text">STARTING EQUIPMENT</string>
+	<string name="button_inventory_text">PURCHASE EQUIPMENT</string>
+	<string name="button_resetinventory_text">RESET EQUIPMENT</string>
+	<string name="charwizard_itemlistfilter_title">FILTER ITEM NAME BY:</string>
+	<string name="button_gear_text">GEAR</string>
+	<string name="button_weapon_text">WEAPONS</string>
+	<string name="button_armor_text">ARMOR</string>
+	<string name="emptyset">No records returned.</string>
+	<string name="emptyclass">No Class selected.</string>
+	<string name="emptybackground">No Background selected.</string>
+	<string name="charwizard_cost_title">TOTAL COST</string>
+	<string name="charwizard_cost_title_pp">PP:</string>
+	<string name="charwizard_cost_title_gp">GP:</string>
+	<string name="charwizard_cost_title_sp">SP:</string>
+	<string name="charwizard_cost_title_cp">CP:</string>
+	<string name="char_abilities_message_inventoryadd">Item '%s' added to '%s'.</string>
+
+	<!-- Character Wizard - Spells -->
+	<string name="charwizard_label_spells">SPELL SELECTION</string>
+	<string name="charwizard_spelllist_title">SPELL LIST</string>
+	<string name="charwizard_selectedspelllist_title">SELECTED</string>
+	<string name="no_spells_notice">No Spells Available</string>
+	<string name="no_class_notice">You Have No Spellcasting Classes</string>
+	<string name="spell_drag_notice">Drop Spells Here</string>
+	<string name="button_cantrip_text">CANTRIPS</string>
+	<string name="charwizard_cantrips_available">CANTRIPS AVAILABLE</string>
+	<string name="charwizard_spells_available">SPELLS</string>
+	<string name="charwizard_slots_available">SLOTS</string>
+	<string name="charwizard_cantrip_slots_available">C:</string>
+	<string name="charwizard_l1_slots_available">L1:</string>
+	<string name="charwizard_l2_slots_available">L2:</string>
+	<string name="charwizard_l3_slots_available">L3:</string>
+	<string name="charwizard_l4_slots_available">L4:</string>
+	<string name="charwizard_l5_slots_available">L5:</string>
+	<string name="charwizard_l6_slots_available">L6:</string>
+	<string name="charwizard_l7_slots_available">L7:</string>
+	<string name="charwizard_l8_slots_available">L8:</string>
+	<string name="charwizard_l9_slots_available">L9:</string>
+	<string name="charwizard_l1_pactslots_available">WL1:</string>
+	<string name="charwizard_l2_pactslots_available">WL2:</string>
+	<string name="charwizard_l3_pactslots_available">WL3:</string>
+	<string name="charwizard_l4_pactslots_available">WL4:</string>
+	<string name="charwizard_l5_pactslots_available">WL5:</string>
+	<string name="char_abilities_message_spelladd">Spell '%s' added to '%s'.</string>
+
+	<!-- Character Wizard - Feats -->
+	<string name="charwizard_featlist_title">FEAT LIST</string>
+	<string name="racial_feat_label">Select racial feat</string>
+	<string name="no_feats_notice">This Character does not have Feats available for selection.</string>
+	<string name="charwizard_tooltip_asi">Select One Ability for a +2, or Two Abilities each to gain a +1</string>
+	<string name="charwizard_tooltip_feat">Select a Feat</string>
+
+	<!-- Character Wizard - Summary -->
+	<string name="charwizard_label_statstotal">ABILITY SCORES - TOTAL</string>
+	<string name="charwizard_label_statsrace">ABILITY SCORES - RACE</string>
+	<string name="charwizard_specialization_label">SPECIALIZATION</string>
+	<string name="charwizard_label_summary">SUMMARY</string>
+
+	<!-- Character Wizard - Warnings -->
+	<string name="charwizard_tooltip_save">Save with Warnings</string>
+	<string name="charwizard_save">SAVE</string>
+	<string name="charwizard_tooltip_cancel">Cancel Save</string>
+	<string name="charwizard_cancel">CANCEL</string>
+	<string name="charwizard_label_warnings">WARNINGS</string>
+</root>

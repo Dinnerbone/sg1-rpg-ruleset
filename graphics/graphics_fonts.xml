@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  Please see the license.html file included with this distribution for 
+  attribution and copyright information.
+-->
+
+<root>
+	<!-- Windows -->
+	<font name="subwindowtitle">
+		<ttf file="graphics/fonts/Charlemagne Std Bold.ttf" name="Charlemagne Std Bold" size="18" />
+		<color value="DED1B1" />
+		<shadow offset="2,2" color="000000" />
+	</font>
+	<font name="subwindowsmalltitle">
+		<ttf file="graphics/fonts/Noto_Sans/NotoSans-Bold.ttf" name="Noto Sans Bold" size="16" />
+		<color value="FFF1CC" />
+		<shadow offset="1,1" color="000000" />
+	</font>
+	<font name="subwindowsmalltitle_disabled">
+		<ttf file="graphics/fonts/Noto_Sans/NotoSans-Bold.ttf" name="Noto Sans Bold" size="16" />
+		<color value="494340" />
+		<shadow offset="1,1" color="000000" />
+	</font>
+	
+	<!-- Misc -->
+	<font name="list-empty-ct">
+		<ttf file="graphics/fonts/Noto_Sans/NotoSans-Italic.ttf" name="Noto Sans Italic" size="16" />
+		<color value="#FFFFFF" />
+	</font>
+	<font name="list-empty-ps">
+		<ttf file="graphics/fonts/Noto_Sans/NotoSans-Italic.ttf" name="Noto Sans Italic" size="16" />
+		<color value="#000000" />
+	</font>
+	<font name="reference-title">
+		<ttf file="graphics/fonts/Noto_Sans/NotoSans-Bold.ttf" name="Noto Sans Bold" size="18" />
+		<color value="000000" />
+	</font>
+	<font name="reference-subtitle">
+		<ttf file="graphics/fonts/Noto_Sans/NotoSans-Bold.ttf" name="Noto Sans Bold" size="16" />
+		<color value="000000" />
+	</font>
+
+	<!-- Override CoreRPG ruleset graphics -->
+	<!-- Modifier Stack -->
+	<font name="modcollector">
+		<ttf file="graphics/fonts/Noto_Sans/NotoSans-Bold.ttf" name="Noto Sans Bold" size="24" />
+		<color value="DED1B1" />
+	</font>
+	<font name="modcollectorlabel">
+		<ttf file="graphics/fonts/Noto_Sans/NotoSans-Regular.ttf" name="Noto Sans" size="14" />
+		<color value="DED1B1" />
+	</font>
+		
+	<!-- Windows -->
+	<font name="windowtitle"> 
+		<ttf file="graphics/fonts/Charlemagne Std Bold.ttf" name="Charlemagne Std Bold" size="18" />
+		<color value="DED1B1" />
+		<shadow offset="2,2" color="000000" /> 
+	</font>
+	
+	<!-- Formatted text fields -->
+	<font name="reference-h">
+		<ttf file="graphics/fonts/Noto_Sans/NotoSans-Bold.ttf" name="Noto Sans Bold" size="24" />
+		<color value="660000" />
+	</font>
+	
+	<!-- Reference -->
+	<font name="reference-header">
+		<ttf file="graphics/fonts/Noto_Sans/NotoSans-Bold.ttf" name="Noto Sans Bold" size="16" />
+		<color value="FFFFFF" />
+	</font>
+	<font name="reference-groupdesc">
+		<ttf file="graphics/fonts/Noto_Sans/NotoSans-Bold.ttf" name="Noto Sans Bold" size="16" />
+		<color value="#000000" />
+	</font>
+
+	<!-- Utility Windows -->
+	<font name="sheetlabel_ct">
+		<ttf file="graphics/fonts/Noto_Sans/NotoSans-Bold.ttf" name="Noto Sans Bold" size="16" />
+		<color value="#F8F6EF" />
+	</font>
+	<font name="sheetlabel_ps">
+		<ttf file="graphics/fonts/Noto_Sans/NotoSans-Bold.ttf" name="Noto Sans Bold" size="16" />
+		<color value="#FFF1CC" />
+	</font>
+
+	<!-- Languages -->
+	<font name="Dwarven">
+		<ttf file="graphics/fonts/Dwarven.ttf" name="D&amp;D Dwarvish Bold" size="20" />
+		<color value="#000000" />
+	</font>
+	<font name="Elven">
+		<ttf file="graphics/fonts/Elven.ttf" name="D&amp;DElven" size="20" />
+		<color value="#000000" />
+	</font>
+	<font name="Infernal">
+		<ttf file="graphics/fonts/Infernal.ttf" name="D&amp;D Abyssal Barazhad" size="20" />
+		<color value="#000000" />
+	</font>
+	<font name="Celestial">
+		<ttf file="graphics/fonts/Celestial.ttf" name="Supernal" size="24" />
+		<color value="#000000" />
+	</font>
+	<font name="Draconic">
+		<ttf file="graphics/fonts/Draconic.ttf" name="Draconic 4" size="24" />
+		<color value="#000000" />
+	</font>
+	<font name="Primordial">
+		<ttf file="graphics/fonts/Primordial.ttf" name="Primordial" size="24" />
+		<color value="#000000" />
+	</font>
+</root>

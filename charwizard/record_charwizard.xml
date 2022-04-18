@@ -1,0 +1,3366 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+	Please see the license.html file included with this distribution for
+	attribution and copyright information.
+-->
+
+<root>
+	<windowclass name="charwizard">
+		<frame>charsheet</frame>
+		<placement>
+			<size width="1070" height="600" />
+		</placement>
+		<sizelimits>
+			<minimum width="1070" height="600" />
+			<dynamic />
+		</sizelimits>		
+		<nodelete />
+		<playercontrol />
+		<minimize>minimized_char</minimize>
+		<tooltip field="name" />
+		<script file="charwizard/scripts/charwizard.lua" />
+		<sheetdata>
+			<anchor_title_charsheet name="contentanchor" />
+
+			<button_charwizard_commit name="commit" >
+				<anchored to="contentanchor" position="belowright" offset="27,6" width="66" height="46" />
+			</button_charwizard_commit>
+
+			<label_charframetop name="nametitle">
+				<anchored to="contentanchor" height="20" width="210" >
+					<top anchor="bottom" offset="7" />
+					<left offset="80" />
+				</anchored>
+				<static textres="char_label_name" />
+			</label_charframetop>
+			<stringcu name="name">
+				<anchored to="nametitle" position="insidetop" offset="0,25" height="20" />
+				<script>
+					function onValueChanged()
+						window.summary.subwindow.summary_name.setValue(getValue());
+					end
+				</script>
+			</stringcu>
+
+			<button_charwizard_tab name="charwizard_statstab" >
+				<anchored to="contentanchor" position="belowright" offset="475,6" width="46" height="46" />
+				<state textres="charwizard_statscheck_label" />
+				<script>
+					function onButtonPress()
+						window.tabs.activateTab(1);
+
+						if window.genstats.subwindow and window.import == 0 then
+							local wndSummary = UtilityManager.getTopWindow(window);
+							window.genstats.subwindow.contents.subwindow.setupRacialBonuses(wndSummary);
+						end
+						window.updateAbilityAlerts();
+					end
+				</script>
+			</button_charwizard_tab>
+			<buttoncontrol name="ability_alert">
+				<anchored to="charwizard_statstab" position="insidebottomleft" offset="-5,-5" width="20" height="20" />
+				<icon normal="button_alert" />
+				<static textres="charwizard_abilitycheck_label" />
+			</buttoncontrol>
+			<buttoncontrol name="ability_GateCheck">
+				<anchored to="charwizard_statstab" position="insidebottomright" offset="-5,-5" width="20" height="20" />
+				<static textres="charwizard_statscheck_label" />
+				<state icon="button_dialog_cancel_down" tooltipres="charwizard_abilitycheckfail_tooltip" />
+				<state icon="button_dialog_ok_down" tooltipres="charwizard_abilitycheckpass_tooltip" />
+			</buttoncontrol>
+
+			<button_charwizard_tab name="charwizard_racetab" >
+				<anchored to="charwizard_statstab" width="46" height="46">
+					<top offset="0" />
+					<left anchor="right" relation="relative" offset="10" />
+				</anchored>
+				<state textres="charwizard_racecheck_label" />
+				<script>
+					function onButtonPress()
+						window.tabs.activateTab(2);
+
+						if window.genraces.subwindow then
+							CharWizardManager.getAlerts(window, window.genraces.subwindow.contents.subwindow.race_window);
+						end
+					end
+				</script>
+			</button_charwizard_tab>
+			<buttoncontrol name="race_alert">
+				<anchored to="charwizard_racetab" position="insidebottomleft" offset="-5,-5" width="20" height="20" />
+				<icon normal="button_alert" />
+				<static textres="charwizard_racecheck_label" />
+			</buttoncontrol>
+			<buttoncontrol name="race_GateCheck">
+				<anchored to="charwizard_racetab" position="insidebottomright" offset="-5,-5" width="20" height="20" />
+				<static textres="charwizard_racecheck_label" />
+				<state icon="button_dialog_cancel_down" tooltipres="charwizard_racecheckfail_tooltip" />
+				<state icon="button_dialog_ok_down" tooltipres="charwizard_racecheckpass_tooltip" />
+			</buttoncontrol>
+
+			<button_charwizard_tab name="charwizard_classtab" >
+				<anchored to="charwizard_statstab" width="46" height="46">
+					<top offset="0" />
+					<left anchor="right" relation="relative" offset="10" />
+				</anchored>
+				<state textres="charwizard_classcheck_label" />
+				<script>
+					function onButtonPress()
+						window.tabs.activateTab(3);
+
+						if window.genclass.subwindow then
+							CharWizardManager.getAlerts(window, window.genclass.subwindow.contents.subwindow.class_window)
+						end
+					end
+				</script>
+			</button_charwizard_tab>
+			<buttoncontrol name="class_GateCheck">
+				<anchored to="charwizard_classtab" position="insidebottomright" offset="-5,-5" width="20" height="20" />
+				<static textres="charwizard_classcheck_label" />
+				<state icon="button_dialog_cancel_down" tooltipres="charwizard_classfail_tooltip" />
+				<state icon="button_dialog_ok_down" tooltipres="charwizard_classpass_tooltip" />
+			</buttoncontrol>
+			<buttoncontrol name="class_alert">
+				<anchored to="charwizard_classtab" position="insidebottomleft" offset="-5,-5" width="20" height="20" />
+				<icon normal="button_alert" />
+				<static textres="charwizard_classcheck_label" />
+			</buttoncontrol>
+			<buttoncontrol name="classcheck">
+				<anchored to="charwizard_classtab" position="insidebottomright" offset="-5,-5" width="20" height="20" />
+				<static textres="charwizard_classcheck_label" />
+				<state icon="button_dialog_cancel_down" tooltipres="charwizard_classfail_tooltip" />
+				<state icon="button_dialog_ok_down" tooltipres="charwizard_classpass_tooltip" />
+				<invisible />
+			</buttoncontrol>
+
+			<button_charwizard_tab name="charwizard_backtab" >
+				<anchored to="charwizard_statstab" width="46" height="46">
+					<top offset="0" />
+					<left anchor="right" relation="relative" offset="10" />
+				</anchored>
+				<state textres="charwizard_backgroundcheck_label" />
+				<script>
+					function onButtonPress()
+						window.tabs.activateTab(4);
+
+						if window.genback.subwindow then
+							CharWizardManager.getAlerts(window, window.genback.subwindow.contents.subwindow.background_window)
+						end
+					end
+				</script>
+			</button_charwizard_tab>
+			<buttoncontrol name="background_GateCheck">
+				<anchored to="charwizard_backtab" position="insidebottomright" offset="-5,-5" width="20" height="20" />
+				<static textres="charwizard_backcheck_label" />
+				<state icon="button_dialog_cancel_down" tooltipres="charwizard_backgroundcheckfail_tooltip" />
+				<state icon="button_dialog_ok_down" tooltipres="charwizard_backgroundcheckpass_tooltip" />
+			</buttoncontrol>
+			<buttoncontrol name="background_alert">
+				<anchored to="charwizard_backtab" position="insidebottomleft" offset="-5,-5" width="20" height="20" />
+				<icon normal="button_alert" />
+				<static textres="charwizard_backcheck_label" />
+			</buttoncontrol>
+
+			<button_charwizard_tab name="charwizard_invtab" >
+				<anchored to="charwizard_statstab" width="46" height="46">
+					<top offset="0" />
+					<left anchor="right" relation="relative" offset="10" />
+				</anchored>
+				<state textres="charwizard_invcheck_label" />
+				<script>
+					function onButtonPress()
+						window.tabs.activateTab(5);
+
+						if window.geninv.subwindow then
+							if window.geninv.subwindow.contents.subwindow.kitlist.getWindowCount() &lt;= 1 then
+								local sClass = "";
+								for _,v in pairs(window.genclass.subwindow.contents.subwindow.class_window.getWindows()) do
+									if v.group_name.getValue() == "CLASS" then
+										if v.selection_name.getValue ~= "" then
+											sClass = v.selection_name.getValue():lower();
+
+											break
+										end
+									end
+								end
+
+								CharWizardManager.createStartingKit(sClass, window.geninv.subwindow.contents.subwindow.kitlist)
+							end
+						end
+					end
+				</script>
+				<invisible />
+			</button_charwizard_tab>
+
+			<button_charwizard_tab name="charwizard_spelltab" >
+				<anchored to="charwizard_statstab" width="46" height="46">
+					<top offset="0" />
+					<left anchor="right" relation="relative" offset="10" />
+				</anchored>
+				<state textres="charwizard_spellcheck_label" />
+				<script>
+					function onButtonPress()
+						window.tabs.activateTab(6);
+						window.updateAlerts(window)
+
+						if window.genspells.subwindow then
+							window.genspells.subwindow.contents.subwindow.spellclass.closeAll();
+
+							CharWizardManager.setSpellClasses(window, window.genspells.subwindow.contents.subwindow.spellclass);
+
+							local aClasses = window.genspells.subwindow.contents.subwindow.spellclass.getWindows();
+
+							if #aClasses > 0 then
+								aClasses[1].bname.onButtonPress();
+							end
+						end
+					end
+				</script>
+				<invisible />
+			</button_charwizard_tab>
+
+			<button_charwizard_tab name="charwizard_feattab" >
+				<anchored to="charwizard_statstab" width="46" height="46">
+					<top offset="0" />
+					<left anchor="right" relation="relative" offset="10" />
+				</anchored>
+				<state textres="charwizard_featcheck_label" />
+				<script>
+					function onButtonPress()
+						window.tabs.activateTab(7);
+
+						if window.genfeats.subwindow then
+							CharWizardManager.getAlerts(window, window.genfeats.subwindow.contents.subwindow.feat_window)
+						end
+					end
+				</script>
+				<invisible />
+			</button_charwizard_tab>
+			<buttoncontrol name="feat_GateCheck">
+				<anchored to="charwizard_feattab" position="insidebottomright" offset="-5,-5" width="20" height="20" />
+				<static textres="charwizard_featcheck_label" />
+				<state icon="button_dialog_cancel_down" tooltipres="charwizard_featcheckfail_tooltip" />
+				<state icon="button_dialog_ok_down" tooltipres="charwizard_featcheckpass_tooltip" />
+				<invisible />
+			</buttoncontrol>
+			<buttoncontrol name="feat_alert">
+				<anchored to="charwizard_feattab" position="insidebottomleft" offset="-5,-5" width="20" height="20" />
+				<icon normal="button_alert" />
+				<static textres="charwizard_featcheck_label" />
+				<invisible />
+			</buttoncontrol>
+
+			<button_charwizard_tab name="charwizard_import" >
+				<anchored to="contentanchor" position="belowright" offset="83,6" width="46" height="46" />
+				<state textres="charwizard_import_label" />
+				<script>
+					function onButtonPress()
+						window.tabs.activateTab(8);
+					end
+				</script>
+				<invisible />
+			</button_charwizard_tab>
+
+			<button_charwizard_tab name="charwizard_classtab_alt" >
+				<anchored to="contentanchor" position="belowright" offset="27,6" width="46" height="46" />
+				<state textres="charwizard_altclasscheck_label" />
+				<disabled/>
+				<invisible />
+			</button_charwizard_tab>
+
+			<windowlist name="alerts">
+				<anchored height="35">
+					<left offset="20" />
+					<right offset="-40" />
+					<bottom offset="-20" />
+				</anchored>
+				<sizelimits>
+					<maximum height="40" />
+					<minimum height="40" />
+				</sizelimits>
+				<columns width="220" fillwidth="true" />
+				<skipempty />
+				<frame name="fielddark" offset="0,0,0,0" />
+				<class>alert_item</class>
+				<sortby><control>alert_order</control></sortby>
+			</windowlist>
+
+			<subwindow name="summary">
+				<anchored width="560">
+					<top offset="79" />
+					<right offset="-40" />
+					<bottom offset="-52" />
+				</anchored>
+				<class>charwizard_summary</class>
+				<activate />
+				<fastinit />
+			</subwindow>
+
+			<sub_charsheet name="genstats">
+				<class>charsheet_charwizard_stats</class>
+			</sub_charsheet>
+			<sub_charsheet name="genraces">
+				<class>charsheet_charwizard_racealt</class>
+			</sub_charsheet>
+			<sub_charsheet name="genclass">
+				<class>charsheet_charwizard_classalt</class>
+			</sub_charsheet>
+			<sub_charsheet name="genback">
+				<class>charsheet_charwizard_backgroundalt</class>
+			</sub_charsheet>
+			<sub_charsheet name="geninv">
+				<class>charsheet_charwizard_inventory</class>
+			</sub_charsheet>
+			<sub_charsheet name="genspells">
+				<class>charsheet_charwizard_spells</class>
+			</sub_charsheet>
+			<sub_charsheet name="genfeats">
+				<class>charsheet_charwizard_featalt</class>
+			</sub_charsheet>
+			<sub_charsheet name="genimport">
+				<class>charsheet_charwizard_featalt</class>
+			</sub_charsheet>
+			<sub_charsheet name="genclassalt">
+				<class>charsheet_charwizard_classalt</class>
+			</sub_charsheet>
+			<sub_charsheet name="genwarnings">
+				<class>charsheet_charwizard_warnings</class>
+			</sub_charsheet>
+
+			<tabs_charsheet name="tabs">
+				<tab>
+					<icon>tab_stats</icon>
+					<subwindow>genstats</subwindow>
+				</tab>
+				<tab>
+					<icon>tab_races</icon>
+					<subwindow>genraces</subwindow>
+				</tab>
+				<tab>
+					<icon>tab_class</icon>
+					<subwindow>genclass</subwindow>
+				</tab>
+				<tab>
+					<icon>tab_back</icon>
+					<subwindow>genback</subwindow>
+				</tab>
+				<tab>
+					<icon>tab_inventory</icon>
+					<subwindow>geninv</subwindow>
+				</tab>
+				<tab>
+					<icon>tab_spells</icon>
+					<subwindow>genspells</subwindow>
+				</tab>
+				<tab>
+					<icon>tab_feats</icon>
+					<subwindow>genfeats</subwindow>
+				</tab>
+				<tab>
+					<icon>tab_import</icon>
+					<subwindow>genimport</subwindow>
+				</tab>
+				<tab>
+					<icon>tab_warnings</icon>
+					<subwindow>genwarnings</subwindow>
+				</tab>
+
+				<activate>1</activate>
+				<invisible />
+			</tabs_charsheet>
+
+			<resize_charsheet />
+			<close_charsheet />
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="charwizard_summary">
+		<margins control="0,0,0,2" />
+		<sheetdata>
+			<hnc name="summary_race_strength" />
+			<hnc name="summary_race_dexterity" />
+			<hnc name="summary_race_constitution" />
+			<hnc name="summary_race_intelligence" />
+			<hnc name="summary_race_wisdom" />
+			<hnc name="summary_race_charisma" />
+
+			<hnc name="summary_base_strength" />
+			<hnc name="summary_base_dexterity" />
+			<hnc name="summary_base_constitution" />
+			<hnc name="summary_base_intelligence" />
+			<hnc name="summary_base_wisdom" />
+			<hnc name="summary_base_charisma" />
+
+			<hlink name="summary_race_link" />
+			<hlink name="summary_subrace_link" />
+			<hlink name="summary_background_link" />
+
+			<anchor_title_charsheet name="summaryanchor" />
+
+			<label_charframetop name="summarytitle">
+				<anchored height="20" >
+					<top offset="20" />
+					<left offset="10" />
+					<right offset="-10" />
+				</anchored>
+				<static textres="charwizard_label_summary" />
+			</label_charframetop>
+			<genericcontrol name="summaryframe">
+				<anchored>
+					<top parent="summarytitle" anchor="bottom" relation="relative" offset="15" />
+					<left offset="10" />
+					<right offset="-10" />
+					<bottom offset="-10" />
+				</anchored>
+				<frame name="groupbox" offset="10,10,10,10" />
+			</genericcontrol>
+
+			<label name="summary_nametitle">
+				<anchored to="summaryanchor" height="20" width="160" >
+					<top anchor="bottom" offset="12" />
+					<left offset="0" />
+				</anchored>
+				<static textres="char_label_name" />
+			</label>
+			<stringcu name="summary_name">
+				<anchored to="summary_nametitle" position="insidetop" offset="0,15" height="20" />
+				<readonly />
+			</stringcu>
+
+			<stringcu name="summary_identity">
+				<anchored to="summary_nametitle" position="insidetop" offset="0,15" height="20" />
+				<readonly />
+				<invisible />
+			</stringcu>
+
+			<label name="summary_racetitle">
+				<anchored to="summaryanchor" height="20" width="160" >
+					<top anchor="bottom" offset="12" />
+					<left offset="165" />
+				</anchored>
+				<static textres="char_label_race" />
+			</label>
+			<stringcu name="summary_race">
+				<anchored to="summary_racetitle" position="insidetop" offset="0,15" height="20" />
+				<readonly />
+			</stringcu>
+
+			<label name="summary_backgroundtitle">
+				<anchored to="summaryanchor" height="20" width="160" >
+					<top anchor="bottom" offset="12" />
+					<left offset="330" />
+				</anchored>
+				<static textres="char_label_background" />
+			</label>
+			<stringcu name="summary_background">
+				<anchored to="summary_backgroundtitle" position="insidetop" offset="0,15" height="20" />
+				<readonly />
+			</stringcu>
+
+			<label name="summary_spectitle">
+				<anchored to="summaryanchor" height="20" width="120" >
+					<top anchor="bottom" offset="350" />
+					<left offset="200" />
+				</anchored>
+				<static textres="charwizard_specialization_label" />
+			</label>
+
+			<windowlist name="summary_specialization">
+				<anchored>
+					<top parent="summary_spectitle" anchor="bottom" offset="5" />
+					<left offset="215" />
+					<right offset="-15" />
+				</anchored>
+				<sizelimits>
+					<maximum height="60" />
+					<minimum height="60" />
+				</sizelimits>
+				<columns width="135" fillwidth="true" />
+				<skipempty />
+				<readonly />
+				<class>charwizard_summary_item</class>
+				<sortby><control>name</control></sortby>
+			</windowlist>
+
+			<label name="summary_classtitle">
+				<anchored to="summaryanchor" height="20" width="60" >
+					<top anchor="bottom" offset="350" />
+					<left offset="0" />
+				</anchored>
+				<static textres="charwizard_classcheck_label" />
+			</label>
+
+			<windowlist name="summary_class">
+				<anchored>
+					<top parent="summary_classtitle" anchor="bottom" offset="5" />
+					<left offset="15" />
+					<right offset="-300" />
+				</anchored>
+				<sizelimits>
+					<maximum height="60" />
+					<minimum height="60" />
+				</sizelimits>
+				<columns width="100" fillwidth="true" />
+				<skipempty />
+				<readonly />
+				<class>charwizard_summary_item</class>
+				<sortby><control>name</control></sortby>
+			</windowlist>
+
+			<stringcontrol name="summary_spec">
+				<anchored to="summaryanchor" height="20" width="120" >
+					<top anchor="bottom" offset="350" />
+					<left offset="120" />
+				</anchored>
+				<font>sheettext</font>
+				<invisible />
+			</stringcontrol>
+
+			<label name="summary_statstitle">
+				<anchored to="summary_name" height="20" width="145" >
+					<top anchor="bottom" offset="0" />
+					<left offset="0" />
+				</anchored>
+				<static textres="charwizard_label_statstotal" />
+			</label>
+			<stringcontrol name="summary_genmethod">
+				<anchored to="summary_statstitle" position="right" offset="10" />
+				<font>sheettext</font>
+				<readonly />
+				<default>(STANDARD ARRAY)</default><!--Need to create a textres -->
+			</stringcontrol>
+
+			<basicnumberc name="summary_strength">
+				<anchored to="summary_statstitle" height="40" width="40" >
+					<top anchor="bottom" offset="5" />
+					<left offset="25" />
+				</anchored>
+				<default>15</default>
+				<readonly />
+				<script>
+					function onValueChanged()
+						local wndSummary = UtilityManager.getTopWindow(window);
+						wndSummary.updateAbilityAlerts();
+					end
+				</script>
+			</basicnumberc>
+			<label_abilityscore>
+				<anchored to="summary_strength" />
+				<static textres="STR" />
+				<readonly />
+			</label_abilityscore>
+			<basicnumberc name="summary_dexterity">
+				<anchored to="summary_strength" position="right" offset="40" width="40" />
+				<default>14</default>
+				<readonly />
+				<script>
+					function onValueChanged()
+						local wndSummary = UtilityManager.getTopWindow(window);
+						wndSummary.updateAbilityAlerts();
+					end
+				</script>
+			</basicnumberc>
+			<label_abilityscore>
+				<anchored to="summary_dexterity" />
+				<static textres="DEX" />
+			</label_abilityscore>
+
+			<basicnumberc name="summary_constitution">
+				<anchored to="summary_dexterity" position="right" offset="40" width="40" />
+				<default>13</default>
+				<readonly />
+				<script>
+					function onValueChanged()
+						local wndSummary = UtilityManager.getTopWindow(window);
+						wndSummary.updateAbilityAlerts();
+					end
+				</script>
+			</basicnumberc>
+			<label_abilityscore>
+				<anchored to="summary_constitution" />
+				<static textres="CON" />
+			</label_abilityscore>
+
+			<basicnumberc name="summary_intelligence">
+				<anchored to="summary_constitution" position="right" offset="40" width="40" />
+				<default>12</default>
+				<readonly />
+				<script>
+					function onValueChanged()
+						local wndSummary = UtilityManager.getTopWindow(window);
+						wndSummary.updateAbilityAlerts();
+					end
+				</script>
+			</basicnumberc>
+			<label_abilityscore>
+				<anchored to="summary_intelligence" />
+				<static textres="INT" />
+			</label_abilityscore>
+
+			<basicnumberc name="summary_wisdom">
+				<anchored to="summary_intelligence" position="right" offset="40" width="40" />
+				<default>10</default>
+				<readonly />
+				<script>
+					function onValueChanged()
+						local wndSummary = UtilityManager.getTopWindow(window);
+						wndSummary.updateAbilityAlerts();
+					end
+				</script>
+			</basicnumberc>
+			<label_abilityscore>
+				<anchored to="summary_wisdom" />
+				<static textres="WIS" />
+			</label_abilityscore>
+
+			<basicnumberc name="summary_charisma">
+				<anchored to="summary_wisdom" position="right" offset="40" width="40" />
+				<default>8</default>
+				<readonly />
+				<script>
+					function onValueChanged()
+						local wndSummary = UtilityManager.getTopWindow(window);
+						wndSummary.updateAbilityAlerts();
+					end
+				</script>
+			</basicnumberc>
+			<label_abilityscore>
+				<anchored to="summary_charisma" />
+				<static textres="CHA" />
+			</label_abilityscore>
+
+			<label name="summary_sensestitle">
+				<anchored to="summaryanchor" height="20" width="170" >
+					<top anchor="bottom" offset="120" />
+					<left offset="0" />
+				</anchored>
+				<static textres="charwizard_label_senses" />
+			</label>
+			<stringcu name="summary_senses">
+				<anchored to="summary_sensestitle" position="insidetop" offset="0,15" height="20" />
+				<readonly />
+			</stringcu>
+
+			<label name="summary_sizetitle">
+				<anchored to="summaryanchor" height="20" width="160" >
+					<top anchor="bottom" offset="120" />
+					<left offset="165" />
+				</anchored>
+				<static textres="char_label_size" />
+			</label>
+			<stringcu name="summary_size">
+				<anchored to="summary_sizetitle" position="insidetop" offset="0,15" height="20" />
+				<readonly />
+			</stringcu>
+
+			<label name="summary_speedtitle">
+				<anchored to="summaryanchor" height="20" width="160" >
+					<top anchor="bottom" offset="120" />
+					<left offset="300" />
+				</anchored>
+				<static textres="char_label_speed" />
+			</label>
+			<stringcu name="summary_speed">
+				<anchored to="summary_speedtitle" position="insidetop" offset="0,15" height="20" />
+				<readonly />
+			</stringcu>
+
+			<label name="summary_speedspecialtitle">
+				<anchored to="summaryanchor" height="20" width="120" >
+					<top anchor="bottom" offset="120" />
+					<!--top anchor="bottom" offset="155" /-->
+					<left offset="430" />
+				</anchored>
+				<static textres="charwizard_label_speedspecial" />
+			</label>
+			<stringcu name="summary_speedspecial">
+				<anchored to="summary_speedspecialtitle" position="insidetop" offset="0,15" height="20" />
+				<readonly />
+			</stringcu>
+
+			<label name="summary_languagetitle">
+				<anchored to="summaryanchor" height="20" width="140" >
+					<top anchor="bottom" offset="155" />
+					<left offset="370" />
+				</anchored>
+				<static textres="char_abilities_label_languages" />
+			</label>
+
+			<windowlist name="summary_languages">
+				<anchored>
+					<top parent="summary_languagetitle" anchor="bottom" offset="0" width="80" />
+					<left offset="380" />
+					<right offset="-5" />
+				</anchored>
+				<sizelimits>
+					<maximum height="60" />
+					<dynamic />
+				</sizelimits>
+				<columns width="85" fillwidth="true" />
+				<skipempty />
+				<readonly />
+				<class>charwizard_summary_item</class>
+				<sortby><control>name</control></sortby>
+			</windowlist>
+
+			<label name="summary_featuretitle">
+				<anchored>
+					<top parent="summary_languages" anchor="bottom" relation="relative" offset="5" width="80" />
+					<left offset="385" />
+					<right offset="-10" />
+				</anchored>
+				<static textres="char_abilities_label_features" />
+			</label>
+
+			<windowlist name="summary_features">
+				<anchored>
+					<top parent="summary_featuretitle" anchor="bottom" relation="relative" offset="0" width="80" />
+					<left offset="380" />
+					<right offset="-10" />
+				</anchored>
+				<skipempty />
+				<readonly />
+				<noscroll />
+				<class>charwizard_summary_item</class>
+				<sortby><control>name</control></sortby>
+			</windowlist>
+
+			<label name="summary_skilltitle">
+				<anchored to="summaryanchor" height="20" width="140" >
+					<top anchor="bottom" offset="155" />
+					<left offset="145" />
+				</anchored>
+				<static textres="char_abilities_label_skills" />
+			</label>
+
+			<windowlist name="summary_skills">
+				<anchored>
+					<top parent="summary_skilltitle" anchor="bottom" offset="0" />
+					<left offset="155" />
+					<right offset="-175" />
+				</anchored>
+				<skipempty />
+				<readonly />
+				<noscroll />
+				<columns width="105" fillwidth="true" />
+				<class>charwizard_summary_item</class>
+				<sortby><control>name</control></sortby>
+			</windowlist>
+
+			<label name="summary_traittitle">
+				<anchored>
+					<top parent="summary_skills" anchor="bottom" relation="relative" offset="5" width="140" />
+					<left offset="160" />
+				</anchored>
+				<static textres="char_abilities_label_traits" />
+			</label>
+
+			<windowlist name="summary_traits">
+				<anchored>
+					<top parent="summary_traittitle" anchor="bottom" relation="relative" offset="0" />
+					<left offset="155" />
+					<right offset="-175" />
+				</anchored>
+				<skipempty />
+				<readonly />
+				<noscroll />
+				<class>charwizard_summary_item</class>
+				<sortby><control>name</control></sortby>
+			</windowlist>
+
+			<label name="summary_proficiencytitle">
+				<anchored to="summaryanchor" height="20" width="120" >
+					<top anchor="bottom" offset="155" />
+					<left offset="0" />
+				</anchored>
+				<static textres="char_abilities_label_proficiencies" />
+			</label>
+
+			<windowlist name="summary_proficiencies">
+				<anchored>
+					<top parent="summary_proficiencytitle" anchor="bottom" offset="0" width="70" />
+					<left offset="10" />
+					<right offset="-340" />
+					<bottom offset="-85" />
+				</anchored>
+				<skipempty />
+				<readonly />
+				<class>charwizard_summary_item</class>
+				<sortby><control>name</control></sortby>
+			</windowlist>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="charwizard_alerts">
+		<margins control="0,0,0,2" />
+		<sheetdata>
+			<windowlist name="alert_list">
+				<anchored position="bottom" relation="relative" >
+					<top offset="545" />
+					<left offset="20" />
+					<right offset="-40" />
+					<bottom offset="-20" />
+				</anchored>
+				<sizelimits>
+					<maximum height="40" />
+					<minimum height="40" />
+				</sizelimits>
+				<columns width="220" fillwidth="true" />
+				<frame name="fielddark" offset="8,7,8,7" />
+				<invisible />
+				<class>alert_item</class>
+				<sortby><control>alert_order</control></sortby>
+			</windowlist>
+		</sheetdata>
+	</windowclass>
+
+	<!--windowclass name="charwizard_warnings">
+		<frame>utilitybox3</frame>
+		<placement>
+			<size width="500" height="400" />
+		</placement>
+		<sizelimits>
+			<minimum width="500" height="400" />
+		</sizelimits>
+		<nodelete />
+		<playercontrol />
+		<script>
+			function setWarnings(aWarnings)
+				aCommitWarnings = aWarnings;
+				warnings.closeAll();
+				for _,vWarning in pairs(aCommitWarnings) do
+					local wndSubwindow = warnings.createWindow();
+					local sLabel = "";
+					if vWarning.severity == 1 then
+						sLabel = "ERROR";
+					elseif vWarning.severity == 2 then
+						sLabel = "WARNING";
+					else
+						sLabel = "NOTE";
+					end
+					wndSubwindow.warning_label.setValue(sLabel);
+					wndSubwindow.group1.setValue(StringManager.titleCase(vWarning.group1));
+					wndSubwindow.warning.setValue(vWarning.warning);
+					wndSubwindow.severity.setValue(vWarning.severity);
+					wndSubwindow.order.setValue(vWarning.order);
+					wndSubwindow.grouporder.setValue(vWarning.grouporder);
+					warnings.applySort();
+				end
+			end
+		</script>
+		<sheetdata>
+			<anchor_title_charsheet name="contentanchor" />
+			<button_charwizard_warning_save name="save" >
+				<anchored to="contentanchor" position="belowright" offset="25,315" width="65" height="18" />
+			</button_charwizard_warning_save>
+			<button_charwizard_warning_cancel name="cancel" >
+				<anchored to="contentanchor" height="18" width="65" >
+					<top anchor="bottom" offset="315" />
+					<left offset="30" />
+				</anchored>
+			</button_charwizard_warning_cancel>
+			<windowlist name="warnings">
+				<anchored to="contentanchor" position="belowright" offset="2,0" width="445" height="310" />
+				<child></child>
+				<child><backcolor>1A40301E</backcolor></child>
+				<frame name="fielddark" offset="0,0,0,0" />
+				<skipempty />
+				<readonly />
+				<class>warning_item</class>
+				<sortby><control>severity</control><control>grouporder</control><control>order</control></sortby>
+			</windowlist>
+			<scrollbar name="warnings_scrollbar">
+				<anchored to="warnings" />
+				<target>warnings</target>
+			</scrollbar>		
+		</sheetdata>			
+	</windowclass-->
+
+	<windowclass name="alert_item">
+		<margins control="0,0,0,0" />
+		<sheetdata>
+			<hn name="alert_order" />
+			<hs name="alert_code" />
+
+			<genericcontrol name="leftanchor">
+				<anchored position="insidetopleft" offset="10,15" height="20" />
+			</genericcontrol>		
+			<buttoncontrol name="alert_icon">
+				<anchored to="leftanchor" position="insidebottomleft" offset="-4,6" width="20" height="20" />
+				<icon normal="button_alert" />
+				<static textres="charwizard_abilitycheck_label" />
+				<readonly />				
+			</buttoncontrol>
+			<label name="alert_label">
+				<anchored to="alert_icon" position="righthigh" offset="2,0" />
+				<static textres="charwizard_abilitycheck_label" />
+				<!--readonly /-->
+			</label>
+			<!--basicnumberc name="alert_order">
+				<anchored to="alert_label" position="right" offset="0,0" />
+				<invisible />				
+			</basicnumberc>
+			<label name="alert_code">
+				<anchored to="alert_order" position="righthigh" offset="0" width="0" />
+				<invisible />				
+			</label-->
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="charwizard_summary_item">
+		<margins control="0,0,0,0" />
+		<sheetdata>
+			<hlink name="link" />
+			<hnc name="expertise">
+				<default>0</default>
+			</hnc>
+			<hnc name="import" />
+			<hsc name="type" />
+
+			<genericcontrol name="rightanchor">
+				<anchored position="insidetopright" offset="0,2" height="0" width="0" />
+			</genericcontrol>
+
+			<stringcontrol name="classlevel">
+				<anchored to="rightanchor">
+					<top />
+					<left parent="" offset="80" />
+					<right anchor="left" />
+				</anchored>
+				<readonly />
+				<invisible />
+			</stringcontrol>
+
+			<stringcontrol name="name">
+				<anchored to="rightanchor">
+					<top />
+					<left parent="" offset="5" />
+					<right anchor="left" relation="relative" offset="-5" />
+				</anchored>
+				<readonly />
+			</stringcontrol>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="charwizard_window_item">
+		<margins control="0,0,10,10" />
+		<frame>groupbox</frame>
+		<sheetdata>
+			<hnc name="order" />
+			<hsc name="ability" />
+
+			<genericcontrol name="rightanchor">
+				<anchored position="insidetopright" offset="0,2" height="0" width="0" />
+			</genericcontrol>
+
+			<linkcontrol name="selection_shortcut">
+				<anchored to="rightanchor" width="20" height="20">
+					<top offset="5" />
+					<right anchor="left" relation="relative" offset="-10" />
+				</anchored>
+				<!--anchored position="insidetopright" relation="relative" offset="10,10" width="20" height="20" /-->
+				<class>reference_background</class>
+				<readonly />
+				<invisible />
+			</linkcontrol>
+
+			<button_charwizard_level_genvalup name="level_up">
+				<anchored to="rightanchor" width="20" height="20">
+					<top offset="5" />
+					<right anchor="left" relation="relative" offset="-10" />
+				</anchored>
+				<!--anchored to="level" /-->
+			</button_charwizard_level_genvalup>
+			<basicnumber name="level">
+				<anchored to="rightanchor" width="30" height="20">
+					<top offset="5" />
+					<right anchor="left" relation="relative" offset="-10" />
+				</anchored>
+				<!--anchored position="insidetopright" relation="relative" offset="140,10" width="30" height="20" /-->
+				<readonly />
+				<invisible />
+			</basicnumber>
+			<button_charwizard_level_genvaldown name="level_down">
+				<anchored to="rightanchor" width="20" height="20">
+					<top offset="5" />
+					<right anchor="left" relation="relative" offset="-10" />
+				</anchored>
+				<!--anchored to="level" /-->
+			</button_charwizard_level_genvaldown>
+
+			<basicnumber name="selection_count">
+				<anchored to="rightanchor" width="20" height="20">
+					<top offset="5" />
+					<right anchor="left" relation="relative" offset="-10" />
+				</anchored>
+				<!--anchored position="insidetopright" relation="relative" offset="10,10" width="20" height="20" /-->
+				<readonly />
+				<invisible />
+			</basicnumber>
+
+			<!--label name="level_label">
+				<anchored position="insidetopright" relation="relative" offset="160,10" />
+				<static textres="charwizard_background_level" />
+				<readonly />
+				<invisible />
+			</label-->
+
+			<label name="selection_name">
+				<anchored to="rightanchor">
+					<top offset="5" />
+					<right anchor="left" relation="relative" offset="-10" />
+				</anchored>
+				<!--anchored position="insidetopright" relation="relative" offset="40,10" /-->
+				<multilinespacing>20</multilinespacing>
+				<readonly />
+				<invisible />
+			</label>
+
+			<label name="group_name">
+				<!--anchored to="rightanchor">
+					<top offset="5" />
+					<right anchor="left" relation="relative" offset="-10" />
+				</anchored-->
+				<anchored>
+					<top offset="10" />
+					<left offset="40" />
+					<right parent="rightanchor" anchor="left" relation="relative" offset="-5" />
+				</anchored>
+				<multilinespacing>20</multilinespacing>
+				<!--anchored position="insidetopleft" offset="40,10" /-->
+				<readonly />
+			</label>
+
+			<button_charwizard_expand_window name="button_expand">
+				<anchored position="insidetopleft" offset="10,10" />
+				<target>selection_window</target>
+			</button_charwizard_expand_window>
+
+			<windowlist name="selection_window">
+				<anchored position="insidetopleft" offset="5,35">
+					<right />
+				</anchored>
+				<columns width="135" fillwidth="true" />
+				<skipempty />
+				<noscroll />
+				<class>charwizard_selection_item</class>
+			</windowlist>
+			<windowlist name="subselection_window">
+				<anchored position="insidetopleft" offset="5,35">
+					<right />
+				</anchored>
+				<columns width="135" fillwidth="true" />
+				<skipempty />
+				<noscroll />
+				<class>charwizard_selection_item</class>
+				<invisible />
+			</windowlist>
+
+		</sheetdata>
+	</windowclass>
+
+	<!--windowclass name="charwizard_window_item">
+		<margins control="0,0,10,10" />
+		<frame>groupbox</frame>
+		<sheetdata>
+			<hnc name="order" />
+			<hsc name="ability" />
+
+			<label name="group_name">
+				<anchored position="insidetopleft" offset="40,10" />
+				<readonly />
+			</label>
+			<windowlist name="selection_window">
+				<anchored position="insidetopleft" offset="5,35">
+					<right />
+				</anchored>
+				<columns width="135" fillwidth="true" />
+				<skipempty />
+				<noscroll />
+				<class>charwizard_selection_item</class>
+			</windowlist>
+			<windowlist name="subselection_window">
+				<anchored position="insidetopleft" offset="5,35">
+					<right />
+				</anchored>
+				<columns width="135" fillwidth="true" />
+				<skipempty />
+				<noscroll />
+				<class>charwizard_selection_item</class>
+				<invisible />
+			</windowlist>
+			<label name="level_label">
+				<anchored position="insidetopright" relation="relative" offset="160,10" />
+				<static textres="charwizard_background_level" />
+				<readonly />
+				<invisible />
+			</label>
+			<basicnumber name="level">
+				<anchored position="insidetopright" relation="relative" offset="140,10" width="30" height="20" />
+				<readonly />
+				<invisible />
+			</basicnumber>
+			<button_charwizard_level_genvalup name="level_up">
+				<anchored to="level" />
+			</button_charwizard_level_genvalup>
+			<button_charwizard_level_genvaldown name="level_down">
+				<anchored to="level" />
+			</button_charwizard_level_genvaldown>
+			<label name="selection_name">
+				<anchored position="insidetopright" relation="relative" offset="40,10" />
+				<readonly />
+				<invisible />
+			</label>
+			<linkcontrol name="selection_shortcut">
+				<anchored position="insidetopright" relation="relative" offset="10,10" width="20" height="20" />
+				<class>reference_background</class>
+				<readonly />
+				<invisible />
+			</linkcontrol>
+			<basicnumber name="selection_count">
+				<anchored position="insidetopright" relation="relative" offset="10,10" width="20" height="20" />
+				<readonly />
+				<invisible />
+			</basicnumber>
+			<button_charwizard_expand_window name="button_expand">
+				<anchored position="insidetopleft" offset="10,10" />
+				<target>selection_window</target>
+			</button_charwizard_expand_window>
+		</sheetdata>
+	</windowclass-->
+
+	<windowclass name="charwizard_selection_item">
+		<margins control="0,0,0,10" />
+		<sheetdata>
+			<hsc name="class" />
+			<hsc name="name" />
+			<hsc name="value" />
+			<hsc name="count" />
+
+			<genericcontrol name="rightanchor">
+				<anchored position="insidetopright" offset="0,2" height="0" width="0" />
+			</genericcontrol>
+			<button_charwizard_selection name="bname" />
+			<linkcontrol name="shortcut">
+				<anchored to="rightanchor" width="20" height="20">
+					<top offset="5" />
+					<right anchor="left" relation="relative" offset="-110" />
+				</anchored>
+				<class>reference_background</class>
+				<readonly />
+				<invisible />
+			</linkcontrol>
+
+			<string_textlistitem name="type">
+				<anchored to="rightanchor">
+					<top />
+					<left parent="" offset="0" />
+					<right anchor="left" relation="relative" offset="-7" />
+				</anchored>
+				<invisible />
+				<multilinespacing>20</multilinespacing>
+			</string_textlistitem>
+		</sheetdata>
+	</windowclass>
+
+	<!-- Commit Warnings -->
+	<windowclass name="charsheet_charwizard_warnings">
+		<sheetdata>
+			<subwindow name="contents">
+				<anchored>
+					<top offset="0" />
+					<bottom offset="0" />
+					<left offset="0" />
+					<right offset="-535" />
+				</anchored>
+				<class>charwizard_warnings_contents</class>
+				<activate />
+				<fastinit />
+			</subwindow>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="charwizard_warnings_contents">
+		<script>
+			function onInit()
+				local wndSummary = UtilityManager.getTopWindow(parentcontrol.window);
+
+				setWarnings(wndSummary._tWarnings);
+			end
+
+			function setWarnings(aWarnings)
+				aCommitWarnings = aWarnings;
+				warnings.closeAll();
+				for _,vWarning in pairs(aCommitWarnings) do
+					local wndSubwindow = warnings.createWindow();
+					local sLabel = "";
+					if vWarning.severity == 1 then
+						sLabel = "ERROR";
+					elseif vWarning.severity == 2 then
+						sLabel = "WARNING";
+					else
+						sLabel = "NOTE";
+					end
+					wndSubwindow.warning_label.setValue(sLabel);
+					wndSubwindow.group1.setValue(StringManager.titleCase(vWarning.group1));
+					wndSubwindow.warning.setValue(vWarning.warning);
+					wndSubwindow.severity.setValue(vWarning.severity);
+					wndSubwindow.order.setValue(vWarning.order);
+					wndSubwindow.grouporder.setValue(vWarning.grouporder);
+					warnings.applySort();
+				end
+			end
+		</script>
+		<sheetdata>
+			<anchor_column name="columnanchor" />
+
+			<label_charframetop name="warnings_label">
+				<anchored height="20">
+					<top parent="columnanchor" anchor="bottom" relation="relative" offset="15" />
+					<left offset="15" />
+					<right offset="-50" />
+				</anchored>
+				<icons>button_alert</icons>
+				<static textres="charwizard_label_warnings" />
+			</label_charframetop>
+
+			<windowlist name="warnings">
+				<anchored>
+					<top parent="warnings_label" anchor="bottom" relation="relative" offset="15" />
+					<left offset="15" />
+					<right offset="-50" />
+					<bottom offset="-72" />
+				</anchored>
+				<child></child>
+				<child><backcolor>1A40301E</backcolor></child>
+				<frame name="fielddark" offset="0,0,0,0" />
+				<skipempty />
+				<readonly />
+				<class>warning_item</class>
+				<sortby><control>severity</control><control>grouporder</control><control>order</control></sortby>
+			</windowlist>
+
+			<scrollbar name="warnings_scrollbar">
+				<anchored to="warnings" />
+				<target>warnings</target>
+			</scrollbar>
+
+			<button_charwizard_warning_save name="save" >
+				<anchored position="insidebottomleft" offset="25,45" width="65" height="18" />
+			</button_charwizard_warning_save>
+
+			<!--anchor_title_charsheet name="contentanchor" /-->
+			<!--button_charwizard_warning_save name="save" >
+				<anchored to="columnanchor" position="belowright" offset="25,315" width="65" height="18" />
+			</button_charwizard_warning_save>
+			<button_charwizard_warning_cancel name="cancel" >
+				<anchored to="columnanchor" height="18" width="65" >
+					<top anchor="bottom" offset="315" />
+					<left offset="30" />
+				</anchored>
+			</button_charwizard_warning_cancel>
+			<windowlist name="warnings">
+				<anchored to="columnanchor" position="belowright" offset="2,0" width="445" height="310" />
+				<child></child>
+				<child><backcolor>1A40301E</backcolor></child>
+				<frame name="fielddark" offset="0,0,0,0" />
+				<skipempty />
+				<readonly />
+				<class>warning_item</class>
+				<sortby><control>severity</control><control>grouporder</control><control>order</control></sortby>
+			</windowlist>
+			<scrollbar name="warnings_scrollbar">
+				<anchored to="warnings" />
+				<target>warnings</target>
+			</scrollbar-->
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="warning_item">
+		<margins control="0,0,0,2" />
+		<sheetdata>
+			<hs name="group1" />
+			<hn name="severity" />
+			<hn name="order" />
+			<hn name="grouporder" />
+
+			<genericcontrol name="rightanchor">
+				<anchored position="insidetopright" offset="0,5" height="0" width="0" />
+			</genericcontrol>
+			<button_warningfix name="button_fix">
+				<anchored to="rightanchor" width="70" height="20">
+					<top offset="2" />
+					<right parent="rightanchor" anchor="left" relation="relative" offset="-7" />
+				</anchored>
+			</button_warningfix>
+			<!--stringcontrol name="group1">
+				<anchored to="rightanchor">
+					<top />
+					<left parent="" offset="70" />
+					<right anchor="left" relation="relative" />
+				</anchored>
+				<anchored to="rightanchor" position="insidetopright" offset="70,0" width="30" />
+				<invisible />
+				<readonly />
+			</stringcontrol-->
+			<stringcontrol name="warning">
+				<anchored to="rightanchor">
+					<top offset="5" />
+					<left parent="" offset="110" />
+					<right parent="rightanchor" anchor="left" relation="relative" offset="-7" />
+				</anchored>
+				<font>reference-b</font>
+				<readonly />
+			</stringcontrol>
+			<stringcontrol name="warning_label">
+				<anchored to="rightanchor">
+					<top />
+					<left parent="" offset="15" />
+					<right anchor="left" relation="relative" />
+				</anchored>
+				<!--anchored to="rightanchor">
+					<top />
+					<left parent="" offset="5" />
+					<right anchor="left" />
+				</anchored-->
+				<font>reference-h</font>
+				<readonly />
+			</stringcontrol>
+			<!--basicnumberc name="severity">
+				<anchored to="rightanchor">
+					<top />
+					<left parent="" offset="5" />
+					<right anchor="left" relation="relative" />
+				</anchored>
+				<invisible />
+			</basicnumberc-->
+			<!--basicnumberc name="order">
+				<anchored to="rightanchor">
+					<top />
+					<left parent="" offset="5" />
+					<right anchor="left" relation="relative" />
+				</anchored>
+				<invisible />
+			</basicnumberc-->
+			<!--basicnumberc name="grouporder">
+				<anchored to="rightanchor">
+					<top />
+					<left parent="" offset="5" />
+					<right anchor="left" relation="relative" />
+				</anchored>
+				<invisible />
+			</basicnumberc-->
+		</sheetdata>
+	</windowclass>
+
+	<!-- Ability Scores -->
+	<windowclass name="charsheet_charwizard_stats">
+		<sheetdata>
+			<subwindow name="contents">
+				<anchored>
+					<top offset="0" />
+					<bottom offset="0" />
+					<left offset="0" />
+					<right offset="-535" />
+				</anchored>
+				<class>charwizard_stats_contents</class>
+				<activate />
+				<fastinit />
+			</subwindow>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="charwizard_stats_contents">
+		<script file="charwizard/scripts/charwizard_abilities.lua" />
+		<sheetdata>
+			<anchor_column name="columnanchor" />
+
+			<label_charframetop name="statslabel">
+				<anchored height="20">
+					<top parent="columnanchor" anchor="bottom" relation="relative" offset="15" />
+					<left offset="15" />
+					<right offset="-50" />
+				</anchored>
+				<icons>char_stats</icons>
+				<static textres="charwizard_label_stats" />
+			</label_charframetop>
+
+			<genericcontrol name="genmethodframe">
+				<anchored height="20">
+					<top parent="columnanchor" anchor="bottom" relation="relative" offset="15" />
+					<left offset="15" />
+					<right offset="-50" />
+				</anchored>
+				<frame name="groupbox" offset="10,10,10,10" />
+			</genericcontrol>
+			<button_roll name="reroll">
+				<anchored to="genmethodframe" position="insidetopleft" offset="2,0" />
+				<script>
+					function onButtonPress()
+						window.handleReroll();
+					end
+				</script>
+				<invisible />
+			</button_roll>
+			<label name="rerolllabel">
+				<anchored to="reroll" position="righthigh" offset="3,0" />
+				<static textres="charwizard_reroll" />
+				<invisible />
+			</label>
+			<comboboxc name="cb_genmethod">
+				<anchored to="genmethodframe" position="insidetopleft" offset="70,0" width="150" height="20" />
+				<listdirection >down</listdirection>
+				<buttonoffset>0,3</buttonoffset>
+				<default>STANDARD ARRAY</default>
+				<center />
+				<script file="charwizard/scripts/charwizard_genmethod_combo.lua" />
+			</comboboxc>
+			<label name="genmethod_dice_label">
+				<anchored to="genmethodframe" position="insidetopright" relation="relative" offset="110" />
+				<static textres="charwizard_dice" />
+				<invisible />
+			</label>
+			<basicnumberc name="genmethod_dice">
+				<anchored to="genmethodframe" position="insidetopright" relation="relative" offset="80" width="20" height="20" />
+				<default>4</default>
+				<invisible />
+			</basicnumberc>
+			<label name="genmethod_drop_label">
+				<anchored to="genmethodframe" position="insidetopright" relation="relative" offset="40" />
+				<static textres="charwizard_drop" />
+				<invisible />
+			</label>
+			<basicnumberc name="genmethod_drop">
+				<anchored to="genmethodframe" position="insidetopright" relation="relative" offset="10" width="20" height="20" />
+				<default>1</default>
+				<invisible />
+			</basicnumberc>
+			<label name="point_total_label">
+				<anchored to="genmethodframe" position="insidetopright" relation="relative" offset="40" />
+				<static textres="charwizard_buytotal" />
+				<invisible />
+			</label>
+			<basicnumberc name="point_total">
+				<anchored to="genmethodframe" position="insidetopright" relation="relative" offset="10" width="20" height="20" />
+				<target>total</target>
+				<readonly />
+				<invisible />
+			</basicnumberc>
+			<label_charframetop name="statstitle">
+				<anchored height="20">
+					<top parent="columnanchor" anchor="bottom" relation="relative" offset="15" />
+					<left offset="15" />
+					<right offset="-50" />
+				</anchored>
+				<static textres="char_label_stats" />
+				<invisible />
+			</label_charframetop>
+
+			<number_charwizard_abilityscore name="strength">
+				<modifiersize>mini</modifiersize>
+			</number_charwizard_abilityscore>
+			<label_abilityscore>
+				<anchored to="strength" />
+				<static textres="STR" />
+			</label_abilityscore>
+
+			<button_charwizard_ability_genvalup name="strength_up">
+				<anchored to="strength" />
+			</button_charwizard_ability_genvalup>
+			<button_charwizard_ability_genvaldown name="strength_down">
+				<anchored to="strength" />
+			</button_charwizard_ability_genvaldown>
+			<string_abilitymodtext name="label_cost_strength">
+				<anchored to="strength" />
+				<invisible />
+			</string_abilitymodtext>
+			<numbercontrol name="cost_strength">
+				<anchored to="strength" position="below" offset="0,-6" />
+				<invisible />
+			</numbercontrol>
+			<button_charwizard_ability_moveup name="strength_moveup">
+				<anchored to="strength" />
+			</button_charwizard_ability_moveup>
+			<button_charwizard_ability_movedown name="strength_movedown">
+				<anchored to="strength" />
+			</button_charwizard_ability_movedown>
+
+			<number_charwizard_abilityscore2 name="dexterity">
+				<target>dexterity</target>
+				<modifiersize>mini</modifiersize>
+			</number_charwizard_abilityscore2>
+			<label_abilityscore>
+				<anchored to="dexterity" />
+				<static textres="DEX" />
+			</label_abilityscore>
+
+			<button_charwizard_ability_genvalup name="dexterity_up">
+				<anchored to="dexterity" />
+			</button_charwizard_ability_genvalup>
+			<button_charwizard_ability_genvaldown name="dexterity_down">
+				<anchored to="dexterity" />
+			</button_charwizard_ability_genvaldown>
+			<string_abilitymodtext name="label_cost_dexterity">
+				<anchored to="dexterity" />
+				<invisible />
+			</string_abilitymodtext>
+			<numbercontrol name="cost_dexterity">
+				<anchored to="dexterity" position="below" offset="0,-6" />
+				<invisible />
+			</numbercontrol>
+			<button_charwizard_ability_moveup name="dexterity_moveup">
+				<anchored to="dexterity" />
+			</button_charwizard_ability_moveup>
+			<button_charwizard_ability_movedown name="dexterity_movedown">
+				<anchored to="dexterity" />
+			</button_charwizard_ability_movedown>
+
+			<number_charwizard_abilityscore2 name="constitution">
+				<target>constitution</target>
+				<modifiersize>mini</modifiersize>
+			</number_charwizard_abilityscore2>
+			<label_abilityscore>
+				<anchored to="constitution" />
+				<static textres="CON" />
+			</label_abilityscore>
+
+			<button_charwizard_ability_genvalup name="constitution_up">
+				<anchored to="constitution" />
+			</button_charwizard_ability_genvalup>
+			<button_charwizard_ability_genvaldown name="constitution_down">
+				<anchored to="constitution" />
+			</button_charwizard_ability_genvaldown>
+			<string_abilitymodtext name="label_cost_constitution">
+				<anchored to="constitution" />
+				<invisible />
+			</string_abilitymodtext>
+			<numbercontrol name="cost_constitution">
+				<anchored to="constitution" position="below" offset="0,-6" />
+				<invisible />
+			</numbercontrol>
+			<button_charwizard_ability_moveup name="constitution_moveup">
+				<anchored to="constitution" />
+			</button_charwizard_ability_moveup>
+			<button_charwizard_ability_movedown name="constitution_movedown">
+				<anchored to="constitution" />
+			</button_charwizard_ability_movedown>
+
+			<number_charwizard_abilityscore2 name="intelligence">
+				<target>intelligence</target>
+				<modifiersize>mini</modifiersize>
+			</number_charwizard_abilityscore2>
+			<label_abilityscore>
+				<anchored to="intelligence" />
+				<static textres="INT" />
+			</label_abilityscore>
+
+			<button_charwizard_ability_genvalup name="intelligence_up">
+				<anchored to="intelligence" />
+			</button_charwizard_ability_genvalup>
+			<button_charwizard_ability_genvaldown name="intelligence_down">
+				<anchored to="intelligence" />
+			</button_charwizard_ability_genvaldown>
+			<string_abilitymodtext name="label_cost_intelligence">
+				<anchored to="intelligence" />
+				<invisible />
+			</string_abilitymodtext>
+			<numbercontrol name="cost_intelligence">
+				<anchored to="intelligence" position="below" offset="0,-6" />
+				<invisible />
+			</numbercontrol>
+			<button_charwizard_ability_moveup name="intelligence_moveup">
+				<anchored to="intelligence" />
+			</button_charwizard_ability_moveup>
+			<button_charwizard_ability_movedown name="intelligence_movedown">
+				<anchored to="intelligence" />
+			</button_charwizard_ability_movedown>
+
+			<number_charwizard_abilityscore2 name="wisdom">
+				<target>wisdom</target>
+				<modifiersize>mini</modifiersize>
+			</number_charwizard_abilityscore2>
+			<label_abilityscore>
+				<anchored to="wisdom" />
+				<static textres="WIS" />
+			</label_abilityscore>
+
+			<button_charwizard_ability_genvalup name="wisdom_up">
+				<anchored to="wisdom" />
+			</button_charwizard_ability_genvalup>
+			<button_charwizard_ability_genvaldown name="wisdom_down">
+				<anchored to="wisdom" />
+			</button_charwizard_ability_genvaldown>
+			<string_abilitymodtext name="label_cost_wisdom">
+				<anchored to="wisdom" />
+				<invisible />
+			</string_abilitymodtext>
+			<numbercontrol name="cost_wisdom">
+				<anchored to="wisdom" position="below" offset="0,-6" />
+				<invisible />
+			</numbercontrol>
+			<button_charwizard_ability_moveup name="wisdom_moveup">
+				<anchored to="wisdom" />
+			</button_charwizard_ability_moveup>
+			<button_charwizard_ability_movedown name="wisdom_movedown">
+				<anchored to="wisdom" />
+			</button_charwizard_ability_movedown>
+
+			<number_charwizard_abilityscore2 name="charisma">
+				<target>charisma</target>
+				<modifiersize>mini</modifiersize>
+			</number_charwizard_abilityscore2>
+			<label_abilityscore>
+				<anchored to="charisma" />
+				<static textres="CHA" />
+			</label_abilityscore>
+
+			<button_charwizard_ability_genvalup name="charisma_up">
+				<anchored to="charisma" />
+			</button_charwizard_ability_genvalup>
+			<button_charwizard_ability_genvaldown name="charisma_down">
+				<anchored to="charisma" />
+			</button_charwizard_ability_genvaldown>
+			<string_abilitymodtext name="label_cost_charisma">
+				<anchored to="charisma" />
+				<invisible />
+			</string_abilitymodtext>
+			<numbercontrol name="cost_charisma">
+				<anchored to="charisma" position="below" offset="0,-6" />
+				<invisible />
+			</numbercontrol>
+			<button_charwizard_ability_moveup name="charisma_moveup">
+				<anchored to="charisma" />
+			</button_charwizard_ability_moveup>
+			<button_charwizard_ability_movedown name="charisma_movedown">
+				<anchored to="charisma" />
+			</button_charwizard_ability_movedown>
+
+			<label_charframetop name="summarytitle">
+				<anchored height="20">
+					<top parent="columnanchor" anchor="bottom" relation="relative" offset="15" />
+					<left offset="15" />
+					<right offset="-50" />
+				</anchored>
+				<static textres="charwizard_label_benefits" />
+				<invisible/>
+			</label_charframetop>
+			<genericcontrol name="summaryframe">
+				<anchored>
+					<top parent="summarytitle" anchor="bottom" relation="relative" offset="15" />
+					<left offset="100" />
+					<right offset="-15" />
+					<bottom offset="-20" />
+				</anchored>
+				<frame name="groupbox" offset="10,10,10,10" />
+				<invisible/>
+			</genericcontrol>
+			<label_charframetop name="race_statstitle">
+				<anchored height="20">
+					<top parent="columnanchor" anchor="bottom" relation="relative" offset="20" />
+					<left offset="15" />
+					<right offset="-50" />
+				</anchored>
+				<icons>char_race</icons>
+				<static textres="charwizard_raceadj_label" />
+			</label_charframetop>
+
+			<number_charwizard_statracemod name="race_strength">
+				<anchored width="40" height="40">
+					<top parent="columnanchor" anchor="bottom" relation="relative" offset="15" />
+					<left anchor="center" offset="-210" />
+				</anchored>
+				<target>strength</target>
+			</number_charwizard_statracemod>
+			<label_abilityscore>
+				<anchored to="race_strength" />
+				<static textres="STR" />
+			</label_abilityscore>
+
+			<number_charwizard_statracemod name="race_dexterity">
+				<anchored to="race_strength" width="40" height="40">
+					<top anchor="top" offset="0" />
+					<left anchor="right" relation="relative" offset="30" />
+				</anchored>
+				<target>dexterity</target>
+			</number_charwizard_statracemod>
+			<label_abilityscore>
+				<anchored to="race_dexterity" />
+				<static textres="DEX" />
+			</label_abilityscore>
+
+			<number_charwizard_statracemod name="race_constitution">
+				<anchored to="race_strength" width="40" height="40">
+					<top anchor="top" offset="0" />
+					<left anchor="right" relation="relative" offset="30" />
+				</anchored>
+				<target>constitution</target>
+			</number_charwizard_statracemod>
+			<label_abilityscore>
+				<anchored to="race_constitution" />
+				<static textres="CON" />
+			</label_abilityscore>
+
+			<number_charwizard_statracemod name="race_intelligence">
+				<anchored to="race_strength" width="40" height="40">
+					<top anchor="top" offset="0" />
+					<left anchor="right" relation="relative" offset="30" />
+				</anchored>
+				<target>intelligence</target>
+			</number_charwizard_statracemod>
+			<label_abilityscore>
+				<anchored to="race_intelligence" />
+				<static textres="INT" />
+			</label_abilityscore>
+
+			<number_charwizard_statracemod name="race_wisdom">
+				<anchored to="race_strength" width="40" height="40">
+					<top anchor="top" offset="0" />
+					<left anchor="right" relation="relative" offset="30" />
+				</anchored>
+				<target>wisdom</target>
+			</number_charwizard_statracemod>
+			<label_abilityscore>
+				<anchored to="race_wisdom" />
+				<static textres="WIS" />
+			</label_abilityscore>
+
+			<number_charwizard_statracemod name="race_charisma">
+				<anchored to="race_strength" width="40" height="40">
+					<top anchor="top" offset="0" />
+					<left anchor="right" relation="relative" offset="30" />
+				</anchored>
+				<target>charisma</target>
+			</number_charwizard_statracemod>
+			<label_abilityscore>
+				<anchored to="race_charisma" />
+				<static textres="CHA" />
+			</label_abilityscore>
+
+			<label_charframetop name="abilityimp_statstitle">
+				<anchored height="20">
+					<top parent="columnanchor" anchor="bottom" relation="relative" offset="15" />
+					<left offset="15" />
+					<right offset="-50" />
+				</anchored>
+				<static textres="charwizard_abilityimp_label" />
+			</label_charframetop>
+
+			<windowlist name="abilityscore_improvements">
+				<anchored>
+					<top parent="abilityimp_statstitle" anchor="bottom" relation="relative" offset="10" />
+					<left offset="15" />
+					<right offset="-50" />
+					<bottom offset="-42" />
+				</anchored>
+				<skipempty />
+				<child></child>
+				<child><backcolor>1A40301E</backcolor></child>
+				<frame name="fielddark" offset="10,9,10,9" />
+				<empty><textres>stats_improvement_notice</textres></empty>
+				<class>charwizard_window_item</class>
+				<sortby><control>group_name</control></sortby>
+				<skipempty />
+				<script>
+					function onInit()
+						local wndSummary = UtilityManager.getTopWindow(window);
+
+						if wndSummary.genclass.subwindow then
+							for _,v in pairs(wndSummary.genclass.subwindow.contents.subwindow.class_window.getWindows()) do
+								if v.group_name.getValue():lower():match("asi choice") then
+									if v.selection_name.getValue():lower() == "asi" then
+										local sClassName = v.group_name.getValue():lower():match("(.-) asi choice")
+										local sClassLevel = v.group_name.getValue():lower():match("(%d+)")
+										local aAbilities = {};
+
+										sClassName = sClassName:gsub("%d+", "")
+
+							            for _,i in pairs(DataCommon.abilities) do
+							                aAbilities[i:lower()] = { tooltip = Interface.getString("charwizard_tooltip_asi") };
+							            end
+
+										CharWizardManager.createSelectionWindows(self, StringManager.trim(sClassName:upper()) .. " " .. StringManager.trim(sClassLevel), aAbilities, 2)
+									end
+								end
+							end
+						end
+					end
+				</script>
+			</windowlist>
+		</sheetdata>
+	</windowclass>
+
+	<!-- Races -->
+	<windowclass name="charsheet_charwizard_racealt">
+		<sheetdata>
+			<subwindow name="contents">
+				<anchored>
+					<top offset="0" />
+					<bottom offset="0" />
+					<left offset="0" />
+					<right offset="-535" />
+				</anchored>
+				<class>charwizard_racewindow_contents</class>
+				<activate />
+				<fastinit />
+			</subwindow>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="charwizard_racewindow_contents">
+		<sheetdata>
+			<anchor_column name="columnanchor" />
+
+			<label_charframetop name="race_label">
+				<anchored height="20">
+					<top parent="columnanchor" anchor="bottom" relation="relative" offset="15" />
+					<left offset="15" />
+					<right offset="-50" />
+				</anchored>
+				<icons>char_race</icons>
+				<static textres="charwizard_label_races" />
+			</label_charframetop>
+
+			<windowlist name="race_window">
+				<anchored>
+					<top parent="race_label" anchor="bottom" relation="relative" offset="10" />
+					<left offset="15" />
+					<right offset="-50" />
+					<bottom offset="-42" />
+				</anchored>
+				<skipempty />
+				<frame name="fielddark" offset="10,9,10,9" />
+				<class>charwizard_window_item</class>
+				<sortby><control>order</control></sortby>
+				<script>
+					function onInit()
+						local wndSummary = UtilityManager.getTopWindow(window);
+
+						CharWizardManager.createSelectionWindows(window.race_window, "SELECT RACE", wndSummary.loaded_races, 1, true);
+						CharWizardManager.getAlerts(wndSummary, self);
+					end
+				</script>
+			</windowlist>
+
+			<scrollbar>
+				<anchored to="race_window" />
+				<target>race_window</target>
+			</scrollbar>
+		</sheetdata>
+	</windowclass>
+
+	<!-- Classes -->
+	<windowclass name="charsheet_charwizard_classalt">
+		<sheetdata>
+			<subwindow name="contents">
+				<anchored>
+					<top offset="0" />
+					<bottom offset="0" />
+					<left offset="0" />
+					<right offset="-535" />
+				</anchored>
+				<class>charwizard_classwindow_contents</class>
+				<activate />
+				<fastinit />
+			</subwindow>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="charwizard_classwindow_contents">
+		<sheetdata>
+			<anchor_column name="columnanchor" />
+
+			<label_charframetop name="class_label">
+				<anchored height="20">
+					<top parent="columnanchor" anchor="bottom" relation="relative" offset="15" />
+					<left offset="15" />
+					<right offset="-50" />
+				</anchored>
+				<icons>char_class</icons>
+				<static textres="charwizard_label_class" />
+			</label_charframetop>
+
+			<windowlist name="class_window">
+				<anchored>
+					<top parent="class_label" anchor="bottom" relation="relative" offset="10" />
+					<left offset="15" />
+					<right offset="-50" />
+					<bottom offset="-42" />
+				</anchored>
+				<skipempty />
+				<frame name="fielddark" offset="10,9,10,9" />
+				<class>charwizard_window_item</class>
+				<sortby><control>order</control></sortby>
+				<script>
+					function onInit()
+						local wndSummary = UtilityManager.getTopWindow(window);
+
+						if wndSummary.import == 0 then
+							CharWizardManager.createSelectionWindows(window.class_window, "SELECT CLASS", wndSummary.loaded_classes, 1, true);
+							CharWizardManager.getAlerts(wndSummary, window.class_window);
+						else
+							CharWizardManager.createLevelUpLabels(wndSummary);
+						end
+
+						CharWizardManager.getAlerts(wndSummary, self);
+					end
+				</script>
+			</windowlist>
+
+			<scrollbar>
+				<anchored to="class_window" />
+				<target>class_window</target>
+			</scrollbar>
+		</sheetdata>
+	</windowclass>
+
+	<!-- Backgrounds -->
+	<windowclass name="charsheet_charwizard_backgroundalt">
+		<sheetdata>
+			<subwindow name="contents">
+				<anchored>
+					<top offset="0" />
+					<bottom offset="0" />
+					<left offset="0" />
+					<right offset="-535" />
+				</anchored>
+				<class>charwizard_backgroundwindow_contents</class>
+				<activate />
+				<fastinit />
+			</subwindow>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="charwizard_backgroundwindow_contents">
+		<sheetdata>
+			<anchor_column name="columnanchor" />
+
+			<label_charframetop name="background_label">
+				<anchored height="20">
+					<top parent="columnanchor" anchor="bottom" relation="relative" offset="15" />
+					<left offset="15" />
+					<right offset="-50" />
+				</anchored>
+				<icons>char_background</icons>
+				<static textres="charwizard_label_background" />
+			</label_charframetop>
+
+			<windowlist name="background_window">
+				<anchored>
+					<top parent="background_label" anchor="bottom" relation="relative" offset="10" />
+					<left offset="15" />
+					<right offset="-50" />
+					<bottom offset="-42" />
+				</anchored>
+				<skipempty />
+				<frame name="fielddark" offset="10,9,10,9" />
+				<class>charwizard_window_item</class>
+				<sortby><control>order</control></sortby>
+				<script>
+					function onInit()
+						local wndSummary = UtilityManager.getTopWindow(window);
+
+						CharWizardManager.createSelectionWindows(window.background_window, "SELECT BACKGROUND", wndSummary.loaded_backgrounds, 1, true);
+						CharWizardManager.getAlerts(wndSummary, self);
+					end
+				</script>
+			</windowlist>
+
+			<scrollbar>
+				<anchored to="background_window" />
+				<target>background_window</target>
+			</scrollbar>
+		</sheetdata>
+	</windowclass>
+
+	<!-- Inventory -->
+	<windowclass name="charsheet_charwizard_inventory">
+		<sheetdata>
+			<subwindow name="contents">
+				<anchored>
+					<top offset="0" />
+					<bottom offset="0" />
+					<left offset="0" />
+					<right offset="-535" />
+				</anchored>
+				<class>charwizard_inv_contents</class>
+				<activate />
+				<fastinit />
+			</subwindow>
+			<scrollbar_charcontents />
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="charwizard_inv_contents">
+		<sheetdata>
+			<anchor_column name="columnanchor" />
+			<anchor_column name="subanchor" />
+
+			<label_charframetop name="inventory_items_label">
+				<anchored height="20">
+					<top parent="columnanchor" anchor="bottom" relation="relative" offset="15" />
+					<left offset="15" />
+					<right offset="-50" />
+				</anchored>
+				<icons>char_inventory</icons>
+				<static textres="charwizard_label_items" />
+			</label_charframetop>
+
+			<genericcontrol name="geninventoryframe">
+				<anchored height="20">
+					<top parent="inventory_items_label" anchor="bottom" relation="relative" offset="18" />
+					<left offset="15" />
+					<right offset="-50" />
+				</anchored>
+				<frame name="groupbox" offset="10,10,10,10" />
+			</genericcontrol>
+			<button_charwizard_inventory name="kit_button">
+				<anchored to="geninventoryframe" position="insidetopleft" offset="2,0" width="160" height="20" />
+				<state textres="button_inventory_text" />
+			</button_charwizard_inventory>
+			<button_charwizard_choice name="reset_kit_button">
+				<anchored to="kit_button" position="right" offset="100,0" width="160" />
+				<state textres="button_resetinventory_text" />
+				<script>
+					function onButtonPress()
+						local wndSummary = UtilityManager.getTopWindow(window);
+						wndSummary.inventory = {};
+						window.kitlist.closeAll();
+
+						local sClass = "";
+						for _,v in pairs(wndSummary.genclass.subwindow.contents.subwindow.class_window.getWindows()) do
+							if v.group_name.getValue() == "CLASS" then
+								if v.selection_name.getValue ~= "" then
+									sClass = v.selection_name.getValue():lower();
+
+									break
+								end
+							end
+						end
+
+						CharWizardManager.createStartingKit(sClass, window.kitlist)
+						CharWizardManager.parseBackgroundKit(wndSummary, window.kitlist);
+					end
+				</script>
+			</button_charwizard_choice>
+			<button_charwizard_inventory name="inventory_button">
+				<anchored to="geninventoryframe" position="insidetopleft" offset="2,0" width="160" height="20" />
+				<state textres="button_kit_text" />
+				<invisible />
+			</button_charwizard_inventory>
+			<label name="items_label">
+				<anchored to="geninventoryframe" position="insidetopleft" offset="20,0" />
+				<static textres="charwizard_itemlist_title" />
+				<center />
+				<invisible />
+			</label>
+			<label name="items_filter_label">
+				<anchored to="geninventoryframe" position="insidetopleft" offset="180,0" />
+				<static textres="charwizard_itemlistfilter_title" />
+				<invisible />
+			</label>
+			<stringcontrol name="filter_toggle">
+				<anchored to="items_filter_label" position="right" offset="5" width="140" />
+				<invisible />
+			</stringcontrol>
+			<stringcontrol name="filter">
+				<anchored to="items_filter_label" position="right" offset="5" width="100" />
+				<frame name="fieldlight" offset="5,5,5,5" />
+				<font>sheetlabel</font>
+				<script>
+					function onEnter()
+						if window.filter_toggle.getValue() == "weapons" then
+							window.itemlist.addItems("Weapon", window.filter.getValue());
+						elseif window.filter_toggle.getValue() == "armor" then
+							window.itemlist.addItems("Armor", window.filter.getValue());
+						else
+							window.itemlist.addItems("Adventuring Gear", window.filter.getValue());
+						end
+					end
+				</script>
+				<invisible />
+			</stringcontrol>
+			<button_charwizard_race name="gear_button">
+				<anchored height="20" width="130">
+					<top parent="geninventoryframe" anchor="bottom" offset="15" />
+					<left offset="15" />
+				</anchored>
+				<state textres="button_gear_text" />
+				<script>
+					function onInit()
+						setFrame("buttondown", 5, 5, 5, 5)
+					end
+					function onButtonPress()
+						window.itemlist.addItems("Adventuring Gear", window.filter.getValue());
+						window.filter_toggle.setValue("gear");
+						window.weapon_button.setFrame("buttonup", 5, 5, 5, 5);
+						window.armor_button.setFrame("buttonup", 5, 5, 5, 5);
+
+						setFrame("buttondown", 5, 5, 5, 5);
+					end
+				</script>
+				<invisible />
+			</button_charwizard_race>
+			<button_charwizard_race name="weapon_button">
+				<anchored to="gear_button" position="right" offset="16,0" width="130" />
+				<state textres="button_weapon_text" />
+				<script>
+					function onButtonPress()
+						window.itemlist.addItems("Weapon", window.filter.getValue());
+						window.filter_toggle.setValue("weapons");
+						window.gear_button.setFrame("buttonup", 5, 5, 5, 5);
+						window.armor_button.setFrame("buttonup", 5, 5, 5, 5);
+
+						setFrame("buttondown", 5, 5, 5, 5);
+					end
+				</script>
+			</button_charwizard_race>
+			<button_charwizard_race name="armor_button">
+				<anchored to="weapon_button" position="right" offset="16,0" width="130" />
+				<state textres="button_armor_text" />
+				<script>
+					function onButtonPress()
+						window.itemlist.addItems("Armor", window.filter.getValue());
+						window.filter_toggle.setValue("armor");
+						window.weapon_button.setFrame("buttonup", 5, 5, 5, 5);
+						window.gear_button.setFrame("buttonup", 5, 5, 5, 5);
+
+						setFrame("buttondown", 5, 5, 5, 5);
+					end
+				</script>
+				<invisible />
+			</button_charwizard_race>
+
+			<windowlist name="kitlist">
+				<anchored>
+					<top parent="gear_button" anchor="bottom" relation="relative" offset="2" />
+					<left offset="15" />
+					<right offset="-50" />
+					<bottom offset="-42" />
+				</anchored>
+				<skipempty />
+				<readonly />
+				<child></child>
+				<child><backcolor>1A40301E</backcolor></child>
+				<frame name="fielddark" offset="10,9,10,9" />
+				<empty><textres>emptyclass</textres></empty>
+				<class>charwizard_window_item</class>
+				<sortby><control>name</control></sortby>
+				<script>
+					function onInit()
+						local wndSummary = UtilityManager.getTopWindow(window);
+						local sClass = "";
+						local bBackground = false;
+
+						if wndSummary.summary.subwindow.summary_class.getWindowCount() > 0 then
+							for _,v in pairs(wndSummary.genclass.subwindow.contents.subwindow.class_window.getWindows()) do
+								if v.group_name.getValue() == "CLASS" then
+									if v.selection_name.getValue ~= "" then
+										sClass = v.selection_name.getValue():lower();
+
+										break
+									end
+								end
+							end
+
+							for _,v in pairs(getWindows()) do
+								if v.group_name.getValue():lower():match("background") then
+									bBackground = true;
+
+									break
+								end
+							end
+
+							CharWizardManager.createStartingKit(sClass, self);
+
+							if not bBackground then
+								CharWizardManager.parseBackgroundKit(wndSummary, self);
+							end
+						end
+					end
+				</script>
+			</windowlist>
+			<scrollbar name="kitlist_scrollbar">
+				<anchored to="kitlist" />
+				<target>kitlist</target>
+			</scrollbar>
+
+			<windowlist name="itemlist">
+				<anchored>
+					<top parent="gear_button" anchor="bottom" relation="relative" offset="12" />
+					<left offset="15" />
+					<right offset="-50" />
+					<bottom anchor="center" offset="-1" />
+				</anchored>
+				<skipempty />
+				<readonly />
+				<child></child>
+				<child><backcolor>1A40301E</backcolor></child>
+				<frame name="fielddark" offset="10,9,10,9" />
+				<empty><textres>emptyset</textres></empty>
+				<class>itemlist_item</class>
+				<sortby><control>name</control></sortby>
+				<script file="charwizard/scripts/charwizard_itemlist.lua" />
+				<invisible />
+			</windowlist>
+			<scrollbar name="itemlist_scrollbar">
+				<anchored to="itemlist" />
+				<target>itemlist</target>
+				<invisible />
+			</scrollbar>
+
+			<genericcontrol name="geninvframe">
+				<anchored height="20">
+					<top anchor="center" offset="17" />
+					<left offset="15" />
+					<right offset="-50" />
+				</anchored>
+				<frame name="groupbox" offset="10,10,10,10" />
+				<invisible />
+			</genericcontrol>
+			<label name="inventory_label">
+				<anchored to="geninvframe" position="insidetopleft" offset="2,0" />
+				<static textres="charwizard_inventory_title" />
+				<center />
+				<invisible />
+			</label>
+			<label name="class_label">
+				<anchored to="geninvframe" position="insidetopleft" offset="2,0" />
+				<static textres="charwizard_inventory_title" />
+				<center />
+				<invisible />
+			</label>
+			<label name="items_cost_label">
+				<anchored to="geninvframe" position="insidetopleft" offset="125,0" />
+				<static textres="charwizard_cost_title" />
+				<invisible />
+			</label>
+			<label name="items_cost_label_pp">
+				<anchored to="geninvframe" position="insidetopleft" offset="205,0" />
+				<static textres="charwizard_cost_title_pp" />
+				<invisible />
+			</label>
+			<numberc name="total_cost_pp">
+				<anchored to="items_cost_label_pp" position="right" offset="5" width="40" />
+				<frame name="fieldlight" offset="5,5,5,5" />
+				<readonly />
+				<font>sheetlabel</font>
+				<invisible />
+			</numberc>
+			<label name="items_cost_label_gp">
+				<anchored to="geninvframe" position="insidetopleft" offset="275,0" />
+				<static textres="charwizard_cost_title_gp" />
+				<invisible />
+			</label>
+			<numberc name="total_cost_gp">
+				<anchored to="items_cost_label_gp" position="right" offset="5" width="20" />
+				<frame name="fieldlight" offset="5,5,5,5" />
+				<readonly />
+				<font>sheetlabel</font>
+				<invisible />
+			</numberc>
+			<label name="items_cost_label_sp">
+				<anchored to="geninvframe" position="insidetopleft" offset="325,0" />
+				<static textres="charwizard_cost_title_sp" />
+				<invisible />
+			</label>
+			<numberc name="total_cost_sp">
+				<anchored to="items_cost_label_sp" position="right" offset="5" width="20" />
+				<frame name="fieldlight" offset="5,5,5,5" />
+				<readonly />
+				<font>sheetlabel</font>
+				<invisible />
+			</numberc>
+			<label name="items_cost_label_cp">
+				<anchored to="geninvframe" position="insidetopleft" offset="375,0" />
+				<static textres="charwizard_cost_title_cp" />
+				<invisible />
+			</label>
+			<numberc name="total_cost_cp">
+				<anchored to="items_cost_label_cp" position="right" offset="5" width="20" />
+				<frame name="fieldlight" offset="5,5,5,5" />
+				<readonly />
+				<font>sheetlabel</font>
+				<invisible />
+			</numberc>
+
+			<windowlist name="inventory">
+				<anchored>
+					<top parent="geninvframe" anchor="bottom" relation="relative" offset="16" />
+					<left offset="15" />
+					<right offset="-50" />
+					<bottom offset="-42" />
+				</anchored>
+				<skipempty />
+				<frame name="fielddark" offset="10,9,10,9" />
+				<scrollbar>
+					<anchored to="inventory" anchor="insideright" />
+				</scrollbar>
+				<child></child>
+				<child><backcolor>1A40301E</backcolor></child>
+				<empty><textres>inventory_drag_notice</textres></empty>
+				<class>charwizard_invitem</class>
+				<script file="charwizard/scripts/charwizard_invlist.lua" />
+				<invisible />
+			</windowlist>
+			<scrollbar name="inventory_scrollbar">
+				<anchored to="inventory" />
+				<target>inventory</target>
+				<invisible />
+			</scrollbar>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="itemlist_item">
+		<margins control="0,0,0,0" />
+		<sheetdata>
+			<hs name="type" />
+
+			<genericcontrol name="rightanchor">
+				<anchored width="0" height="0">
+					<top />
+					<right />
+				</anchored>
+				<invisible />
+			</genericcontrol>
+			<buttoncontrol name="selecteditem_iadd">
+				<anchored width="20" height="20">
+					<top offset="2" />
+					<right parent="rightanchor" anchor="left" relation="relative" offset="-2" />
+				</anchored>
+				<icon normal="button_selectedspell_add" pressed="button_selectedspell_add_down" />
+				<tooltip textres="" />
+				<script>
+					function onButtonPress()
+						local sClass, sRecord = window.link.getValue();
+						local nodeSource = DB.findNode(sRecord);
+						local aInventory = {};
+						local nCount = 1;
+						local bFound = false;
+						local bArmorEquipped = false;
+						local bShieldEquipped = false;
+
+						sClass = CharWizardManager.getShortcutClass(sRecord);
+
+						if LibraryData.isRecordDisplayClass("item", sClass) then
+							for _,wndItem in pairs(window.windowlist.window.inventory.getWindows()) do
+								local sItemClass, sItemRecord = wndItem.shortcut.getValue();
+								local sCRRecordUnique = StringManager.split(sItemRecord, "@")[1];
+								local sDragRecordUnique = StringManager.split(sRecord, "@")[1];
+
+								if sCRRecordUnique == sDragRecordUnique then
+									bFound = true;
+									wndItem.count.setValue(wndItem.count.getValue() + 1);
+								end
+							end
+							if not bFound then
+								local nCarried = 1;
+
+								if DB.getValue(nodeSource, "type", "") == "Weapon" then
+									nCarried = 2;
+								end
+
+								if DB.getValue(nodeSource, "type", "") == "Armor" and not bArmorEquipped then
+									nCarried = 2;
+								end
+
+								if DB.getValue(nodeSource, "type", "") == "Shield" and not bShieldEquipped then
+									nCarried = 2;
+								end
+
+								local wndInventory = window.windowlist.window.inventory.createWindow();
+
+								wndInventory.shortcut.setValue(sClass, sRecord);
+								wndInventory.carried.setValue(nCarried);
+								wndInventory.name.setValue(DB.getValue(nodeSource, "name", ""));
+								wndInventory.count.setValue(1);
+								--wndInventory.import.setValue(0);
+							end
+						end
+
+						window.windowlist.window.inventory.updateInventory();
+					end
+				</script>
+			</buttoncontrol>
+
+			<stringcontrol name="cost">
+				<anchored>
+					<top offset="4" />
+					<right parent="rightanchor" anchor="left" relation="relative" offset="-10" />
+				</anchored>
+				<readonly />
+			</stringcontrol>
+
+			<string_list_link name="name">
+				<bounds>30,2,260,20</bounds>
+				<readonly />
+			</string_list_link>
+			<linkcontrol_id name="link">
+				<anchored position="insidetopleft" offset="5,2" width="20" height="20" />
+				<class>item</class>
+			</linkcontrol_id>
+
+			<stringcontrol name="ac">
+				<bounds>300,2,40,20</bounds>
+				<center />
+				<readonly />
+				<invisible/>
+			</stringcontrol>
+			<stringcontrol name="damage">
+				<bounds>180,2,100,20</bounds>
+				<center />
+				<readonly />
+				<invisible/>
+			</stringcontrol>
+			<stringcontrol name="weight">
+				<bounds>320,2,30,20</bounds>
+				<right />
+				<readonly />
+			</stringcontrol>
+			<stringcontrol name="subtype">
+				<bounds>420,2,120,20</bounds>
+				<center />
+				<readonly />
+				<invisible/>
+			</stringcontrol>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="charwizard_invitem">
+		<margins control="0,0,0,2" />
+		<sheetdata>
+			<hidden_record_isidentified name="isidentified"><class>item</class><ignorehost /></hidden_record_isidentified>
+			<hn name="import" />
+			<hn name="cost" />
+
+			<number_charinv name="count">
+				<bounds>5,2,20,20</bounds>
+				<tabtarget next="name" />
+				<default>1</default>
+				<min>1</min>
+				<script>
+					function onValueChanged()
+						window.windowlist.updateInventory();
+					end
+				</script>
+			</number_charinv>
+
+			<genericcontrol name="rightanchor">
+				<anchored width="0" height="0">
+					<top />
+					<right />
+				</anchored>
+				<invisible />
+			</genericcontrol>
+			<buttoncontrol name="selecteditems_idelete">
+				<anchored width="20" height="20">
+					<top offset="2" />
+					<right parent="rightanchor" anchor="left" relation="relative" offset="-2" />
+				</anchored>
+				<state icon="button_delete" tooltipres="button_delete" />
+				<state icon="button_deleteconfirm" tooltipres="button_deleteconfirm" />
+				<tooltip textres="" />
+				<script>
+					function setVisibility(bVisible)
+						setValue(0);
+						setVisible(bVisible);
+					end
+
+					function onButtonPress()
+						if getValue() == 0 then
+							window.windowlist.window.inventory.updateInventory(window);
+
+							window.close();
+						end
+					end
+				</script>
+			</buttoncontrol>
+			<linkcontrol_id name="shortcut">
+				<anchored width="20" height="20">
+					<top offset="2" />
+					<right parent="rightanchor" anchor="left" relation="relative" offset="-5" />
+				</anchored>
+				<class>item</class>
+				<script>
+					function onClose()
+						window.windowlist.onItemDeleted(window.count.getValue(), getValue());
+					end
+				</script>
+			</linkcontrol_id>
+			<button_char_inv_carried name="carried">
+				<anchored width="20" height="20">
+					<top offset="2" />
+					<right parent="rightanchor" anchor="left" relation="relative" offset="-5" />
+				</anchored>
+			</button_char_inv_carried>
+			<number_charinv name="weight">
+				<anchored width="30" height="20">
+					<top offset="2" />
+					<right parent="rightanchor" anchor="left" relation="relative" offset="-10" />
+				</anchored>
+				<delaykeyupdate />
+				<tabtarget prev="location" />
+			</number_charinv>
+			<!--numberc name="cost">
+				<bounds>360,2,70,20</bounds>
+				<invisible/>
+			</numberc-->
+			<string_charinvname name="name">
+				<anchored position="insidetopleft" offset="35,2" height="20">
+					<right parent="rightanchor" anchor="left" relation="current" offset="-5" />
+				</anchored>
+				<tabtarget next="location" prev="count" />
+			</string_charinvname>
+
+		</sheetdata>
+	</windowclass>
+
+	<!-- Spells -->
+	<windowclass name="charsheet_charwizard_spells">
+		<sheetdata>
+			<subwindow name="contents">
+				<anchored>
+					<top offset="0" />
+					<bottom offset="0" />
+					<left offset="0" />
+					<right offset="-535" />
+				</anchored>
+				<class>charwizard_spells_contents</class>
+				<activate />
+				<fastinit />
+			</subwindow>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="charwizard_spells_contents">
+		<sheetdata>
+			<anchor_column name="columnanchor" />
+			<anchor_column name="subanchor" />
+
+			<label_charframetop name="spell_label">
+				<anchored height="20">
+					<top parent="columnanchor" anchor="bottom" relation="relative" offset="15" />
+					<left offset="15" />
+					<right offset="-50" />
+				</anchored>
+				<icons>char_powers</icons>
+				<static textres="charwizard_label_spells" />
+			</label_charframetop>
+
+			<genericcontrol name="genspellframe">
+				<anchored height="20">
+					<top parent="spell_label" anchor="bottom" relation="relative" offset="15" />
+					<left offset="15" />
+					<right offset="-50" />
+				</anchored>
+				<frame name="groupbox" offset="10,10,10,10" />
+			</genericcontrol>
+			<label name="spelllist_label">
+				<anchored to="genspellframe" position="insidetopleft" offset="2,0" />
+				<static textres="charwizard_spelllist_title" />
+				<center />
+			</label>
+			<label name="slots_available_label">
+				<anchored to="spelllist_label">
+					<top />
+					<left anchor="right" relation="relative" offset="10" />
+				</anchored>
+				<!--anchored to="genspellframe" position="insidetopleft" offset="95" /-->
+				<static textres="charwizard_slots_available" />
+			</label>
+			<label name="label_slots_available_1">
+				<anchored to="spelllist_label">
+					<top />
+					<left anchor="right" relation="relative" offset="5" />
+				</anchored>
+				<!--anchored to="genspellframe" position="insidetopleft" offset="135" /-->
+				<static textres="charwizard_l1_slots_available" />
+				<invisible/>
+			</label>
+			<numberc name="slots_available_1">
+				<anchored to="spelllist_label" width="10" height="20">
+					<top />
+					<left anchor="right" relation="relative" offset="5" />
+				</anchored>
+				<!--anchored to="genspellframe" position="insidetopright" offset="245" width="10" height="20" /-->
+				<font>sheetlabel</font>
+				<readonly />
+				<invisible/>
+			</numberc>
+			<label name="label_slots_available_2">
+				<anchored to="spelllist_label">
+					<top />
+					<left anchor="right" relation="relative" offset="5" />
+				</anchored>
+				<!--anchored to="genspellframe" position="insidetopright" offset="225" /-->
+				<static textres="charwizard_l2_slots_available" />
+				<invisible/>
+			</label>
+			<numberc name="slots_available_2">
+				<anchored to="spelllist_label" width="10" height="20">
+					<top />
+					<left anchor="right" relation="relative" offset="5" />
+				</anchored>
+				<!--anchored to="genspellframe" position="insidetopright" offset="215" width="10" height="20" /-->
+				<font>sheetlabel</font>
+				<readonly />
+				<invisible/>
+			</numberc>
+			<label name="label_slots_available_3">
+				<anchored to="spelllist_label">
+					<top />
+					<left anchor="right" relation="relative" offset="5" />
+				</anchored>
+				<!--anchored to="genspellframe" position="insidetopright" offset="195" /-->
+				<static textres="charwizard_l3_slots_available" />
+				<invisible/>
+			</label>
+			<numberc name="slots_available_3">
+				<anchored to="spelllist_label" width="10" height="20">
+					<top />
+					<left anchor="right" relation="relative" offset="5" />
+				</anchored>
+				<!--anchored to="genspellframe" position="insidetopright" offset="185" width="10" height="20" /-->
+				<font>sheetlabel</font>
+				<readonly />
+				<invisible/>
+			</numberc>
+			<label name="label_slots_available_4">
+				<anchored to="spelllist_label">
+					<top />
+					<left anchor="right" relation="relative" offset="5" />
+				</anchored>
+				<!--anchored to="genspellframe" position="insidetopright" offset="165" /-->
+				<static textres="charwizard_l4_slots_available" />
+				<invisible/>
+			</label>
+			<numberc name="slots_available_4">
+				<anchored to="spelllist_label" width="10" height="20">
+					<top />
+					<left anchor="right" relation="relative" offset="5" />
+				</anchored>
+				<!--anchored to="genspellframe" position="insidetopright" offset="155" width="10" height="20" /-->
+				<font>sheetlabel</font>
+				<readonly />
+				<invisible/>
+			</numberc>
+			<label name="label_slots_available_5">
+				<anchored to="spelllist_label">
+					<top />
+					<left anchor="right" relation="relative" offset="5" />
+				</anchored>
+				<!--anchored to="genspellframe" position="insidetopright" offset="135" /-->
+				<static textres="charwizard_l5_slots_available" />
+				<invisible/>
+			</label>
+			<numberc name="slots_available_5">
+				<anchored to="spelllist_label" width="10" height="20">
+					<top />
+					<left anchor="right" relation="relative" offset="5" />
+				</anchored>
+				<!--anchored to="genspellframe" position="insidetopright" offset="125" width="10" height="20" /-->
+				<font>sheetlabel</font>
+				<readonly />
+				<invisible/>
+			</numberc>
+			<label name="label_slots_available_6">
+				<anchored to="spelllist_label">
+					<top />
+					<left anchor="right" relation="relative" offset="5" />
+				</anchored>
+				<!--anchored to="genspellframe" position="insidetopright" offset="105" /-->
+				<static textres="charwizard_l6_slots_available" />
+				<invisible/>
+			</label>
+			<numberc name="slots_available_6">
+				<anchored to="spelllist_label" width="10" height="20">
+					<top />
+					<left anchor="right" relation="relative" offset="5" />
+				</anchored>
+				<!--anchored to="genspellframe" position="insidetopright" offset="95" width="10" height="20" /-->
+				<font>sheetlabel</font>
+				<readonly />
+				<invisible/>
+			</numberc>
+			<label name="label_slots_available_7">
+				<anchored to="spelllist_label">
+					<top />
+					<left anchor="right" relation="relative" offset="5" />
+				</anchored>
+				<!--anchored to="genspellframe" position="insidetopright" offset="75" /-->
+				<static textres="charwizard_l7_slots_available" />
+				<invisible/>
+			</label>
+			<numberc name="slots_available_7">
+				<anchored to="spelllist_label" width="10" height="20">
+					<top />
+					<left anchor="right" relation="relative" offset="5" />
+				</anchored>
+				<!--anchored to="genspellframe" position="insidetopright" offset="65" width="10" height="20" /-->
+				<font>sheetlabel</font>
+				<readonly />
+				<invisible/>
+			</numberc>
+			<label name="label_slots_available_8">
+				<anchored to="spelllist_label">
+					<top />
+					<left anchor="right" relation="relative" offset="5" />
+				</anchored>
+				<!--anchored to="genspellframe" position="insidetopright" offset="45" /-->
+				<static textres="charwizard_l8_slots_available" />
+				<invisible/>
+			</label>
+			<numberc name="slots_available_8">
+				<anchored to="spelllist_label" width="10" height="20">
+					<top />
+					<left anchor="right" relation="relative" offset="5" />
+				</anchored>
+				<!--anchored to="genspellframe" position="insidetopright" offset="35" width="10" height="20" /-->
+				<font>sheetlabel</font>
+				<readonly />
+				<invisible/>
+			</numberc>
+			<label name="label_slots_available_9">
+				<anchored to="spelllist_label">
+					<top />
+					<left anchor="right" relation="relative" offset="5" />
+				</anchored>
+				<!--anchored to="genspellframe" position="insidetopright" offset="15" /-->
+				<static textres="charwizard_l9_slots_available" />
+				<invisible/>
+			</label>
+			<numberc name="slots_available_9">
+				<anchored to="spelllist_label" width="10" height="20">
+					<top />
+					<left anchor="right" relation="relative" offset="5" />
+				</anchored>
+				<!--anchored to="genspellframe" position="insidetopright" offset="5" width="10" height="20" /-->
+				<font>sheetlabel</font>
+				<readonly />
+				<invisible/>
+			</numberc>
+			<label name="label_pactslots_available_1">
+				<anchored to="spelllist_label">
+					<top />
+					<left anchor="right" relation="relative" offset="5" />
+				</anchored>
+				<!--anchored to="genspellframe" position="insidetopright" offset="255" /-->
+				<static textres="charwizard_l1_pactslots_available" />
+				<invisible/>
+			</label>
+			<numberc name="pactslots_available_1">
+				<anchored to="spelllist_label" width="10" height="20">
+					<top />
+					<left anchor="right" relation="relative" offset="5" />
+				</anchored>
+				<!--anchored to="genspellframe" position="insidetopright" offset="245" width="10" height="20" /-->
+				<font>sheetlabel</font>
+				<readonly />
+				<invisible/>
+			</numberc>
+			<label name="label_pactslots_available_2">
+				<anchored to="spelllist_label">
+					<top />
+					<left anchor="right" relation="relative" offset="5" />
+				</anchored>
+				<!--anchored to="genspellframe" position="insidetopright" offset="225" /-->
+				<static textres="charwizard_l2_pactslots_available" />
+				<invisible/>
+			</label>
+			<numberc name="pactslots_available_2">
+				<anchored to="spelllist_label" width="10" height="20">
+					<top />
+					<left anchor="right" relation="relative" offset="5" />
+				</anchored>
+				<!--anchored to="genspellframe" position="insidetopright" offset="215" width="10" height="20" /-->
+				<font>sheetlabel</font>
+				<readonly />
+				<invisible/>
+			</numberc>
+			<label name="label_pactslots_available_3">
+				<anchored to="spelllist_label">
+					<top />
+					<left anchor="right" relation="relative" offset="5" />
+				</anchored>
+				<!--anchored to="genspellframe" position="insidetopright" offset="195" /-->
+				<static textres="charwizard_l3_pactslots_available" />
+				<invisible/>
+			</label>
+			<numberc name="pactslots_available_3">
+				<anchored to="spelllist_label" width="10" height="20">
+					<top />
+					<left anchor="right" relation="relative" offset="5" />
+				</anchored>
+				<!--anchored to="genspellframe" position="insidetopright" offset="185" width="10" height="20" /-->
+				<font>sheetlabel</font>
+				<readonly />
+				<invisible/>
+			</numberc>
+			<label name="label_pactslots_available_4">
+				<anchored to="spelllist_label">
+					<top />
+					<left anchor="right" relation="relative" offset="5" />
+				</anchored>
+				<!--anchored to="genspellframe" position="insidetopright" offset="165" /-->
+				<static textres="charwizard_l4_pactslots_available" />
+				<invisible/>
+			</label>
+			<numberc name="pactslots_available_4">
+				<anchored to="spelllist_label" width="10" height="20">
+					<top />
+					<left anchor="right" relation="relative" offset="5" />
+				</anchored>
+				<!--anchored to="genspellframe" position="insidetopright" offset="155" width="10" height="20" /-->
+				<font>sheetlabel</font>
+				<readonly />
+				<invisible/>
+			</numberc>
+			<label name="label_pactslots_available_5">
+				<anchored to="spelllist_label">
+					<top />
+					<left anchor="right" relation="relative" offset="5" />
+				</anchored>
+				<!--anchored to="genspellframe" position="insidetopright" offset="135" /-->
+				<static textres="charwizard_l5_pactslots_available" />
+				<invisible/>
+			</label>
+			<numberc name="pactslots_available_5">
+				<anchored to="spelllist_label" width="10" height="20">
+					<top />
+					<left anchor="right" relation="relative" offset="5" />
+				</anchored>
+				<!--anchored to="genspellframe" position="insidetopright" offset="125" width="10" height="20" /-->
+				<font>sheetlabel</font>
+				<readonly />
+				<invisible/>
+			</numberc>
+
+			<button_charwizard_spelllevel name="button_spelllevel_0">
+				<anchored height="18" width="60" >
+					<top parent="spell_label" anchor="bottom" relation="relative" offset="15" />
+					<!--top anchor="bottom" offset="85" /-->
+					<left offset="15" />
+				</anchored>
+				<state textres="button_cantrip_text" />
+			</button_charwizard_spelllevel>
+			<button_charwizard_spelllevel name="button_spelllevel_1">
+				<anchored to="button_spelllevel_0" position="right" offset="11,0" width="30" />
+				<state textres="npc_label_spellslot1" />
+			</button_charwizard_spelllevel>
+			<button_charwizard_spelllevel name="button_spelllevel_2">
+				<anchored to="button_spelllevel_1" position="right" offset="11,0" width="30" />
+				<state textres="npc_label_spellslot2" />
+			</button_charwizard_spelllevel>
+			<button_charwizard_spelllevel name="button_spelllevel_3">
+				<anchored to="button_spelllevel_2" position="right" offset="11,0" width="30" />
+				<state textres="npc_label_spellslot3" />
+			</button_charwizard_spelllevel>
+			<button_charwizard_spelllevel name="button_spelllevel_4">
+				<anchored to="button_spelllevel_3" position="right" offset="11,0" width="30" />
+				<state textres="npc_label_spellslot4" />
+			</button_charwizard_spelllevel>
+			<button_charwizard_spelllevel name="button_spelllevel_5">
+				<anchored to="button_spelllevel_4" position="right" offset="11,0" width="30" />
+				<state textres="npc_label_spellslot5" />
+			</button_charwizard_spelllevel>
+			<button_charwizard_spelllevel name="button_spelllevel_6">
+				<anchored to="button_spelllevel_5" position="right" offset="11,0" width="30" />
+				<state textres="npc_label_spellslot6" />
+			</button_charwizard_spelllevel>
+			<button_charwizard_spelllevel name="button_spelllevel_7">
+				<anchored to="button_spelllevel_6" position="right" offset="11,0" width="30" />
+				<state textres="npc_label_spellslot7" />
+			</button_charwizard_spelllevel>
+			<button_charwizard_spelllevel name="button_spelllevel_8">
+				<anchored to="button_spelllevel_7" position="right" offset="11,0" width="30" />
+				<state textres="npc_label_spellslot8" />
+			</button_charwizard_spelllevel>
+			<button_charwizard_spelllevel name="button_spelllevel_9">
+				<anchored to="button_spelllevel_8" position="right" offset="11,0" width="30" />
+				<state textres="npc_label_spellslot9" />
+			</button_charwizard_spelllevel>
+
+			<windowlist name="spellclass">
+				<anchored>
+					<top parent="spell_label" anchor="bottom" relation="relative" offset="10" />
+					<left offset="15" />
+					<right offset="-355" />
+					<bottom anchor="center" offset="0" />
+				</anchored>
+				<!--anchored height="20">
+					<top anchor="center" offset="-20" />
+					<left offset="15" />
+					<right offset="-50" />
+				</anchored-->
+				<!--columns width="105" fillwidth="true" /-->
+				<skipempty />
+				<!--noscroll /-->
+				<child><backcolor>1A40301E</backcolor></child>
+				<frame name="fielddark" offset="10,9,10,9" />
+				<empty><textres>no_class_notice</textres></empty>
+				<class>spell_class_item</class>
+				<script>
+					function onInit()
+						local wndSummary = UtilityManager.getTopWindow(window);
+						CharWizardManager.setSpellClasses(wndSummary, self);
+
+						local aClasses = getWindows();
+
+						if #aClasses > 0 then
+							aClasses[1].bname.onButtonPress();
+						end
+					end
+				</script>
+			</windowlist>
+			<scrollbar name="spellclass_scrollbar">
+				<anchored to="spellclass" />
+				<target>spellclass</target>
+			</scrollbar>
+
+			<windowlist name="spells">
+				<anchored>
+					<top parent="spellclass" anchor="top" />
+					<left offset="150" />
+					<right offset="-50" />
+					<bottom anchor="center" offset="0" />
+				</anchored>
+				<!--anchored>
+					<top parent="spell_label" anchor="bottom" relation="relative" offset="10" />
+					<left offset="130" />
+					<right offset="-50" />
+					<bottom anchor="center" offset="-33" />
+				</anchored-->
+				<skipempty />
+				<readonly />
+				<child></child>
+				<child><backcolor>1A40301E</backcolor></child>
+				<frame name="fielddark" offset="10,9,10,9" />
+				<empty><textres>no_spells_notice</textres></empty>
+				<class>spell_item</class>
+				<sortby><control>subtype</control><control>name</control></sortby>
+			</windowlist>
+			<scrollbar name="spells_scrollbar">
+				<anchored to="spells" />
+				<target>spells</target>
+			</scrollbar>
+
+			<genericcontrol name="genselectedframe">
+				<anchored height="20">
+					<top anchor="center" offset="17" />
+					<left offset="15" />
+					<right offset="-50" />
+				</anchored>
+				<frame name="groupbox" offset="10,10,10,10" />
+			</genericcontrol>
+			<label name="selectedspelllist_label">
+				<anchored to="genselectedframe" position="insidetopleft" offset="2,0" />
+				<static textres="charwizard_selectedspelllist_title" />
+				<center />
+			</label>
+			<label name="cantrips_available_label">
+				<anchored to="genselectedframe" position="insidetopright" offset="215" />
+				<static textres="charwizard_cantrips_available" />
+				<center />
+			</label>
+			<stringcontrol name="cantrips_available">
+				<anchored to="genselectedframe" position="insidetopright" offset="170" width="40" height="20" />
+				<frame name="fieldlight" offset="5,5,5,5" />
+				<font>sheetlabel</font>
+				<readonly />
+				<center />
+			</stringcontrol>
+			<label name="spells_available_label">
+				<anchored to="genselectedframe" position="insidetopright" offset="50" />
+				<static textres="charwizard_spells_available" />
+				<center />
+			</label>
+			<stringcontrol name="spells_available">
+				<anchored to="genselectedframe" position="insidetopright" offset="5" width="40" height="20" />
+				<frame name="fieldlight" offset="5,5,5,5" />
+				<font>sheetlabel</font>
+				<readonly />
+				<center />
+			</stringcontrol>
+
+			<windowlist name="selectedspells">
+				<anchored>
+					<top parent="genselectedframe" anchor="bottom" relation="relative" offset="16" />
+					<left offset="15" />
+					<right offset="-50" />
+					<bottom offset="-42" />
+				</anchored>
+				<skipempty />
+				<child></child>
+				<child><backcolor>1A40301E</backcolor></child>
+				<frame name="fielddark" offset="10,9,10,9" />
+				<empty><textres>spell_drag_notice</textres></empty>
+				<class>selectedspell_item</class>
+				<sortby><control>group</control><control>level</control><control>name</control></sortby>
+				<script>
+					function onInit()
+						local wndSummary = UtilityManager.getTopWindow(window);
+						local sCantrips = window.cantrips_available.getValue();
+						local sTotalCantrips = string.match(sCantrips, "/(%d+)");
+						local sCantripsAvailable = string.match(sCantrips, "%d+");
+						local sSpells = window.spells_available.getValue();
+						local sTotalSpells = string.match(sSpells, "/(%d+)");
+						local sSpellsAvailable = string.match(sSpells, "%d+");
+						local nCantrips = 0;
+						local nSpells = 0;
+
+						if wndSummary.import == 1 then
+							for _,v in pairs(wndSummary.impspells) do
+								local nodeSpell = DB.findNode(v.record)
+								local sName = DB.getValue(nodeSpell, "name", "");
+								local nLevel = DB.getValue(nodeSpell, "level", 0);
+								local sSource = v.source;
+								local sLevel = "";
+
+								if nLevel == 0 then
+									sLevel = "Cantrip";
+								else
+									sLevel = tostring(nLevel);
+								end
+
+								local w = createWindow();
+								w.link.setValue(v.class, v.record);
+								w.name.setValue(sName);
+								w.displaylevel.setValue(sLevel);
+								w.group.setValue(sSource);
+
+								if sSource == "Innate" then
+									w.group.setComboBoxReadOnly(true);
+									w.selectedspells_idelete.setVisible(false);
+								end
+							end
+
+							local nCantrips, nSpells = CharWizardManager.getSelectedSpellCount(self);
+
+							window.cantrips_available.setValue(tostring(nCantrips) .. "/" .. sTotalCantrips)
+							window.spells_available.setValue(tostring(nSpells) .. "/" .. sTotalSpells)
+						end
+					end
+				</script>
+			</windowlist>
+			<scrollbar name="selectedspells_scrollbar">
+				<anchored to="selectedspells" />
+				<target>selectedspells</target>
+			</scrollbar>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="spell_item">
+		<margins control="0,0,0,2" />
+		<sheetdata>
+			<hsc name="subtype" />
+			<hsc name="source" />
+
+			<linkfield_list name="link" />
+			<string_list_link name="name">
+				<bounds>30,2,210,20</bounds>
+			</string_list_link>
+			<stringcontrol name="level">
+				<bounds>210,2,40,20</bounds>
+				<center />
+				<readonly />
+			</stringcontrol>
+
+			<buttoncontrol name="selectedspells_iadd">
+				<anchored position="insidetopright" offset="10,2" width="20" height="20" />
+				<icon normal="button_selectedspell_add" pressed="button_selectedspell_add_down" />
+				<tooltip textres="" />
+				<script>
+					function onButtonPress()
+						local wndSummary = UtilityManager.getTopWindow(window);
+						local sName = window.name.getValue();
+						local sSource = window.source.getValue();
+						local sSpellLevel = window.level.getValue();
+						local _,sRecord = window.link.getValue();
+						local nDisplayLevel = 0;
+
+						for _,wndSpellPath in pairs(window.windowlist.window.selectedspells.getWindows()) do
+							local sSelectedClass, sSelectedRecord = wndSpellPath.link.getValue();
+							if sRecord == sDragRecord then
+								return
+							end
+						end
+
+						local sCantrips = window.windowlist.window.cantrips_available.getValue();
+						local sTotalCantrips = string.match(sCantrips, "/(%d+)");
+						local sCantripsAvailable = string.match(sCantrips, "%d+");
+						local sSpells = window.windowlist.window.spells_available.getValue();
+						local sTotalSpells = string.match(sSpells, "/(%d+)");
+						local sSpellsAvailable = string.match(sSpells, "%d+");
+
+						if sSpellLevel == "Cantrip" then
+							window.windowlist.window.cantrips_available.setValue(tonumber(sCantripsAvailable) + 1 .. "/" .. sTotalCantrips);
+							nDisplayLevel = 0;
+						else
+							window.windowlist.window.spells_available.setValue(tonumber(sSpellsAvailable) + 1 .. "/" .. sTotalSpells);
+							nDisplayLevel = tonumber(sSpellLevel);
+						end
+
+						local wndSpellDrop = window.windowlist.window.selectedspells.createWindow();
+
+						wndSpellDrop.link.setValue("reference_spell", sRecord);
+						wndSpellDrop.name.setValue(StringManager.titleCase(sName));
+						wndSpellDrop.level.setValue(nDisplayLevel);
+						wndSpellDrop.displaylevel.setValue(sSpellLevel);
+						wndSpellDrop.group.setValue(StringManager.titleCase(sSource));
+
+						table.insert(wndSummary.spelllist, {class = "reference_spell", record = sRecord, source = sSource});
+
+						CharWizardManager.createSpellList(wndSummary, window.windowlist, nDisplayLevel, sSource);
+					end
+				</script>
+			</buttoncontrol>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="selectedspell_item">
+		<margins control="0,0,0,2" />
+		<sheetdata>
+			<hnc name="import" />
+			<hsc name="subtype" />
+			<hsc name="source" />
+
+			<linkfield_list name="link" />
+			<string_list_link name="name">
+				<bounds>30,2,210,20</bounds>
+			</string_list_link>
+			<stringcontrol name="displaylevel">
+				<bounds>210,2,40,20</bounds>
+				<center />
+				<readonly />
+			</stringcontrol>
+			<stringcontrol name="level">
+				<bounds>400,0,0,0</bounds>
+				<invisible/>
+			</stringcontrol>
+			<combobox name="group">
+				<bounds>270,2,120,20</bounds>
+				<nohide />
+				<listdirection>down</listdirection>
+				<default></default>
+				<center />
+				<script>
+					function onInit()
+						super.onInit();
+
+						local wndSummary = UtilityManager.getTopWindow(window);
+						local aClasses = {};
+						for _,v in pairs(wndSummary.summary.subwindow.summary_class.getWindows()) do
+							table.insert(aClasses, v.name.getValue())
+						end
+						addItems(aClasses);
+					end
+				</script>
+			</combobox>
+			<!--stringcontrol name="group">
+				<bounds>250,2,160,20</bounds>
+				<center />
+				<readonly />
+			</stringcontrol-->
+
+			<buttoncontrol name="selectedspells_idelete">
+				<anchored position="insidetopright" offset="10,2" width="20" height="20" />
+				<state icon="button_delete" tooltipres="button_delete" />
+				<state icon="button_deleteconfirm" tooltipres="button_deleteconfirm" />
+				<tooltip textres="" />
+				<script>
+					function setVisibility(bVisible)
+						setValue(0);
+						setVisible(bVisible);
+					end
+
+					function onButtonPress()
+						if getValue() == 0 then
+							local wndSummary = UtilityManager.getTopWindow(window);
+							local sName = window.name.getValue();
+							local sSource = window.group.getValue();
+							local sSpellLevel = window.displaylevel.getValue();
+							local _,sRecord = window.link.getValue();
+							local nDisplayLevel = 0;
+
+							local sCantrips = window.windowlist.window.cantrips_available.getValue();
+							local sTotalCantrips = string.match(sCantrips, "/(%d+)");
+							local sCantripsAvailable = string.match(sCantrips, "%d+");
+							local sSpells = window.windowlist.window.spells_available.getValue();
+							local sTotalSpells = string.match(sSpells, "/(%d+)");
+							local sSpellsAvailable = string.match(sSpells, "%d+");
+
+							if sSpellLevel == "Cantrip" then
+								if tonumber(sCantripsAvailable) == 0 then
+									return false
+								else
+									window.windowlist.window.cantrips_available.setValue(tonumber(sCantripsAvailable) - 1 .. "/" .. sTotalCantrips);
+								end
+							else
+								if tonumber(sSpellsAvailable) == 0 then
+									return false
+								else
+									window.windowlist.window.spells_available.setValue(tonumber(sSpellsAvailable) - 1 .. "/" .. sTotalSpells);
+									nDisplayLevel = tonumber(sSpellLevel);
+								end
+							end
+
+							for k,v in pairs(wndSummary.spelllist) do
+								if v.record == sRecord then
+									if wndSummary.impspells[sName:lower()] then
+										wndSummary.impspells[sName:lower()].delete = true;
+									end
+
+									table.remove(wndSummary.spelllist, k);
+
+									break
+								end
+							end
+
+							CharWizardManager.createSpellList(wndSummary, window.windowlist.window.spells, nDisplayLevel, sSource);
+
+							window.close();
+						end
+					end
+				</script>
+			</buttoncontrol>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="spell_class_item">
+		<margins control="0,0,0,10" />
+		<sheetdata>
+			<hsc name="toggle" />
+			<hnc name="level" />
+			<hsc name="module" />
+			<hsc name="class" />
+			<hsc name="name" />
+			<hlink name="shortcut" />
+
+			<!--genericcontrol name="rightanchor">
+				<anchored position="insidetopright" offset="0,2" height="0" width="0" />
+			</genericcontrol-->
+			<button_charwizard_race name="bname">
+				<anchored position="insidetopleft" offset="5,5" height="16" width="100" />
+				<!--anchored to="rightanchor" width="100" height="16">
+					<top />
+					<right anchor="left" relation="relative" offset="-2" />
+				</anchored-->
+				<script>
+					function onButtonPress()
+						local sClassName = window.name.getValue():lower();
+
+
+						window.windowlist.window.spells.closeAll();
+
+						for k,v in pairs(window.windowlist.getWindows()) do
+							v.bname.setFrame("buttonup", 4, 4, 4, 4)
+							v.toggle.setValue(0);
+						end
+
+						setFrame("buttondown", 4, 4, 4, 4);
+						window.toggle.setValue(1);
+
+						for i = 1, 10 do
+							window.windowlist.window["button_spelllevel_" .. i - 1].setFrame("buttonup", 5, 5, 5, 5)
+						end
+
+						if StringManager.contains({"paladin", "ranger"}, window.name.getValue():lower()) then
+							window.windowlist.window.button_spelllevel_1.onButtonPress();
+						else
+							window.windowlist.window.button_spelllevel_0.onButtonPress();
+						end
+					end
+				</script>
+			</button_charwizard_race>
+			<!--linkcontrol name="shortcut">
+				<anchored to="rightanchor" width="20" height="20">
+					<top />
+					<right anchor="left" relation="relative" offset="-2" />
+				</anchored>
+				<class>reference_class</class>
+				<readonly />
+				<invisible />
+			</linkcontrol-->
+		</sheetdata>
+	</windowclass>
+
+	<!-- Feats -->
+	<windowclass name="charsheet_charwizard_featalt">
+		<sheetdata>
+			<subwindow name="contents">
+				<anchored>
+					<top offset="0" />
+					<bottom offset="0" />
+					<left offset="0" />
+					<right offset="-535" />
+				</anchored>
+				<class>charwizard_featwindow_contents</class>
+				<activate />
+				<fastinit />
+			</subwindow>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="charwizard_featwindow_contents">
+		<sheetdata>
+			<anchor_column name="columnanchor" />
+
+			<label_charframetop name="feat_label">
+				<anchored height="20">
+					<top parent="columnanchor" anchor="bottom" relation="relative" offset="15" />
+					<left offset="15" />
+					<right offset="-50" />
+				</anchored>
+				<icons>char_abilities_green</icons>
+				<static textres="charwizard_label_feats" />
+			</label_charframetop>
+
+			<windowlist name="feat_window">
+				<anchored>
+					<top parent="feat_label" anchor="bottom" relation="relative" offset="10" />
+					<left offset="15" />
+					<right offset="-50" />
+					<bottom offset="-42" />
+				</anchored>
+				<skipempty />
+				<frame name="fielddark" offset="10,9,10,9" />
+				<empty><textres>no_feats_notice</textres></empty>
+				<class>charwizard_window_item</class>
+				<script>
+					function onInit()
+						local wndSummary = UtilityManager.getTopWindow(window);
+
+						if wndSummary.import == 0 then
+							for _,v in pairs(wndSummary.genraces.subwindow.contents.subwindow.race_window.getWindows()) do
+								if StringManager.contains({"human-variant", "custom lineage"}, v.selection_name.getValue():lower()) then
+									CharWizardManager.createSelectionWindows(self, "RACE FEAT", wndSummary.loaded_feats, 1, true)
+
+									break
+								end
+							end
+						end
+
+						for _,v in pairs(wndSummary.genclass.subwindow.contents.subwindow.class_window.getWindows()) do
+							if v.group_name.getValue():lower():match("asi choice") then
+								if v.selection_name.getValue():lower() == "feat" then
+									local sClassName = v.group_name.getValue():lower():match("(.-) asi choice")
+									local sClassLevel = v.group_name.getValue():lower():match("(%d+)")
+
+									sClassName = sClassName:gsub("%d+", "")
+
+									CharWizardManager.createSelectionWindows(self, StringManager.trim(sClassName:upper()) .. " " .. StringManager.trim(sClassLevel) .. " FEAT", wndSummary.loaded_feats, 1, true)
+								end
+							end
+						end
+
+						CharWizardManager.getAlerts(wndSummary, self);
+					end
+				</script>
+			</windowlist>
+
+			<scrollbar>
+				<anchored to="feat_window" />
+				<target>feat_window</target>
+			</scrollbar>
+		</sheetdata>
+	</windowclass>
+</root>

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  Please see the license.html file included with this distribution for 
+  attribution and copyright information.
+-->
+
+<root>
+	<panel name="modifierstack" modes="host,client" merge="join">
+		<bounds>15,-100,200,57</bounds>
+	</panel>
+	<panel name="dicetower" modes="host,client" merge="join">
+		<anchored height="100" width="100" />
+	</panel>
+	
+	<template name="basicchatentry">
+		<chatentry_step>
+			<anchored position="insidebottomleft" offset="24,17">
+				<right offset="-72" />
+			</anchored>
+		</chatentry_step>
+	</template>
+	<template name="basicchatwindow">
+		<chatwindow_step>
+			<anchored position="insidetopleft" offset="20,25">
+				<right offset="-30" />
+				<bottom parent="entry" anchor="top" relation="relative" offset="-15" />
+			</anchored>
+			<droptypes>
+				<type merge="add">attack</type>
+				<type merge="add">damage</type>
+				<type merge="add">heal</type>
+				<type merge="add">init</type>
+				<type merge="add">save</type>
+				<type merge="add">check</type>
+			</droptypes>
+			<stateframe>
+				<drophilight name="chatboxhilight" offset="7,12,16,6" />
+			</stateframe>
+		</chatwindow_step>
+	</template>
+	
+	<windowclass name="modifierstack">
+		<sizelimits>
+			<minimum width="200" height="60" />
+		</sizelimits>
+		<noclose />
+		<script>
+			function onInit()
+				ModifierStack.registerControl(self);
+			end
+			
+			function onClose()
+				ModifierStack.registerControl(nil);
+			end
+		</script>
+		<sheetdata>
+			<genericcontrol name="base">
+				<bounds>5,5,64,52</bounds>
+				<icon>modcollector</icon>
+				<counters>
+					<icon>modcollector_counter</icon>
+					<offset>
+						<x>10</x>
+						<y>45</y>
+					</offset>
+					<spacing>9</spacing>
+					<hoversize>4</hoversize>
+				</counters>
+				<acceptdrop>
+					<type>dice</type>
+					<type>number</type>
+					<type>attack</type>
+					<type>damage</type>
+					<type>heal</type>
+					<type>init</type>
+					<type>save</type>
+					<type>check</type>
+					<type>recovery</type>
+				</acceptdrop>
+				<script file="desktop/scripts/modifierstack_base.lua" />
+			</genericcontrol>
+			<numbercontrol name="modifier">
+				<bounds>15,12,42,22</bounds>
+				<stateframe>
+					<keyedit name="modstackfocus" />
+					<hover name="modstackfocus" />
+					<drophilight name="modstackfocus" />
+				</stateframe>
+				<font>modcollector</font>
+				<displaysign />
+				<droptypes>
+					<type>number</type>
+					<type>dice</type>
+					<type>attack</type>
+					<type>fullattack</type>
+					<type>damage</type>
+					<type>heal</type>
+					<type>init</type>
+					<type>save</type>
+					<type>check</type>
+					<type>recovery</type>
+				</droptypes>
+				<script file="desktop/scripts/modifierstack_modifier.lua" />
+			</numbercontrol>
+			<stringcontrol name="label">
+				<bounds>9,34,54,12</bounds>
+				<font>modcollectorlabel</font>
+				<static textres="modstack_label_modifier" />
+				<center />
+				<script>
+					function onDrop(x, y, draginfo)
+						return window.base.onDrop(x, y, draginfo);
+					end
+				</script>
+			</stringcontrol>
+			<buttoncontrol name="targeting">
+				<anchored position="insidetopleft" offset="2,2" width="15" height="15" />
+				<state icon="icon_targeting_off" frame="mini_name" frameoffset="2,2,2,2" tooltipres="modstack_tooltip_targeting_off" />
+				<state icon="drag_targeting" frame="mini_name" frameoffset="2,2,2,2" tooltipres="modstack_tooltip_targeting_on" />
+				<default>1</default>
+			</buttoncontrol>
+			
+			<button_modifierkey name="ADV">
+				<bounds>80,8,30,18</bounds>
+			</button_modifierkey>
+			<button_modifierkey name="DIS">
+				<bounds>80,35,30,18</bounds>
+			</button_modifierkey>
+			
+			<button_modifierkey name="PLUS2">
+				<bounds>120,8,30,18</bounds>
+			</button_modifierkey>
+			<button_modifierkey name="MINUS2">
+				<bounds>120,35,30,18</bounds>
+			</button_modifierkey>
+			
+			<button_modifierkey name="PLUS5">
+				<bounds>160,8,30,18</bounds>
+			</button_modifierkey>
+			<button_modifierkey name="MINUS5">
+				<bounds>160,35,30,18</bounds>
+			</button_modifierkey>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="dicetower" merge="join">
+		<sizelimits>
+			<minimum width="100" height="100" />
+		</sizelimits>
+		<sheetdata>
+			<genericcontrol name="base">
+				<bounds>0,0,100,100</bounds>
+				<droptypes>
+					<type merge="add">attack</type>
+					<type merge="add">damage</type>
+					<type merge="add">heal</type>
+					<type merge="add">init</type>
+					<type merge="add">save</type>
+					<type merge="add">check</type>
+				</droptypes>
+			</genericcontrol>
+		</sheetdata>
+	</windowclass>
+	
+</root>
+

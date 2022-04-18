@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  Please see the license.html file included with this distribution for 
+  attribution and copyright information.
+-->
+
+<root>
+	<windowclass name="charselect_host" merge="join">
+		<sheetdata>
+			<button_charwizard name="button_characterwizard" insertbefore="filter">
+				<anchored to="contentanchor" position="aboveleft" offset="5,0" />
+			</button_charwizard>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="charselect_client" merge="join">
+		<sheetdata>
+			<button_charwizard name="button_characterwizard" insertbefore="filter">
+				<anchored to="contentanchor" position="aboveleft" offset="5,0" />
+			</button_charwizard>
+		</sheetdata>
+	</windowclass>
+</root>

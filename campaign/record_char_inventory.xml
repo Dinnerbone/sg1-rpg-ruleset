@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  Please see the license.html file included with this distribution for 
+  attribution and copyright information.
+-->
+
+<root>
+	<windowclass name="charsheet_inventory">
+		<sheetdata>
+			<button_iedit name="inventory_iedit">
+				<anchored position="insidebottomright" offset="10,10" />
+				<tooltip textres="char_inventory_tooltip_edit" />
+				<script>
+					function onValueChanged()
+						local bEditMode = (getValue() == 1);
+						
+						window.contents.subwindow.inventorylist.update();
+					end
+				</script>
+			</button_iedit>
+
+			<subwindow name="contents">
+				<anchored>
+					<top offset="0" />
+					<bottom offset="-40" />
+					<left offset="0" />
+					<right offset="-15" />
+				</anchored>
+				<class>charsheet_inventory_contents</class>
+				<activate />
+				<fastinit />
+			</subwindow>
+			<scrollbar_charcontents />
+		</sheetdata>
+	</windowclass>
+		
+	<windowclass name="charsheet_inventory_contents">
+		<margins control="0,0,0,2" />
+		<script file="campaign/scripts/char_inventory.lua" />
+		<sheetdata>
+			<label_charframetop name="invtitle">
+				<bounds>15,10,-10,20</bounds>
+				<icons>char_inventory</icons>
+				<static textres="char_label_inventory" />
+			</label_charframetop>
+
+			<genericcontrol name="headeranchor">
+				<anchored to="invtitle" width="0" height="20">
+					<top anchor="bottom" relation="relative" offset="5" />
+					<left offset="-5" />
+				</anchored>
+				<disabled />
+			</genericcontrol>
+			<label name="count_label">
+				<anchored to="headeranchor" width="20">
+					<top />
+					<left anchor="right" relation="relative" offset="5" />
+				</anchored>
+				<center />
+				<static>#</static>
+			</label>
+			<genericcontrol name="rightanchor">
+				<anchored to="invtitle" position="belowright" offset="-5,5" width="0" height="20" />
+				<invisible />
+			</genericcontrol>
+			<genericcontrol name="shortcut_header">
+				<anchored to="rightanchor" width="20" height="20">
+					<top />
+					<right anchor="left" relation="relative" offset="-5" />
+				</anchored>
+				<disabled />
+			</genericcontrol>
+			<genericcontrol name="carried_header">
+				<anchored to="rightanchor" width="20" height="20">
+					<top />
+					<right anchor="left" relation="relative" offset="-5" />
+				</anchored>
+				<icon>char_inv_carried_header</icon>
+				<tooltip textres="char_tooltip_itemcarried" />
+			</genericcontrol>
+			<label name="weight_label">
+				<anchored to="rightanchor" width="30">
+					<top />
+					<right anchor="left" relation="relative" offset="-10" />
+				</anchored>
+				<center />
+				<static textres="char_label_itemweight" />
+				<tooltip textres="char_tooltip_itemweight" />
+			</label>
+			<genericcontrol name="attuned_header">
+				<anchored to="rightanchor" width="20" height="20">
+					<top />
+					<right anchor="left" relation="relative" offset="-5" />
+				</anchored>
+				<icon>char_attuned</icon>
+				<tooltip textres="char_inventory_tooltip_attuned" />
+			</genericcontrol>
+			<label name="location_label">
+				<anchored to="rightanchor" width="80">
+					<top />
+					<right anchor="left" relation="relative" offset="-10" />
+				</anchored>
+				<center />
+				<static textres="char_label_itemlocation" />
+			</label>
+			<label name="name_label">
+				<anchored to="headeranchor">
+					<top />
+					<left anchor="right" relation="current" offset="5" />
+					<right parent="rightanchor" anchor="left" relation="current" offset="-5" />
+				</anchored>
+				<static textres="char_label_itemname" />
+				<center />
+			</label>
+
+			<button_iadd name="inventorylist_iadd">
+				<anchored to="invtitle" position="insidetopright" offset="0,0" />
+				<target>inventorylist</target>
+			</button_iadd>
+			<list_charinv name="inventorylist">
+				<anchored to="invtitle">
+					<top anchor="bottom" relation="relative" offset="2" />
+					<right offset="5" />
+					<left offset="-5" />
+				</anchored>
+				<noscroll />
+			</list_charinv>
+			
+			<button_details name="button_invmeta">
+				<anchored to="invtitle" position="insidetopright" offset="25,0" />
+				<script>
+					function onButtonPress()
+						Interface.openWindow("charsheet_invmeta", window.getDatabaseNode());
+					end
+				</script>
+			</button_details>
+			<genericcontrol name="attunecalcicon">
+				<anchored to="button_invmeta" position="lefthigh" offset="55,0" width="20" height="20" />
+				<icon>char_attuned</icon>
+			</genericcontrol>
+			<string_charinv_attunecalc name="attunecalc">
+				<anchored to="attunecalcicon" position="righthigh" offset="0,0" height="20" />
+			</string_charinv_attunecalc>
+
+			<label_charframetop name="moneytitle">
+				<anchored to="invtitle" height="20">
+					<top anchor="bottom" relation="relative" offset="10" />
+					<left />
+					<right />
+				</anchored>
+				<icons>char_treasure</icons>
+				<static textres="char_label_money" />
+			</label_charframetop>
+
+			<list_charcurrency_inline name="currencylist" />
+			<button_iadd_currencylist_inline name="currencylist_iadd" />
+			<button_iedit_currencylist_inline name="currencylist_iedit" />
+			<string_coinother_inline name="coinother" />
+
+			<label_charframetop name="encumbrancetitle">
+				<anchored to="moneytitle" height="20">
+					<top anchor="bottom" relation="relative" offset="10" />
+					<left />
+					<right />
+				</anchored>
+				<icons>char_inventory</icons>
+				<static textres="char_label_encumbrance" />
+			</label_charframetop>
+			<number_static name="encumbranceload" source="encumbrance.load">
+				<anchored to="encumbrancetitle" width="60" height="30">
+					<top anchor="bottom" relation="relative" offset="20" />
+					<right offset="-10" />
+				</anchored>
+				<font>sheetlabel</font>
+			</number_static>
+			<label_fieldtop name="encumbranceload_label">
+				<anchored to="encumbranceload" />
+				<static textres="char_label_totalweight" />
+			</label_fieldtop>
+
+			<genericcontrol name="encumbranceanchor">
+				<anchored to="encumbrancetitle" position="belowleft" offset="0,20" width="0" height="30" />
+				<invisible />
+			</genericcontrol>
+			<number_static name="encumbrancebase" source="encumbrance.encumbered">
+				<anchored to="encumbranceanchor" width="60" height="30">
+					<top />
+					<left anchor="right" relation="relative" offset="10" />
+				</anchored>
+			</number_static>
+			<label_fieldtop name="encumbrancebase_label">
+				<anchored to="encumbrancebase" />
+				<static textres="char_label_encbase" />
+			</label_fieldtop>
+			<number_static name="encumbranceheavy" source="encumbrance.encumberedheavy">
+				<anchored to="encumbranceanchor" width="70" height="30">
+					<top />
+					<left anchor="right" relation="relative" offset="10" />
+				</anchored>
+			</number_static>
+			<label_fieldtop name="encumbranceheavy_label">
+				<anchored to="encumbranceheavy" />
+				<static textres="char_label_encheavy" />
+			</label_fieldtop>
+			<number_static name="encumbrancemax" source="encumbrance.max">
+				<anchored to="encumbranceanchor" width="70" height="30">
+					<top />
+					<left anchor="right" relation="relative" offset="10" />
+				</anchored>
+			</number_static>
+			<label_fieldtop name="encumbrancemax_label">
+				<anchored to="encumbrancemax" />
+				<static textres="char_label_encmax" />
+			</label_fieldtop>
+			<number_static name="encumbrancedrag" source="encumbrance.liftpushdrag">
+				<anchored to="encumbranceanchor" width="70" height="30">
+					<top />
+					<left anchor="right" relation="relative" offset="10" />
+				</anchored>
+			</number_static>
+			<label_fieldtop name="encumbrancedrag_label">
+				<anchored to="encumbrancedrag" offset="10,1" />
+				<static textres="char_label_encdrag" />
+			</label_fieldtop>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="char_invitem" merge="join">
+		<script file="campaign/scripts/char_invitem.lua" />
+		<sheetdata>
+			<button_idelete name="idelete" merge="delete" />
+			<button_idelete name="idelete" insertbefore="carried">
+				<anchored>
+					<top offset="2" />
+					<right parent="rightanchor" anchor="left" offset="-5" />
+				</anchored>
+			</button_idelete>
+
+			<button_checkbox name="attune" insertbefore="location">
+				<anchored width="20" height="20">
+					<top offset="2"/>
+					<right parent="rightanchor" anchor="left" relation="relative" offset="-5"/>
+				</anchored>
+			</button_checkbox>
+			<simplestringc name="attune_na" insertbefore="location">
+				<anchored width="20" height="20">
+					<top offset="2"/>
+					<right parent="rightanchor" anchor="left" relation="relative" offset="-5"/>
+				</anchored>
+				<static text="-" />
+				<center />
+			</simplestringc>
+		</sheetdata>
+	</windowclass>
+
+	<windowclass name="charsheet_invmeta">
+		<frame>charsheethelper</frame>
+		<placement>
+			<size width="400" height="145" />
+		</placement>
+		<nodelete />
+		<playercontrol />
+		<script>
+			function onInit()
+				OptionsManager.registerCallback("HRAS", onBaseSlotsChanged);
+				DB.addHandler(DB.getPath(getDatabaseNode(), "profbonus"), "onUpdate", onBaseSlotsChanged);
+
+				onBaseSlotsChanged();
+			end
+
+			function onClose()
+				OptionsManager.unregisterCallback("HRAS", onBaseSlotsChanged);
+				DB.removeHandler(DB.getPath(getDatabaseNode(), "profbonus"), "onUpdate", onBaseSlotsChanged);
+			end
+
+			function onBaseSlotsChanged()
+				local nodeChar = getDatabaseNode();
+				local nBase = CharAttunementManager.getBaseSlots(nodeChar);
+				attunebase.setValue(nBase);
+			end
+		</script>
+		<sheetdata>
+			<windowtitlebar_char name="title">
+				<prefix>char_invmeta_title</prefix>
+			</windowtitlebar_char>
+			<anchor_title_charsheethelper name="contentanchor" />
+
+			<!-- Attunement Detail -->
+			<label name="label_attunedetail">
+				<anchored width="100">
+					<top parent="contentanchor" anchor="bottom" relation="relative" offset="20" />
+					<left offset="30" />
+				</anchored>
+				<static textres="char_label_attunedetail" />
+			</label>
+			<simplenumberc name="attunebase">
+				<anchored to="label_attunedetail" position="righthigh" offset="5,0" width="45" height="20" />
+				<frame name="fieldlight" offset="7,5,7,5" />
+				<hideonvalue>0</hideonvalue>
+			</simplenumberc>
+			<label_fieldtop name="label_attunebase">
+				<anchored to="attunebase" />
+				<static textres="base" />
+			</label_fieldtop>
+			<label name="label_attuneplus">
+				<anchored to="attunebase" position="righthigh" offset="5,0" width="10" />
+				<static>+</static>
+				<center />
+			</label>
+			<basicnumber name="attuneclass" source="attunement.class">
+				<anchored to="label_attuneplus" position="right" offset="5,0" width="45" />
+				<hideonvalue>0</hideonvalue>
+			</basicnumber>
+			<label_fieldtop name="label_attuneclass">
+				<anchored to="attuneclass" />
+				<static textres="char_label_attuneclass" />
+			</label_fieldtop>
+			<label name="label_attuneplus2">
+				<anchored to="attuneclass" position="righthigh" offset="5,0" width="10" />
+				<static>+</static>
+				<center />
+			</label>
+			<basicnumber name="attunemisc" source="attunement.misc">
+				<anchored to="label_attuneplus2" position="right" offset="5,0" width="45" />
+				<hideonvalue>0</hideonvalue>
+			</basicnumber>
+			<label_fieldtop name="label_attunemisc">
+				<anchored to="attunemisc" />
+				<static textres="misc" />
+			</label_fieldtop>
+
+			<close_charsheethelper />
+		</sheetdata>
+	</windowclass>
+</root>

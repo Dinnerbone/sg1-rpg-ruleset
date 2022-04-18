@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  Please see the license.html file included with this distribution for 
+  attribution and copyright information.
+-->
+
+<root>
+	<distance>
+		<base>5</base>
+		<diagmult>1</diagmult>
+		<suffix>'</suffix>
+	</distance>
+
+	<imagesettings>
+		<pointer defaultconeangle="5E" />
+	</imagesettings>
+	
+	<hotkeybar>
+		<title frame="hotkeytitlebox" frameoffset="2,-2,5,2" margin="2,7" font="hotkey" />
+	</hotkeybar>
+	
+	<!-- Dice -->
+	<die name="d4">
+		<icon>d4icon</icon>
+		<position>495,-70</position>
+	</die>
+	<die name="d6">
+		<icon>d6icon</icon>
+		<position>445,-70</position>
+	</die>
+	<die name="d8">
+		<icon>d8icon</icon>
+		<position>395,-70</position>
+	</die>
+	<die name="d10">
+		<icon>d10icon</icon>
+		<position>345,-70</position>
+	</die>
+	<die name="d12">
+		<icon>d12icon</icon>
+		<position>295,-70</position>
+	</die>
+	<die name="d20">
+		<icon>d20icon</icon>
+		<position>245,-70</position>
+	</die>
+
+	<die name="dF" merge="delete" />
+	<die name="rF" merge="delete" />
+	<die name="gF" merge="delete" />
+	<die name="bF" merge="delete" />
+	<die name="pF" merge="delete" />
+	
+	<customdie name="d0">
+		<model>d6</model>
+		<menuicon>customdice</menuicon>
+		<script>
+			function onValue(result)
+				return 0;
+			end
+		</script>
+	</customdie>
+</root>

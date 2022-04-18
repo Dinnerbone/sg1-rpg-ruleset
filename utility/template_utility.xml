@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+  Please see the license.html file included with this distribution for 
+  attribution and copyright information.
+-->
+
+<root>
+	<!-- Library - Master Index -->
+	<template name="button_forge_item">
+		<button_text_sm>
+			<anchored to="buttonanchor" width="50">
+				<top />
+				<left anchor="right" relation="relative" offset="5" />
+			</anchored>
+			<state textres="item_button_forge" />
+			<script>
+				function onButtonPress()
+					Interface.openWindow("forge_magicitem", "forge.magicitem");
+				end
+			</script>
+		</button_text_sm>
+	</template>
+
+	<!-- Calendar -->
+	<template name="anchor_calendar">
+		<genericcontrol name="contentframe">
+			<anchored>
+				<top parent="contentanchor" anchor="bottom" relation="relative" offset="5" />
+				<left offset="10" />
+				<right offset="-10" />
+				<bottom offset="-25" />
+			</anchored>
+		</genericcontrol>
+	</template>
+	<template name="anchor_calendarlog">
+		<genericcontrol>
+			<anchored height="0">
+				<top parent="title" anchor="bottom" offset="0" />
+				<left parent="" anchor="left" offset="30" />
+				<right parent="" anchor="right" offset="-30" />
+			</anchored>
+			<disabled />
+		</genericcontrol>
+	</template>
+	
+	<!-- Library - Master Index -->
+	<template name="masterindex_anchor_bottom">
+		<genericcontrol>
+			<anchored height="0">
+				<bottom offset="-25" />
+				<left parent="" anchor="left" offset="35" />
+				<right parent="" anchor="right" offset="-40" />
+			</anchored>
+			<disabled />
+		</genericcontrol>
+	</template>
+</root>

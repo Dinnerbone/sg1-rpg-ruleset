@@ -1,0 +1,417 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- 
+	Please see the license.html file included with this distribution for
+	attribution and copyright information.
+-->
+
+<root>
+	<template name="number_charwizard_genabilityscore">
+		<basicnumberc>
+			<default>10</default>
+			<script>
+				function onInit()
+					super.onInit()
+
+					onValueChanged()
+				end
+
+				function onDragStart(button, x, y, draginfo)
+					return false;
+				end
+
+				function onValueChanged()
+					local w = Interface.findWindow("charwizard", "");
+					local sAbility = getName();
+
+					if window.parentcontrol.window.parentcontrol.window.import ~= 1 then
+						local nScore = getValue();
+
+						w.summary.subwindow["summary_base_" .. string.lower(sAbility)].setValue(nScore);
+					end
+
+					w.calcSummaryStats();
+				end
+			</script>
+			<readonly />
+		</basicnumberc>
+	</template>
+
+	<template name="number_charwizard_statracemod">
+		<basicnumberc>
+			<modifiersize>mini</modifiersize>
+			<readonly />
+			<script>
+				function onDragStart(button, x, y, draginfo)
+					return false;
+				end
+			</script>
+		</basicnumberc>
+	</template>
+
+	<template name="number_charwizard_abilityscore">
+		<number_charwizard_genabilityscore>
+			<anchored width="40" height="40">
+				<top parent="columnanchor" anchor="bottom" relation="relative" offset="20" />
+				<left anchor="center" relation="relative" offset="-210" />
+			</anchored>
+		</number_charwizard_genabilityscore>
+	</template>
+
+	<template name="number_charwizard_abilityscore2">
+		<number_charwizard_genabilityscore>
+			<anchored to="strength" width="40" height="40">
+				<top anchor="top" offset="0" />
+				<left anchor="right" relation="relative" offset="30" />
+			</anchored>
+		</number_charwizard_genabilityscore>
+	</template>	
+
+	<template name="button_charwizard_ability_moveup">
+		<buttoncontrol>
+			<anchored position="belowleft" offset="-2,0" width="20" height="20" />
+			<icon normal="button_page_prev" />
+			<invisible />
+			<script>
+				function onButtonPress()
+					window.handleMoveAbility(getName(), -1);
+				end
+			</script>
+		</buttoncontrol>
+	</template>	
+	<template name="button_charwizard_ability_movedown">
+		<buttoncontrol>
+			<anchored position="belowright" offset="-2,0" width="20" height="20" />
+			<icon normal="button_page_next" />
+			<invisible />
+			<script>
+				function onButtonPress()
+					window.handleMoveAbility(getName(), 1);
+				end
+			</script>
+		</buttoncontrol>
+	</template>	
+	<template name="button_charwizard_ability_genvalup">
+		<buttoncontrol>
+			<anchored position="aboveright" offset="-25,-20" width="20" height="20" />
+			<icon normal="arrow_sm_up" />
+			<invisible />
+			<script>
+				function onButtonPress()
+					local sName = getName();
+					window.handleAbilityPointBuy(sName, 1);
+				end
+			</script>
+		</buttoncontrol>
+	</template>
+	<template name="button_charwizard_ability_genvaldown">
+		<buttoncontrol>
+			<anchored position="belowright" offset="-25,-20" width="20" height="20" />
+			<icon normal="arrow_sm_down" />
+			<invisible />
+			<script>
+				function onButtonPress()
+					local sName = getName();
+					window.handleAbilityPointBuy(sName, -1);
+				end
+			</script>
+		</buttoncontrol>
+	</template>
+	<template name="button_charwizard">
+		<button_text_sm>
+			<anchored width="120" height="20" />
+			<state textres="charselect_button_wizard" />
+			<script>
+				function onButtonPress()
+					Interface.openWindow("charwizard", "");
+				end	
+			</script>
+		</button_text_sm>
+	</template>
+	<template name="button_charwizard_commit">	
+		<buttoncontrol>
+			<anchored height="20" />
+			<frame name="buttonup" offset="5,5,5,5" />
+			<stateframe>
+				<pressed name="buttondown" offset="5,5,5,5" nobaseframe="true" />
+			</stateframe>
+			<font>button-white-large</font>
+			<pressed offset="1,1" />
+			<tooltip textres="charwizard_tooltip_commit" />
+			<state textres="charwizard_commit" />			
+			<script>
+				function onButtonPress()
+					window.onCommitButtonPressed();
+				end	
+			</script>
+		</buttoncontrol>	
+	</template>
+
+	<template name="button_charwizard_warning_save">	
+		<buttoncontrol>
+			<anchored height="20" />
+			<frame name="buttonup" offset="5,5,5,5" />
+			<stateframe>
+				<pressed name="buttondown" offset="5,5,5,5" nobaseframe="true" />
+			</stateframe>
+			<font>button-white-large</font>
+			<pressed offset="1,1" />
+			<tooltip textres="charwizard_tooltip_save" />
+			<state textres="charwizard_save" />
+			<script>
+				function onButtonPress()
+					local wndSummary = Interface.findWindow("charwizard", "")
+					wndSummary.onWarningSaveButtonPressed();
+					window.close();
+				end	
+			</script>
+		</buttoncontrol>
+	</template>
+
+	<template name="button_charwizard_warning_cancel">	
+		<buttoncontrol>
+			<anchored height="20" />
+			<frame name="buttonup" offset="5,5,5,5" />
+			<stateframe>
+				<pressed name="buttondown" offset="5,5,5,5" nobaseframe="true" />
+			</stateframe>
+			<font>button-white-large</font>
+			<pressed offset="1,1" />
+			<tooltip textres="charwizard_tooltip_cancel" />
+			<state textres="charwizard_cancel" />
+			<script>
+				function onButtonPress()
+					window.close();
+				end	
+			</script>
+		</buttoncontrol>
+	</template>	
+	<template name="button_charwizard_tab">	
+		<buttoncontrol>
+			<anchored height="20" />
+			<frame name="buttonup" offset="5,5,5,5" />
+			<stateframe>
+				<pressed name="buttondown" offset="5,5,5,5" nobaseframe="true" />
+			</stateframe>
+			<font>button-white-large</font>
+			<pressed offset="1,1" />
+			<tooltip textres="" />
+			<state textres="" />
+		</buttoncontrol>
+	</template>
+
+	<template name="button_charwizard_expand_window">
+		<buttoncontrol>
+			<anchored width="20" height="20" />
+			<state icon="button_expand" />
+			<state icon="button_collapse" />
+			<script>
+				function onButtonPress()
+					if window[self.target[1]].isVisible() then
+						window[self.target[1]].setVisible(false);
+					else
+						window[self.target[1]].setVisible(true);
+					end
+				end
+			</script>
+		</buttoncontrol>
+	</template>
+
+	<template name="button_charwizard_race">
+		<buttoncontrol>
+			<frame name="buttonup" offset="5,5,5,5" />
+			<stateframe>
+				<normal name="buttonup" offset="5,5,5,5" nobaseframe="true" />			
+				<pressed name="buttondown" offset="5,5,5,5" nobaseframe="true" />
+			</stateframe>
+			<font>button-white-large</font>
+			<pressed offset="1,1" />			
+		</buttoncontrol>
+	</template>	
+
+	<template name="button_charwizard_choice">
+		<buttoncontrol>
+			<frame name="buttonup" offset="5,5,5,5" />
+			<stateframe>
+				<normal name="buttonup" offset="5,5,5,5" nobaseframe="true" />
+				<pressed name="buttondown" offset="5,5,5,5" nobaseframe="true" />
+			</stateframe>		
+			<font>button-white-large</font>
+			<pressed offset="1,1" />			
+		</buttoncontrol>
+	</template>
+
+	<template name="button_charwizard_inventory">
+		<buttoncontrol>
+			<frame name="buttonup" offset="5,5,5,5" />
+			<stateframe>
+				<normal name="buttonup" offset="5,5,5,5" nobaseframe="true" />			
+				<pressed name="buttondown" offset="5,5,5,5" nobaseframe="true" />
+			</stateframe>
+			<font>button-white-large</font>
+			<pressed offset="1,1" />
+			<script>
+				function onButtonPress()
+					local bVisible = false;
+					if window.inventory_button.isVisible() then
+						bVisible = true;
+					end
+
+					window.inventory_button.setVisible(not bVisible);
+					window.kit_button.setVisible(bVisible);
+					window.reset_kit_button.setVisible(bVisible);
+					window.kitlist.setVisible(bVisible);
+					window.kitlist_scrollbar.setVisible(bVisible);
+					window.items_filter_label.setVisible(not bVisible);
+					window.filter_toggle.setVisible(not bVisible);
+					window.filter.setVisible(not bVisible);
+					window.gear_button.setVisible(not bVisible);
+					window.weapon_button.setVisible(not bVisible);
+					window.armor_button.setVisible(not bVisible);
+					window.itemlist.setVisible(not bVisible);
+					window.itemlist_scrollbar.setVisible(not bVisible);
+					window.inventory_label.setVisible(not bVisible);
+					window.items_cost_label.setVisible(not bVisible);
+					window.items_cost_label_pp.setVisible(not bVisible);
+					window.total_cost_pp.setVisible(not bVisible);
+					window.items_cost_label_gp.setVisible(not bVisible);
+					window.total_cost_gp.setVisible(not bVisible);
+					window.items_cost_label_sp.setVisible(not bVisible);
+					window.total_cost_sp.setVisible(not bVisible);
+					window.items_cost_label_cp.setVisible(not bVisible);
+					window.total_cost_cp.setVisible(not bVisible);
+					window.inventory.setVisible(not bVisible);
+					window.inventory_scrollbar.setVisible(not bVisible);
+					window.geninvframe.setVisible(not bVisible);
+				end
+			</script>
+		</buttoncontrol>
+	</template>
+
+	<template name="button_charwizard_spelllevel">
+		<button_charwizard_race>
+			<script>
+				function onButtonPress()
+					local wndSelectedClass = window.spellclass.getWindows();
+					local sClassName = ""
+					local nSpellLevel = getName():gsub("button_spelllevel_", "");
+
+					for _,v in pairs(wndSelectedClass) do
+						if v.toggle.getValue() == "1" then
+							sClassName = v.name.getValue();
+						end
+					end
+
+					CharWizardManager.createSpellList(UtilityManager.getTopWindow(window), window.spells, tonumber(nSpellLevel), sClassName);
+
+					for i = 1, 10 do
+						local nLevel = i - 1
+						if nLevel ~= nSpellLevel then
+							window["button_spelllevel_" .. nLevel].setFrame("buttonup", 5, 5, 5, 5);
+						end
+					end
+
+					setFrame("buttondown", 5, 5, 5, 5);
+				end
+			</script>
+		</button_charwizard_race>
+	</template>
+
+	<template name="button_charwizard_selection">
+		<buttoncontrol>
+			<frame name="buttonup" offset="5,5,5,5" />
+			<stateframe>
+				<normal name="buttonup" offset="5,5,5,5" nobaseframe="true" />
+				<pressed name="buttondown" offset="5,5,5,5" nobaseframe="true" />
+			</stateframe>
+			<font>button-white</font>
+			<pressed offset="1,1" />
+			<anchored position="insidetopleft" offset="5,5" height="20">
+				<right offset="-5" />
+			</anchored>
+			<script>
+				function onButtonPress()
+					local wList = window.windowlist.window.windowlist;
+					local sGroupName = window.windowlist.window.group_name.getValue();
+					local wSelection = window.windowlist.window;
+					local bVisible = window.windowlist.window.selection_count.isVisible();
+					local bASI = window.windowlist.window.windowlist.window.parentcontrol.window.getClass() == "charsheet_charwizard_stats";
+					local bIncrease = true;
+
+					if bVisible or bASI then
+						local nChoicesRemaining = window.windowlist.window.selection_count.getValue();
+
+						if window.value.getValue() == "1" then
+							setFrame("buttonup", 5, 5, 5, 5);
+							window.value.setValue("0");
+							window.windowlist.window.selection_count.setValue(nChoicesRemaining + 1);
+							bIncrease = false;
+						else
+							if nChoicesRemaining == 0 then
+								return;
+							end
+							setFrame("buttondown", 5, 5, 5, 5);
+							window.value.setValue("1");
+							window.windowlist.window.selection_count.setValue(nChoicesRemaining - 1);
+						end
+					else
+						for _,vReset in pairs(window.windowlist.getWindows()) do
+							vReset.bname.setFrame("buttonup", 5, 5, 5, 5);
+							vReset.value.setValue("0");
+						end
+						setFrame("buttondown", 5, 5, 5, 5);
+						window.value.setValue("1");
+					end
+
+					CharWizardManager.parseSelection(wList, wSelection, window.windowlist.window.group_name.getValue(), window.name.getValue(), bIncrease, window.shortcut.getValue());
+				end
+			</script>
+		</buttoncontrol>
+	</template>
+
+	<template name="button_charwizard_level_genvalup">
+		<buttoncontrol>
+			<!--anchored position="aboveright" offset="-25,-20" width="20" height="20" /-->
+			<icon normal="arrow_sm_up" />
+			<invisible />
+			<script>
+				function onButtonPress()
+					local cLevel = window.level;
+					local nLevel = cLevel.getValue();
+
+					CharWizardManager.handleLevelChange(nLevel, cLevel, 1);
+				end
+			</script>
+		</buttoncontrol>
+	</template>
+
+	<template name="button_charwizard_level_genvaldown">
+		<buttoncontrol>
+			<!--anchored position="aboveleft" offset="-25,-20" width="20" height="20" /-->
+			<icon normal="arrow_sm_down" />
+			<invisible />
+			<script>
+				function onButtonPress()
+					local cLevel = window.level;
+					local nLevel = cLevel.getValue();
+
+					CharWizardManager.handleLevelChange(nLevel, cLevel, -1);
+				end
+			</script>
+		</buttoncontrol>
+	</template>
+
+	<template name="button_warningfix">
+		<button_text_sm>
+			<state textres="charselect_button_warningfix" />
+			<script>
+				function onButtonPress()
+					local nTab = window.order.getValue();
+					local wndSummary = UtilityManager.getTopWindow(window);
+
+					wndSummary.tabs.activateTab(nTab);
+				end
+			</script>
+		</button_text_sm>
+	</template>
+</root>	
