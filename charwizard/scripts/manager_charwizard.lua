@@ -290,7 +290,7 @@ function parseSelection(wList, wSelection, sSelectionGroup, sSelectionName, bInc
 	if sType == "race" then
 		if sSelectionKey == "RACE" then
 			parseSelectRace(wndSummary, wList, wSelection, nodeSource);
-		elseif sSelectionKey == "SUBRACE" then
+		elseif sSelectionKey == "RACE OPTION" then
 			parseSelectSubRace(wndSummary, wList, wSelection, nodeSource);
 		elseif sSelectionKey == "RACIAL MODIFIERS" then
 			parseRacialModChoice(wSelection, wList, sSelectionName, wndSummary);
@@ -537,7 +537,7 @@ function getDefaultRaceMods(wList)
 		local sGroup = w.group_name.getValue();
 		if sGroup == "RACE" then
 			_,sRacePath = w.selection_shortcut.getValue();
-		elseif sGroup == "SUBRACE" then
+		elseif sGroup == "RACE OPTION" then
 			_,sSubRacePath = w.selection_shortcut.getValue();
 		end
 	end
@@ -691,7 +691,7 @@ function parseSelectRace(wndSummary, wList, wSelection, nodeSource)
 			aSubraceOptions[sSpecName] = { tooltip = sTooltip, class = v.linkclass, record = v.linkrecord };
 		end
 
-		CharWizardManager.createSelectionWindows(wList, "SELECT SUBRACE", aSubraceOptions, 1, true);
+		CharWizardManager.createSelectionWindows(wList, "SELECT RACE OPTION", aSubraceOptions, 1, true);
 	else
 		local aRacialModifiers = {};
 		local bDefault = false;
@@ -731,7 +731,7 @@ function parseSelectRace(wndSummary, wList, wSelection, nodeSource)
 end
 
 function parseSelectSubRace(wndSummary, wList, wSelection, nodeSource)
-	CharWizardManager.closeListWindowsExcept(wList, { "RACE", "SUBRACE" });
+	CharWizardManager.closeListWindowsExcept(wList, { "RACE", "RACE OPTION" });
 	CharWizardManager.onSelectionChange(wSelection, "reference_subrace", nodeSource.getPath());
 
 	local sRaceRecord;

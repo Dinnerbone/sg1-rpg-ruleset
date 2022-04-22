@@ -51,7 +51,7 @@
 	<string name="skill">Skill</string>
 	<string name="savingthrow">Saving Throw</string>
 	<string name="racial">Racial</string>
-	<string name="subracial">Subracial</string>
+	<string name="subracial">Race Option</string>
 	<string name="background">Background</string>
 	<string name="2nd">2nd</string>
 
@@ -259,7 +259,7 @@
 	
 	<string name="char_error_missingrecord">Unable to find record to match link dropped. Check to make sure the correct modules are open.</string>
 	<string name="char_error_addskill">Unknown format for class skill proficiency.</string>
-	<string name="char_error_addsubrace">To add this race to your character, you must choose exactly one subrace.</string>
+	<string name="char_error_addsubrace">To add this race to your character, you must choose exactly one race option.</string>
 	<string name="char_error_addclasshd">Unable to find class hit die type (assuming d6).</string>
 	<string name="char_error_addclassspecialization">To add this specialization to your character, you must choose exactly one option.</string>
 	
@@ -268,8 +268,8 @@
 	<string name="char_build_message_selectabilityincrease1">Choose 1 ability to increase by %d.</string>
 	<string name="char_build_title_selectskills">Select Skills</string>
 	<string name="char_build_message_selectskills">Choose %d skill(s) from the list below in which your character will become proficient.</string>
-	<string name="char_build_title_selectsubrace">Select Sub-Race</string>
-	<string name="char_build_message_selectsubrace">Choose %s sub-race from the list below.</string>
+	<string name="char_build_title_selectsubrace">Select Race Option</string>
+	<string name="char_build_message_selectsubrace">Choose %s race option from the list below.</string>
 	<string name="char_build_title_selectspecialization">Select Specialization</string>
 	<string name="char_build_message_selectspecialization">Choose %s option from the list below.</string>
 	
@@ -496,8 +496,10 @@
 	<string name="class_header_specializations">SPECIALIZATIONS</string>
 
 	<!-- Races -->
-	<string name="race_header_subraces">SUB-RACES</string>
+	<string name="race_header_subraces">RACE OPTIONS</string>
 	<string name="race_header_traits">TRAITS</string>
+	<string name="race_abilityscoreincrease">Ability Scores</string>
+	<string name="race_proficiencies">Proficiencies</string>
 
 	<!-- Skills -->
 	<string name="skill_label_ability">Ability</string>
@@ -709,7 +711,7 @@
 	<string name="ref_type_classability">Class Specialization</string>
 	<string name="ref_type_proficiency">Proficiency</string>
 	<string name="ref_type_racialtrait">Racial Trait</string>
-	<string name="ref_type_subrace">Subrace</string>
+	<string name="ref_type_subrace">Race Option</string>
 	<string name="ref_type_spell">Spell</string>
 	<string name="ref_type_feature">Feature</string>
 	<string name="ref_type_trait">Trait</string>
@@ -814,9 +816,9 @@
 	<string name="library_recordtype_value_spell_level_0">Cantrip</string>
 
 	<string name="library_recordtype_empty_backgroundfeature">&#171; New Background Feature &#187;</string>
-	<string name="library_recordtype_empty_subrace">&#171; New Sub-Race &#187;</string>
+	<string name="library_recordtype_empty_subrace">&#171; New Race Option &#187;</string>
 	<string name="library_recordtype_empty_racialtrait">&#171; New Racial Trait &#187;</string>
-	<string name="library_recordtype_empty_subracialtrait">&#171; New Sub-Racial Trait &#187;</string>
+	<string name="library_recordtype_empty_subracialtrait">&#171; New Race Option Trait &#187;</string>
 	<string name="library_recordtype_empty_classproficiency">&#171; New Class Proficiency &#187;</string>
 	<string name="library_recordtype_empty_classfeature">&#171; New Class Feature &#187;</string>
 	<string name="library_recordtype_empty_classspecialization">&#171; New Class Specialization &#187;</string>

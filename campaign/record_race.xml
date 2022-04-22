@@ -82,10 +82,28 @@
 				local bReadOnly = WindowManager.getReadOnlyState(getDatabaseNode());
 				subraces.update(bReadOnly);
 				traits.update(bReadOnly);
+				hitpoints.update(bReadOnly);
+				abilityscoreincrease.update(bReadOnly);
+				proficiencies.update(bReadOnly);
 			end
 		</script>
 		<sheetdata>
 			<anchor_column name="columnanchor" />
+			
+			<label_column name="hitpoints_label">
+				<static textres="hitpoints" />
+			</label_column>
+			<string_columnh name="hitpoints" source="hitpoints" />
+			
+			<label_column name="abilityscoreincrease_label">
+				<static textres="race_abilityscoreincrease" />
+			</label_column>
+			<string_columnh name="abilityscoreincrease" source="abilityscoreincrease" />
+			
+			<label_column name="proficiencies_label">
+				<static textres="race_proficiencies" />
+			</label_column>
+			<string_columnh name="proficiencies" source="proficiencies" />
 			
 			<header_column name="subraces_header">
 				<static textres="race_header_subraces"/>
@@ -282,10 +300,28 @@
 			function update()
 				local bReadOnly = WindowManager.getReadOnlyState(getDatabaseNode());
 				traits.update(bReadOnly);
+				hitpoints.update(bReadOnly);
+				abilityscoreincrease.update(bReadOnly);
+				proficiencies.update(bReadOnly);
 			end
 		</script>
 		<sheetdata>
 			<anchor_column name="columnanchor" />
+			
+			<label_column name="hitpoints_label">
+				<static textres="hitpoints" />
+			</label_column>
+			<string_columnh name="hitpoints" source="hitpoints" />
+			
+			<label_column name="abilityscoreincrease_label">
+				<static textres="race_abilityscoreincrease" />
+			</label_column>
+			<string_columnh name="abilityscoreincrease" source="abilityscoreincrease" />
+			
+			<label_column name="proficiencies_label">
+				<static textres="race_proficiencies" />
+			</label_column>
+			<string_columnh name="proficiencies" source="proficiencies" />
 			
 			<header_column name="traits_header">
 				<static textres="race_header_traits"/>

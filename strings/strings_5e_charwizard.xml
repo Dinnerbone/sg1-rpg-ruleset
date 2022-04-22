@@ -64,12 +64,12 @@
 
 	<!-- Character Wizard - Races -->
 	<string name="charwizard_races_title">SELECT RACE</string>
-	<string name="charwizard_subraces_title">SELECT SUBRACE</string>
-	<string name="charwizard_label_races">SELECT A RACE AND SUBRACE</string>
+	<string name="charwizard_subraces_title">SELECT RACE OPTION</string>
+	<string name="charwizard_label_races">SELECT A RACE AND RACE OPTION</string>
 	<string name="charwizard_races_optionsremain">Select Options</string>
 	<string name="charwizard_races_optionscomplete">Option Selection Complete</string>
 	<string name="char_races_tooltip_edit">Edit Races</string>
-	<string name="char_subraces_windowlist_empty">Subraces will appear here when race is selected.</string>
+	<string name="char_subraces_windowlist_empty">Race options will appear here when race is selected.</string>
 
 	<!-- Character Wizard - Stats -->
 	<string name="charwizard_stats_title">GENERATE STATS</string>
