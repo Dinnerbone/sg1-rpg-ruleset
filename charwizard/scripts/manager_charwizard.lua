@@ -27,8 +27,7 @@ function impCharacter(nodeChar)
 	wndWizard.summary.subwindow.summary_background.setValue(StringManager.titleCase(DB.getValue(nodeChar, "background", "")));
 	wndWizard.summary.subwindow.summary_senses.setValue(DB.getValue(nodeChar, "senses", ""));
 	wndWizard.summary.subwindow.summary_size.setValue(DB.getValue(nodeChar, "size", ""));
-	wndWizard.summary.subwindow.summary_speed.setValue(DB.getValue(nodeChar, "speed.total", ""));
-	wndWizard.summary.subwindow.summary_speedspecial.setValue(DB.getValue(nodeChar, "speed.special", ""));
+	wndWizard.summary.subwindow.summary_hitpoints.setValue(DB.getValue(nodeChar, "hp.total", ""));
 
 	wndWizard.charwizard_racetab.setVisible(false);
 	wndWizard.race_alert.setVisible(false);
@@ -419,8 +418,7 @@ end
 function clearSummary(wndSummary, sType, sSubType, nLevel)
 	if sType == "race" and sSubType == "all" then
 		wndSummary.summary.subwindow.summary_size.setValue(nil)
-		wndSummary.summary.subwindow.summary_speed.setValue(nil)
-		wndSummary.summary.subwindow.summary_speedspecial.setValue(nil)
+		wndSummary.summary.subwindow.summary_hitpoints.setValue(nil)
 		wndSummary.summary.subwindow.summary_senses.setValue(nil)
 	end
 
@@ -887,6 +885,11 @@ function updateRace(wndSummary, wList, nodeRace, nodeSubRace)
 
 			wndSummary.updateProficiencies(wndSummary);
 		end
+
+		local hitpointsString = DB.getChild(nodeSubRace, "hitpoints");
+		if hitpointsString then
+			CharWizardManager.updateRaceHitpoints(wndSummary, hitpointsString);
+		end
 	end
 
 	for _,v in pairs(aTraits) do
@@ -895,7 +898,6 @@ function updateRace(wndSummary, wList, nodeRace, nodeSubRace)
 		local aRaceSkill = CharWizardData.getRaceSkill();
 		local aRaceLanguages = CharWizardData.getRaceLanguages();
 		local aRaceProficiency = CharWizardData.getRaceProficiency();
-		local aRaceSpeed = CharWizardData.getRaceSpeed();
 		local aRaceSpells = CharWizardData.getRaceSpells();
 
 		if sTraitType:match("size") then
@@ -918,11 +920,6 @@ function updateRace(wndSummary, wList, nodeRace, nodeSubRace)
 
 				wndSummary.summary.subwindow.summary_size.setValue(StringManager.capitalize(sSize));
 			end
-
-			bParsed = true;
-		end
-		if aRaceSpeed[sTraitType] then
-			CharWizardManager.updateRaceSpeed(wndSummary, v);
 
 			bParsed = true;
 		end
@@ -997,117 +994,10 @@ function parseSelectSize(wSelection, wList, sSelectionName, wndSummary, bIncreas
 	wndSummary.summary.subwindow.summary_size.setValue(StringManager.titleCase(sSelectionName));
 end
 
-function updateRaceSpeed(wndSummary, nodeSpeed)
-	local sSpeed = DB.getText(nodeSpeed, "text"):lower();
-	local bEqualWalkClimb = false;
-	local bEqualWalkFlight = false;
-	local bCurEqualWalkClimb = false;
-	local bCurEqualWalkFlight = false;
-	local sWalkSpeedInc, sWalkSpeedReplace, nClimbSpeed;
-	local sWalkSpeed, nSwimSpeed, nFlightSpeed;
-
-	sCurWalkSpeed = sSpeed:match("walking speed is (%d+)");
-
-	if not sCurWalkSpeed then
-		sCurWalkSpeed = sSpeed:match("land speed is (%d+)");
-	end
-
-	if sSpeed:match("walking speed increases") then
-		local sSpeedInc = sSpeed:match("increases ([^.]+)");
-
-		if sSpeedInc:match("to") then
-			sCurWalkSpeedReplace = sSpeedInc:match("%d+");
-		else
-			sCurWalkSpeedInc = sSpeed:match("%d+");
-		end
-	end
-
-	local nCurSwimSpeed = sSpeed:match("swimming speed of (%d+) feet.");
-	if not nCurSwimSpeed then
-		nCurSwimSpeed = sSpeed:match("swim speed of (%d+) feet.");
-	end
-
-	local nCurClimbSpeed = sSpeed:match("climbing speed of (%d+) feet.");
-	if sSpeed:match("you have a climbing speed equal to your walking speed") then
-		bCurEqualWalkClimb = true
-	end
-
-	local nCurFlightSpeed = sSpeed:match("flying speed of (%d+) feet");
-	if not nCurFlightSpeed then
-		local sFlightSpeed = sSpeed:match("flying speed ([^%)]+)");
-
-		if sFlightSpeed then
-			if sFlightSpeed:match("equal to your walking speed") then
-				bCurEqualWalkFlight = true
-			else
-				nCurFlightSpeed = sFlightSpeed:match("%d+");
-			end
-		end
-	end
-
-	if sCurWalkSpeed then
-		sWalkSpeed = sCurWalkSpeed;
-	end
-	if sCurWalkSpeedInc then
-		sWalkSpeedInc = sCurWalkSpeedInc;
-	end
-	if sCurWalkSpeedReplace then
-		sWalkSpeedReplace = sCurWalkSpeedReplace;
-	end
-	if nCurSwimSpeed then
-		nSwimSpeed = nCurSwimSpeed;
-	end
-	if nCurClimbSpeed then
-		nClimbSpeed = nCurClimbSpeed;
-	end
-	if nCurFlightSpeed then
-		nFlightSpeed = nCurFlightSpeed;
-	end
-	if bCurEqualWalkClimb then
-		bEqualWalkClimb = bCurEqualWalkClimb;
-	end
-	if bCurEqualWalkFlight then
-		bEqualWalkFlight = bCurEqualWalkFlight;
-	end
-
-	if sWalkSpeedInc then
-		sWalkSpeed = tonumber(sWalkSpeed) + tonumber(sWalkSpeedInc:match("%d+"));
-	end
-
-	if sWalkSpeedReplace then
-		sWalkSpeed = sWalkSpeedReplace;
-	end
-
-	if not sWalkSpeed then
-		sWalkSpeed = "30";
-	end
-
-	local aSpeedSpecial = {};
-	if nSwimSpeed then
-		table.insert(aSpeedSpecial, "Swim " .. nSwimSpeed .. " ft.");
-	end
-	if nClimbSpeed then
-		table.insert(aSpeedSpecial, "Climb " .. nClimbSpeed .. " ft.");
-	elseif bEqualWalkClimb then
-		table.insert(aSpeedSpecial, "Climb " .. sWalkSpeed .. " ft.");
-	end
-	if nFlightSpeed then
-		table.insert(aSpeedSpecial, "Fly " .. nFlightSpeed .. " ft.");
-	elseif bEqualWalkFlight then
-		table.insert(aSpeedSpecial, "Fly " .. sWalkSpeed .. " ft.");
-	end
-
-	wndSummary.summary.subwindow.summary_speed.setValue(tonumber(sWalkSpeed));
-
-	if #aSpeedSpecial > 0 then
-		local sSpeedSpecial = table.concat(aSpeedSpecial, ",");
-
-		wndSummary.summary.subwindow.summary_speedspecial.setValue(sSpeedSpecial);
-	end
-
-	if #aSpeedSpecial == 0 then
-		wndSummary.summary.subwindow.summary_speedspecial.setValue("");
-	end
+function updateRaceHitpoints(wndSummary, nodeHp)
+	local sHp = nodeHp:getText():lower();
+	local hitpoints = sHp:match("(%d+)");
+	wndSummary.summary.subwindow.summary_hitpoints.setValue(tonumber(hitpoints));
 end
 
 function updateRaceLanguages(wndSummary, nodeLanguage)

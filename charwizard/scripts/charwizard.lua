@@ -925,9 +925,8 @@ function commitCharacter(identity)
 		w.name.setValue(name.getValue());
 	end
 
-	-- Set Speed
-	DB.setValue(nodeChar, "speed.base", "number", summary.subwindow.summary_speed.getValue());
-	DB.setValue(nodeChar, "speed.special", "string", summary.subwindow.summary_speedspecial.getValue());
+	-- Set Health
+	DB.setValue(nodeChar, "hp.total", "number", summary.subwindow.summary_hitpoints.getValue());
 
 	-- Set Senses
 	DB.setValue(nodeChar, "senses", "string", summary.subwindow.summary_senses.getValue());

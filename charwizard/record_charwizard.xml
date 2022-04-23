@@ -653,28 +653,15 @@
 				<readonly />
 			</stringcu>
 
-			<label name="summary_speedtitle">
+			<label name="summary_hitpointstitle">
 				<anchored to="summaryanchor" height="20" width="160" >
 					<top anchor="bottom" offset="120" />
 					<left offset="300" />
 				</anchored>
-				<static textres="char_label_speed" />
+				<static textres="char_label_hitpoints" />
 			</label>
-			<stringcu name="summary_speed">
-				<anchored to="summary_speedtitle" position="insidetop" offset="0,15" height="20" />
-				<readonly />
-			</stringcu>
-
-			<label name="summary_speedspecialtitle">
-				<anchored to="summaryanchor" height="20" width="120" >
-					<top anchor="bottom" offset="120" />
-					<!--top anchor="bottom" offset="155" /-->
-					<left offset="430" />
-				</anchored>
-				<static textres="charwizard_label_speedspecial" />
-			</label>
-			<stringcu name="summary_speedspecial">
-				<anchored to="summary_speedspecialtitle" position="insidetop" offset="0,15" height="20" />
+			<stringcu name="summary_hitpoints">
+				<anchored to="summary_hitpointstitle" position="insidetop" offset="0,15" height="20" />
 				<readonly />
 			</stringcu>
 

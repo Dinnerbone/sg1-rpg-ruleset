@@ -222,6 +222,7 @@
 
 	<string name="char_label_initiative">INIT</string>
 	<string name="char_label_speed">SPEED</string>
+	<string name="char_label_hitpoints">HIT POINTS</string>
 	<string name="char_label_speedspecial">Special Move</string>
 	<string name="char_label_specialdef">Special Defenses</string>
 	<string name="char_tooltip_speed">Speed</string>
