@@ -872,6 +872,21 @@ function updateRace(wndSummary, wList, nodeRace, nodeSubRace)
 				table.insert(aTraits, v)
 			end
 		end
+
+		local proficienciesString = DB.getChild(nodeSubRace, "proficiencies");
+		if proficienciesString then
+			local bChoice, aChoices, nChoices = CharWizardManager.updateRaceProficiencies(wndSummary, proficienciesString);
+			if bChoice then
+				CharWizardManager.createSelectionWindows(wList, "SELECT TOOL PROFICIENCY", aChoices, nChoices);
+			end
+
+			bChoice, aChoices, nChoices = CharWizardManager.updateRaceSkills(wndSummary, wList, proficienciesString);
+			if bChoice then
+				CharWizardManager.createSelectionWindows(wList, "SELECT SKILL PROFICIENCY", aChoices, nChoices);
+			end
+
+			wndSummary.updateProficiencies(wndSummary);
+		end
 	end
 
 	for _,v in pairs(aTraits) do
@@ -919,23 +934,6 @@ function updateRace(wndSummary, wList, nodeRace, nodeSubRace)
 			end
 
 			wndSummary.summary.subwindow.summary_languages.applySort();
-
-			bParsed = true;
-		end
-		if aRaceProficiency[sTraitType] then
-			local bChoice, aChoices, nChoices = CharWizardManager.updateRaceProficiencies(wndSummary, v);
-			if bChoice then
-				CharWizardManager.createSelectionWindows(wList, "SELECT TOOL PROFICIENCY", aChoices, nChoices);
-			end
-
-			wndSummary.updateProficiencies(wndSummary);
-			bParsed = true;
-		end
-		if aRaceSkill[sTraitType] then
-			local bChoice, aChoices, nChoices = CharWizardManager.updateRaceSkills(wndSummary, wList, v);
-			if bChoice then
-				CharWizardManager.createSelectionWindows(wList, "SELECT SKILL PROFICIENCY", aChoices, nChoices);
-			end
 
 			bParsed = true;
 		end
@@ -1262,7 +1260,7 @@ function updateRaceProficiencies(wndSummary, nodeProficiency)
 	local nChoices = 1;
 	local bChoice = false;
 	local bChoiceProficiency = false;
-	local sText = DB.getText(nodeProficiency, "text"):lower();
+	local sText = nodeProficiency:getText():lower();
 	local sProficiency = sText:match("you have proficiency with ([^.]+)")
 
 	if not sProficiency then
@@ -1350,7 +1348,7 @@ function updateRaceSkills(wndSummary, wList, nodeSkill)
 	local bChoice = false;
 	local aAvailableSkills = wndSummary.getAvailableSkills();
 	local aSortAvailableSkills = {};
-	local sText = DB.getText(nodeSkill, "text"):lower();
+	local sText = nodeSkill:getText():lower();
 	local sSkillText = sText:match("two skills of your choice");
 	local sToolType = nil;
 
@@ -1395,6 +1393,14 @@ function updateRaceSkills(wndSummary, wList, nodeSkill)
 		sSkillText = sText:match("choose one of the following skills: [^.]+")
 	end
 
+	if not sSkillText then
+		sSkillText = sText:match("choose any two skill")
+	end
+
+	if not sSkillText then
+		sSkillText = sText:match("choose one skill")
+	end
+
 	if sSkillText:match("choice") or sSkillText:match("choose") then
 		if sSkillText:match("choice: ([^.]+)") or sSkillText:match("skills: ([^.]+)") then
 			local sChoiceSkills = sSkillText:match("choice: ([^.]+)");
@@ -1423,7 +1429,7 @@ function updateRaceSkills(wndSummary, wList, nodeSkill)
 				end
 			end
 		else
-			if sSkillText:match("of your choice") then
+			if sSkillText:match("of your choice") or sSkillText:match("choose any") then
 				if sSkillText:match("two ") then
 					nChoices = 2;
 				end
