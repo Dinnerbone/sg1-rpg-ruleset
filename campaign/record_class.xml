@@ -114,10 +114,6 @@
 				profskills.update(bReadOnly);
 				proftools.update(bReadOnly);
 				profweapons.update(bReadOnly);
-				multiprofarmor.update(bReadOnly);
-				multiprofskills.update(bReadOnly);
-				multiproftools.update(bReadOnly);
-				multiprofweapons.update(bReadOnly);
 				features.update(bReadOnly);
 				specializations.update(bReadOnly);
 			end
@@ -193,59 +189,6 @@
 				<anchored to="profweapons" />
 				<class>reference_classproficiency</class>
 				<path>proficiencies.weapons</path>
-			</classprof_link>
-			
-			<header_column name="multiclassproficiencies_header">
-				<static textres="class_header_multiclassproficiencies"/>
-				<center />
-			</header_column>
-			<label_column name="multiprofarmor_label">
-				<static textres="classprof_label_armor" />
-			</label_column>
-			<hs name="multiprofarmor_name" source="multiclassproficiencies.armor.name">
-				<default textres="classprof_value_armor" />
-			</hs>
-			<classprof_string name="multiprofarmor" source="multiclassproficiencies.armor.text" />
-			<classprof_link name="multiprofarmor_link">
-				<anchored to="multiprofarmor" />
-				<class>reference_classproficiency</class>
-				<path>multiclassproficiencies.armor</path>
-			</classprof_link>
-			<label_column name="multiprofskills_label">
-				<static textres="classprof_label_skills" />
-			</label_column>
-			<hs name="multiprofskills_name" source="multiclassproficiencies.skills.name">
-				<default textres="classprof_value_skills" />
-			</hs>
-			<classprof_string name="multiprofskills" source="multiclassproficiencies.skills.text" />
-			<classprof_link name="multiprofskills_link">
-				<anchored to="multiprofskills" />
-				<class>reference_classproficiency</class>
-				<path>multiclassproficiencies.skills</path>
-			</classprof_link>
-			<label_column name="multiproftools_label">
-				<static textres="classprof_label_tools" />
-			</label_column>
-			<hs name="multiproftools_name" source="multiclassproficiencies.tools.name">
-				<default textres="classprof_value_tools" />
-			</hs>
-			<classprof_string name="multiproftools" source="multiclassproficiencies.tools.text" />
-			<classprof_link name="multiproftools_link">
-				<anchored to="multiproftools" />
-				<class>reference_classproficiency</class>
-				<path>multiclassproficiencies.tools</path>
-			</classprof_link>
-			<label_column name="multiprofweapons_label">
-				<static textres="classprof_label_weapons" />
-			</label_column>
-			<hs name="multiprofweapons_name" source="multiclassproficiencies.weapons.name">
-				<default textres="classprof_value_weapons" />
-			</hs>
-			<classprof_string name="multiprofweapons" source="multiclassproficiencies.weapons.text" />
-			<classprof_link name="multiprofweapons_link">
-				<anchored to="multiprofweapons" />
-				<class>reference_classproficiency</class>
-				<path>multiclassproficiencies.weapons</path>
 			</classprof_link>
 			
 			<header_column name="features_header">

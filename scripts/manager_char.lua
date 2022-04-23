@@ -1619,10 +1619,6 @@ function addClassRef(nodeChar, sClass, sRecord, bWizard)
 			for _,v in pairs(DB.getChildren(nodeSource, "proficiencies")) do
 				CharManager.addClassProficiencyDB(nodeChar, "reference_classproficiency", v.getPath());
 			end
-		else
-			for _,v in pairs(DB.getChildren(nodeSource, "multiclassproficiencies")) do
-				CharManager.addClassProficiencyDB(nodeChar, "reference_classproficiency", v.getPath());
-			end
 		end
 	end
 	

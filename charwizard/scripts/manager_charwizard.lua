@@ -313,8 +313,6 @@ function parseSelection(wList, wSelection, sSelectionGroup, sSelectionName, bInc
 	elseif sType == "class" then
 		if sSelectionKey == "CLASS" then
 			parseClass(wSelection, wList, wndSummary, sSelectionName, nodeSource);
-		elseif sSelectionKey == "MULTICLASS" then
-			parseClass(wSelection, wList, wndSummary, sSelectionName, nodeSource, true)
 		elseif sSelectionKey:match("SKILL PROFICIENCY") then
 			parseClassSkillProficiency(wSelection, wList, sSelectionName, wndSummary, bIncrease);
 		elseif sSelectionKey:match("TOOL PROFICIENCY") then
@@ -391,11 +389,6 @@ end
 
 function getAlerts(wndSummary, wList)
 	local aAlerts = {};
-	for _,vAlert in pairs(wList.getWindows()) do
-		if (vAlert.selection_name.getValue() == "" or vAlert.selection_name.getValue() == "CHOICES:") and vAlert.group_name.getValue() ~= "SELECT MULTICLASS" then
-			table.insert(aAlerts, vAlert.group_name.getValue());
-		end
-	end
 
 	local aFinalAlerts = {};
 	local aDupes = {};
@@ -1658,7 +1651,7 @@ function createLevelUpLabels(wndSummary)
     local aFinalClasses = {};
 
     for _,vGroup in pairs(wList.getWindows()) do
-        if vGroup.group_name.getValue() == "CLASS" or vGroup.group_name.getValue() == "MULTICLASS" or vGroup.group_name.getValue() == "INCREASE LEVEL" then
+        if vGroup.group_name.getValue() == "CLASS" or vGroup.group_name.getValue() == "INCREASE LEVEL" then
             if vGroup.selection_name.getValue() ~= "" then
                 aSelectedClasses[vGroup.selection_name.getValue():lower()] = "";
             end
@@ -1670,36 +1663,24 @@ function createLevelUpLabels(wndSummary)
             aFinalClasses[k] = vClass;
         end
     end
-
-    local wndMultiClass = CharWizardManager.createSelectionWindows(wList, "SELECT CLASS", aFinalClasses, 1, true);
-    wndMultiClass.group_name.setValue("SELECT MULTICLASS");
-    wndMultiClass.order.setValue(99);
-    wndMultiClass.selection_window.setVisible(false);
-    wndMultiClass.button_expand.setValue(0);
 end
 
-function parseClass(wSelection, wList, wndSummary, sSelectionName, nodeSource, bMultiClassSelection)
-	local bMultiClass = false;
+function parseClass(wSelection, wList, wndSummary, sSelectionName, nodeSource)
 	local sOldClass = wSelection.selection_name.getValue():lower();
 
 	CharWizardManager.clearSummary(wndSummary, sOldClass, "all", 0);
 	CharWizardManager.clearSummary(wndSummary, sOldClass .. "_choice", "all", 0);
 
-	if wSelection.group_name.getValue():match("SELECT MULTICLASS") then
-		wSelection.group_name.setValue("MULTICLASS");
-	else
-		wSelection.group_name.setValue("CLASS");
-	end
+	wSelection.group_name.setValue("CLASS");
 
 	local aCloseWin = {}
 	for _,vSelectClass in pairs(wList.getWindows()) do
-		if vSelectClass.group_name.getValue():lower():match("select multiclass") or vSelectClass.group_name.getValue():lower():match("increase level") then
-			bMultiClass = true;
+		if vSelectClass.group_name.getValue():lower():match("increase level") then
 			if wndSummary.import == 1 then
 				wndSummary.levelUpClass = nodeSource.getPath();
 			end
 		end
-		if vSelectClass.group_name.getValue():lower():match("multiclass") or vSelectClass.group_name.getValue():lower():match("increase level") then
+		if vSelectClass.group_name.getValue():lower():match("increase level") then
 			vSelectClass.level_up.setVisible(false)
 			vSelectClass.level_down.setVisible(false)
 		end
@@ -1808,29 +1789,21 @@ function parseClass(wSelection, wList, wndSummary, sSelectionName, nodeSource, b
 	wSelection.selection_window.setVisible(false);
 	wSelection.button_expand.setValue(0);
 
-	if not bMultiClass then
-		local aSelectedClasses = {};
-		local aFinalClasses = {};
+	local aSelectedClasses = {};
+	local aFinalClasses = {};
 
-		for _,vGroup in pairs(wList.getWindows()) do
-			if vGroup.group_name.getValue() == "CLASS" or vGroup.group_name.getValue() == "MULTICLASS" or vGroup.group_name.getValue() == "INCREASE LEVEL" then
-				if vGroup.selection_name.getValue() ~= "" then
-					aSelectedClasses[vGroup.selection_name.getValue():lower()] = "";
-				end
+	for _,vGroup in pairs(wList.getWindows()) do
+		if vGroup.group_name.getValue() == "CLASS" or vGroup.group_name.getValue() == "INCREASE LEVEL" then
+			if vGroup.selection_name.getValue() ~= "" then
+				aSelectedClasses[vGroup.selection_name.getValue():lower()] = "";
 			end
 		end
+	end
 
-		for k,vClass in pairs(wndSummary.loaded_classes) do
-			if not aSelectedClasses[k] then
-				aFinalClasses[k] = vClass;
-			end
+	for k,vClass in pairs(wndSummary.loaded_classes) do
+		if not aSelectedClasses[k] then
+			aFinalClasses[k] = vClass;
 		end
-
-		local wndMultiClass = CharWizardManager.createSelectionWindows(wList, "SELECT CLASS", aFinalClasses, 1, true);
-		wndMultiClass.group_name.setValue("SELECT MULTICLASS");
-		wndMultiClass.order.setValue(99);
-		wndMultiClass.selection_window.setVisible(false);
-		wndMultiClass.button_expand.setValue(0);
 	end
 
 	CharWizardManager.createFeatureWindows(wSelection, wList, sSelectionName, wndSummary, nodeSource, 1, 1);
@@ -1899,23 +1872,16 @@ function handleLevelChange(nLevel, cLevel, nChange)
 	end
 
 	local aCloseWin = {};
-	local bMultiClass = false;
 	local aSelectedClasses = {};
 
 	for _,v in pairs(cLevel.window.windowlist.getWindows()) do
-		if StringManager.contains({"CLASS", "MULTICLASS", "INCREASE LEVEL"}, v.group_name.getValue()) or v.group_name.getValue():match("MULTICLASS") then
+		if StringManager.contains({"CLASS", "INCREASE LEVEL"}, v.group_name.getValue()) then
 			if v.selection_name.getValue() ~= "" then
 				aSelectedClasses[v.selection_name.getValue():lower()] = "";
 			end
 
 			if bImport then
 				if nChange > 0 then
-					if v.group_name.getValue():match("MULTICLASS") then
-						table.insert(aCloseWin, v);
-
-						bMultiClass = true;
-					end
-
 					if v == cLevel.window then
 						v.level_up.setVisible(false);
 						v.level_down.setVisible(true);
@@ -1937,10 +1903,6 @@ function handleLevelChange(nLevel, cLevel, nChange)
 					v.level_up.setVisible(bUp);
 					v.level_down.setVisible(bDown);
 				end
-
-				if v.group_name.getValue():match("MULTICLASS") then
-					bMultiClass = true;
-				end
 			end
 		end
 	end
@@ -1949,19 +1911,12 @@ function handleLevelChange(nLevel, cLevel, nChange)
 		v.close()
 	end
 
-	if not bMultiClass then
-		local aFinalClasses = {};
+	local aFinalClasses = {};
 
-		for k,vClass in pairs(wndSummary.loaded_classes) do
-			if not aSelectedClasses[k] then
-				aFinalClasses[k] = vClass;
-			end
+	for k,vClass in pairs(wndSummary.loaded_classes) do
+		if not aSelectedClasses[k] then
+			aFinalClasses[k] = vClass;
 		end
-
-		local wndMultiClass = CharWizardManager.createSelectionWindows(cLevel.window.windowlist, "SELECT MULTICLASS", aFinalClasses, 1, true);
-		wndMultiClass.order.setValue(99);
-		wndMultiClass.selection_window.setVisible(false);
-		wndMultiClass.button_expand.setValue(0);
 	end
 end
 
@@ -1990,10 +1945,6 @@ function createFeatureWindows(wSelection, wList, sSelectionName, wndSummary, nod
 		if wSelection.group_name.getValue() == "CLASS" then
 			for _,vProf in pairs(DB.getChildren(nodeSource, "proficiencies")) do
 				table.insert(aProfList, vProf);
-			end
-		else
-			for _,vMultiProf in pairs(DB.getChildren(nodeSource, "multiclassproficiencies")) do
-				table.insert(aProfList, vMultiProf);
 			end
 		end
 
@@ -2511,7 +2462,7 @@ function parseSpecialization(wSelection, wList, wndSummary, nodeSource, sSelecti
 	end
 
 	for _,vSelectSpecialization in pairs(wList.getWindows()) do
-		if StringManager.contains({"CLASS", "MULTICLASS", "INCREASE LEVEL"}, vSelectSpecialization.group_name.getValue()) then
+		if StringManager.contains({"CLASS", "INCREASE LEVEL"}, vSelectSpecialization.group_name.getValue()) then
 			if vSelectSpecialization.selection_name.getValue():lower() == sClassName then
 				sClassRef, sClassRecord = vSelectSpecialization.selection_shortcut.getValue();
 				nClassLevel = vSelectSpecialization.level.getValue();
@@ -2621,7 +2572,7 @@ function updateFeats()
 	local aFeatList = {};
 
 	for k,v in pairs(getWindows()) do
-		if v.group_name.getValue() == "CLASS" or v.group_name.getValue() == "MULTICLASS" or v.group_name.getValue() == "INCREASE LEVEL" then
+		if v.group_name.getValue() == "CLASS" or v.group_name.getValue() == "INCREASE LEVEL" then
 			if v.selection_name.getValue() ~= "" then
 				local sClassName = v.selection_name.getValue();
 				local sClass, sRecord = v.selection_shortcut.getValue();

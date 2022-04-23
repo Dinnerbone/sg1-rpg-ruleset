@@ -1553,10 +1553,6 @@ function setClasses(nodeChar)
 		if vClass.group_name.getValue() == "CLASS" then
 			sMainClass,sMainRecord = vClass.selection_shortcut.getValue();
 			nMainClassLevel = vClass.level.getValue();
-		elseif vClass.group_name.getValue():match("MULTICLASS") then
-			sRestClass,sRestRecord = vClass.selection_shortcut.getValue();
-
-			table.insert(aRestClasses, {level = vClass.level.getValue(), record = sRestRecord})
 		end
 	end
 
