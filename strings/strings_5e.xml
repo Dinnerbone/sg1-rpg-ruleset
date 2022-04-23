@@ -503,24 +503,25 @@
 
 	<!-- Skills -->
 	<string name="skill_label_ability">Ability</string>
-	<string name="skill_value_acrobatics">Acrobatics</string>
-	<string name="skill_value_animalhandling">Animal Handling</string>
-	<string name="skill_value_arcana">Arcana</string>
 	<string name="skill_value_athletics">Athletics</string>
-	<string name="skill_value_deception">Deception</string>
-	<string name="skill_value_history">History</string>
-	<string name="skill_value_insight">Insight</string>
-	<string name="skill_value_intimidation">Intimidation</string>
-	<string name="skill_value_investigation">Investigation</string>
-	<string name="skill_value_medicine">Medicine</string>
-	<string name="skill_value_nature">Nature</string>
-	<string name="skill_value_perception">Perception</string>
-	<string name="skill_value_performance">Performance</string>
-	<string name="skill_value_persuasion">Persuasion</string>
-	<string name="skill_value_religion">Religion</string>
+	<string name="skill_value_acrobatics">Acrobatics</string>
+	<string name="skill_value_pilot">Pilot</string>
 	<string name="skill_value_sleightofhand">Sleight of Hand</string>
 	<string name="skill_value_stealth">Stealth</string>
+	<string name="skill_value_engineering">Engineering</string>
+	<string name="skill_value_investigation">Investigation</string>
+	<string name="skill_value_nature">Nature</string>
+	<string name="skill_value_science">Science</string>
+	<string name="skill_value_animalhandling">Animal Handling</string>
+	<string name="skill_value_culture">Culture</string>
+	<string name="skill_value_insight">Insight</string>
+	<string name="skill_value_medicine">Medicine</string>
+	<string name="skill_value_perception">Perception</string>
 	<string name="skill_value_survival">Survival</string>
+	<string name="skill_value_deception">Deception</string>
+	<string name="skill_value_intimidation">Intimidation</string>
+	<string name="skill_value_performance">Performance</string>
+	<string name="skill_value_persuasion">Persuasion</string>
 
 	<!-- NPCs -->
 	<string name="npc_label_type">Type</string>
