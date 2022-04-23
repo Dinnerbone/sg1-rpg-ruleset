@@ -542,119 +542,46 @@ function getDefaultRaceMods(wList)
 		end
 	end
 
-	local aRaceIncreases, aSubRaceIncreases, bTasha;
+	local aRaceIncreases, aSubRaceIncreases;
 	if sRacePath then
-		for _,v in pairs(DB.getChildren(DB.findNode(sRacePath), "traits")) do
-			local sTraitType = CampaignDataManager2.sanitize(DB.getValue(v, "name", ""));
-			if sTraitType == "abilityscoreincrease" or sTraitType == "abilityscoreincreases" then
-				aRaceIncreases, bTasha = CharWizardManager.getDefaultRaceTraitMod(v);
-			end
+		local raw = DB.getChild(sRacePath, "abilityscoreincrease");
+		if raw then
+			aRaceIncreases = CharWizardManager.getDefaultRaceMod(raw:getText());
 		end
 	end
 	if sSubRacePath then
-		for _,v in pairs(DB.getChildren(DB.findNode(sSubRacePath), "traits")) do
-			local sTraitType = CampaignDataManager2.sanitize(DB.getValue(v, "name", ""));
-			if sTraitType == "abilityscoreincrease" or sTraitType == "abilityscoreincreases" then
-				aSubRaceIncreases, bTasha = CharWizardManager.getDefaultRaceTraitMod(v);
-			end
+		local raw = DB.getChild(sSubRacePath, "abilityscoreincrease");
+		if raw then
+			aSubRaceIncreases = CharWizardManager.getDefaultRaceMod(raw:getText());
 		end
 	end
 
 	local tFinalIncreases = {};
 
-	if not bTasha then
-		if aRaceIncreases then
-			for k,v in pairs(aRaceIncreases) do
-				table.insert(tFinalIncreases, v)
-			end
+	if aRaceIncreases then
+		for k,v in pairs(aRaceIncreases) do
+			table.insert(tFinalIncreases, v)
 		end
-		if aSubRaceIncreases then
-			for k,v in pairs(aSubRaceIncreases) do
-				table.insert(tFinalIncreases, v)
-			end
+	end
+	if aSubRaceIncreases then
+		for k,v in pairs(aSubRaceIncreases) do
+			table.insert(tFinalIncreases, v)
 		end
 	end
 
-	return tFinalIncreases, bTasha;
+	return tFinalIncreases;
 end
 
-function getDefaultRaceTraitMod(nodeTrait)
+function getDefaultRaceMod(sAdjust)
 	local aIncreases = {};
 
-	if not nodeTrait then
-		return;
-	end
+	local a1, a2, sIncrease = sAdjust:match("either (%w+) or (%w+) to improve by %+(%d+)");
 
-	local sAdjust = DB.getText(nodeTrait, "text"):lower();
-	local aAdjust = StringManager.split(sAdjust, ",.");
-	local bChoice = false;
-	local nChoice = 1;
-	local nChoiceInc = 1;
+	if a2 then
+		local nIncrease = tonumber(sIncrease) or 0;
 
-	for _,v in pairs(aAdjust) do
-		if v:match("alternatively") then
-			return aIncreases, true;
-		end
-		if v:match("choice") and not v:match("choose a subrace") then
-			bChoice = true;
-		end
-		if bChoice then
-			if v:match("two") then
-				nChoice = 2;
-			end
-			if v:match("increase[s]? by (%d+)") then
-				nChoiceInc = v:match("increase[s]? by (%d+)");
-			end
-		end
-
-		if v:match("your ability scores each increase") then
-			for k,i in pairs(DataCommon.abilities) do
-				table.insert(aIncreases, {stat = i, increase = 1})
-			end
-		elseif v:match("ability score[s]? of your choice") then
-			for i = 1, nChoice do
-				table.insert(aIncreases, {stat = "any", increase = tonumber(nChoiceInc)})
-			end
-		else
-			local a1, a2, sIncrease = v:match("your (%w+) and (%w+) scores increase by (%d+)");
-
-			if not a1 then
-				a1, a2, sIncrease = v:match("your (%w+) and (%w+) scores both increase by (%d+)");
-			end
-
-			if not a1 then
-				a1, a2, a3, sIncrease = v:match("your (%w+) score, (%w+) score, and (%w+) score each increase by (%d+)");
-			end
-
-			if a3 then
-				local nIncrease = tonumber(sIncrease) or 0;
-
-				table.insert(aIncreases, {stat = a1, increase = nIncrease})
-				table.insert(aIncreases, {stat = a2, increase = nIncrease})
-				table.insert(aIncreases, {stat = a3, increase = nIncrease})
-			elseif a2 then
-				local nIncrease = tonumber(sIncrease) or 0;
-
-				table.insert(aIncreases, {stat = a1, increase = nIncrease})
-				table.insert(aIncreases, {stat = a2, increase = nIncrease})
-			elseif a1 then
-				local nIncrease = tonumber(sIncrease) or 0;
-
-				table.insert(aIncreases, {stat = a1, increase = nIncrease})
-			else
-				for a1, sIncrease in v:gmatch("your (%w+) score increases by (%d+)") do
-					local nIncrease = tonumber(sIncrease) or 0;
-
-					table.insert(aIncreases, {stat = a1, increase = nIncrease})
-				end
-
-				for a1, sDecrease in v:gmatch("your (%w+) score is reduced by (%d+)") do
-					local nDecrease = tonumber(sDecrease) or 0;
-
-					table.insert(aIncreases, {stat = a1, increases = nDecrease * -1})
-				end
-			end
-		end
+		table.insert(aIncreases, {stat = a1, increase = nIncrease});
+		table.insert(aIncreases, {stat = a2, increase = nIncrease});
 	end
 
 	return aIncreases;
@@ -779,62 +706,49 @@ function parseRacialModChoice(wSelection, wList, sSelectionName, wndSummary)
 end
 
 function applyRacialAbilityDefault(wndSummary, wList)
-	local aRaceIncreases, bTasha = CharWizardManager.getDefaultRaceMods(wList);
-
-	if bTasha then
-		return
-	end
+	local aRaceIncreases = CharWizardManager.getDefaultRaceMods(wList);
 
 	local tSelectChoices = {};
 
-	for _,k in pairs(DataCommon.abilities) do
-		tSelectChoices[k] = { tooltip = "Select Ability to increase." };
+	for _,v in pairs(aRaceIncreases) do
+		tSelectChoices[v.stat] = { tooltip = "Select Ability to increase." };
 	end
 
 	local tFinalChoices = {};
 	local tFinalDefaults = {};
-	local bInnateIncrease = false;
+	local increaseAmount = 2; -- Hardcoding this for now
 
 	for k,v in pairs(aRaceIncreases) do
-		if not tFinalChoices[v.increase] then
-			tFinalChoices[v.increase] = 1;
-		else
-			tFinalChoices[v.increase] = tFinalChoices[v.increase] + 1;
-		end
+		tFinalChoices[v.increase] = 1;
 
 		if v.stat ~= "any" then
 			tFinalDefaults[v.stat] = v.increase;
 		end
-		bInnateIncrease = true;
 	end
 
 	for k,v in pairs(tFinalChoices) do
-		CharWizardManager.createSelectionWindows(wList, "SELECT CHOICE RACIAL MOD +" ..  k, tSelectChoices, v);
+		CharWizardManager.createSelectionWindows(wList, "SELECT CHOICE RACIAL MOD +" ..  increaseAmount, tSelectChoices, 1);
 	end
 
-	if bInnateIncrease then
-		for _,vModWin in pairs(wList.getWindows()) do
-			if vModWin.group_name.getValue():lower():match("select choice racial mod") then
-				local sIncrease = vModWin.group_name.getValue():lower():match("select choice racial mod %+(%d+)");
-				local nIncrease = tonumber(sIncrease);
+	for _,vModWin in pairs(wList.getWindows()) do
+		if vModWin.group_name.getValue():lower():match("select choice racial mod") then
+			local sIncrease = vModWin.group_name.getValue():lower():match("select choice racial mod %+(%d+)");
+			local nIncrease = tonumber(sIncrease);
 
-				for k,v in pairs(tFinalDefaults) do
-					if v == nIncrease then
-						for _,vMod in pairs(vModWin.selection_window.getWindows()) do
-							if vMod.name.getValue():lower() == k then
-								vMod.bname.onButtonPress();
-								break
-							end
+			for k,v in pairs(tFinalDefaults) do
+				if v == nIncrease then
+					for _,vMod in pairs(vModWin.selection_window.getWindows()) do
+						if vMod.name.getValue():lower() == k then
+							vMod.bname.onButtonPress();
+							break
 						end
 					end
 				end
 			end
 		end
-
-		return true
 	end
 
-	return
+	return true
 end
 
 function applyRacialAbilityOption1(wndSummary, wList, aChoices)
@@ -875,11 +789,13 @@ function parseChoiceRacialMod(wSelection, wList, sSelectionName, wndSummary, bIn
 		end
 	end
 
+	local aRaceIncreases = CharWizardManager.getDefaultRaceMods(wList);
 	for _,wChoice in pairs(aChoiceWin) do
-		for _,vAbil in pairs(DataCommon.abilities) do
+		for _,v in pairs(aRaceIncreases) do
+			local vAbil = v.stat;
 			local bCreate = true;
 
-			if aChoices[vAbil] then
+			if aChoices[vAbil:lower()] then
 				bCreate = false;
 			end
 
