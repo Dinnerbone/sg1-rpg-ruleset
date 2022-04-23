@@ -108,7 +108,10 @@
 			end
 			function update()
 				local bReadOnly = WindowManager.getReadOnlyState(getDatabaseNode());
+				hitpointsat1stlevel.update(bReadOnly);
+				hitpointsathigherlevels.update(bReadOnly);
 				hitdice.update(bReadOnly);
+				determinationpoints.update(bReadOnly);
 				profarmor.update(bReadOnly);
 				profsavingthrows.update(bReadOnly);
 				profskills.update(bReadOnly);
@@ -121,10 +124,25 @@
 		<sheetdata>
 			<anchor_column name="columnanchor" />
 			
+			<label_column name="hitpointsat1stlevel_label">
+				<static textres="class_label_hitpointsat1stlevel" />
+			</label_column>
+			<string_columnh name="hitpointsat1stlevel" source="hp.hitpointsat1stlevel" />
+			
+			<label_column name="hitpointsathigherlevels_label">
+				<static textres="class_label_hitpointsathigherlevels" />
+			</label_column>
+			<string_columnh name="hitpointsathigherlevels" source="hp.hitpointsathigherlevels" />
+			
 			<label_column name="hitdice_label">
 				<static textres="class_label_hitdice" />
 			</label_column>
-			<string_columnh name="hitdice" source="hp.hitdice.text" />
+			<string_columnh name="hitdice" source="hp.hitdice" />
+			
+			<label_column name="determinationpoints_label">
+				<static textres="class_label_determinationpoints" />
+			</label_column>
+			<string_columnh name="determinationpoints" source="determinationpoints" />
 			
 			<header_column name="proficiencies_header">
 				<static textres="class_header_proficiencies"/>

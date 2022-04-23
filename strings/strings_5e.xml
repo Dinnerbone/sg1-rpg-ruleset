@@ -477,7 +477,10 @@
 	<string name="class_short_warlock">War</string>
 	<string name="class_short_wizard">Wiz</string>
 
-	<string name="class_label_hitdice">HD Per Level</string>
+	<string name="class_label_hitpointsat1stlevel">HP At Lvl 1</string>
+	<string name="class_label_hitpointsathigherlevels">HP Higher Lvls</string>
+	<string name="class_label_hitdice">Hit Dice</string>
+	<string name="class_label_determinationpoints">Determination</string>
 	<string name="classprof_label_armor">Armor</string>
 	<string name="classprof_value_armor">Armor</string>
 	<string name="classprof_label_savingthrows">Saving Throws</string>
