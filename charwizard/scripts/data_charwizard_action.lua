@@ -35,10 +35,46 @@
 	},
 --]]
 parsedata = {
+    -- DIPLOMAT
+    ["inspirations"] = {
+        ["feats"] = {
+            choice = 1,
+            choice_feats = {"calm and collected", "clear focus", "coordinated fire", "defensive motivation", "enduring inspirations", "grim resolve", "hard day's night", "quippy comebacks", "skillful explanations"},
+        }
+    },
+    -- ENGINEER
+    ["modifications"] = {
+        ["feats"] = {
+            choice = 1,
+            choice_feats = {"armorer", "chem thrower", "comms tech", "grenadier", "longarm calibrations", "minefield expert", "montage", "percussive maintenance", "sidearm calibrations"},
+        }
+    },
+    -- MEDIC
     ["procedures"] = {
         ["feats"] = {
             choice = 1,
             choice_feats = {"biohazard disposal", "crash training", "controlled stimulants", "embolism", "improvised medicine", "pharmaceuticals", "sedatives", "urgent care", "vital organ trauma"},
+        }
+    },
+    -- SCIENTIST
+    ["discoveries"] = {
+        ["feats"] = {
+            choice = 1,
+            choice_feats = {"a moment's thought", "archaeologist", "astronomer", "biologist", "chemist", "geologist", "hyper-focus", "physicist", "social sciences"},
+        }
+    },
+    -- SCOUT
+    ["fieldhacks"] = {
+        ["feats"] = {
+            choice = 1,
+            choice_feats = {"camp security", "camouflage", "hide tracks", "foraging", "ration optimization", "ranger tricks", "rope tricks", "tracking", "xenosurvival"},
+        }
+    },
+    -- SOLDIER
+    ["tactics"] = {
+        ["feats"] = {
+            choice = 1,
+            choice_feats = {"ambush", "assault coordination", "coordinated response", "defensive posture", "distracting attacks", "hit & run", "overwatchers", "response shot", "rush"},
         }
     },
 	--
