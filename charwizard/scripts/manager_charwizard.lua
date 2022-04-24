@@ -27,7 +27,6 @@ function impCharacter(nodeChar)
 	wndWizard.summary.subwindow.summary_background.setValue(StringManager.titleCase(DB.getValue(nodeChar, "background", "")));
 	wndWizard.summary.subwindow.summary_senses.setValue(DB.getValue(nodeChar, "senses", ""));
 	wndWizard.summary.subwindow.summary_size.setValue(DB.getValue(nodeChar, "size", ""));
-	wndWizard.summary.subwindow.summary_hitpoints.setValue(DB.getValue(nodeChar, "hp.total", ""));
 
 	wndWizard.charwizard_racetab.setVisible(false);
 	wndWizard.race_alert.setVisible(false);
@@ -411,7 +410,6 @@ end
 function clearSummary(wndSummary, sType, sSubType, nLevel)
 	if sType == "race" and sSubType == "all" then
 		wndSummary.summary.subwindow.summary_size.setValue(nil)
-		wndSummary.summary.subwindow.summary_hitpoints.setValue(nil)
 		wndSummary.summary.subwindow.summary_senses.setValue(nil)
 	end
 
@@ -878,11 +876,6 @@ function updateRace(wndSummary, wList, nodeRace, nodeSubRace)
 
 			wndSummary.updateProficiencies(wndSummary);
 		end
-
-		local hitpointsString = DB.getChild(nodeSubRace, "hitpoints");
-		if hitpointsString then
-			CharWizardManager.updateRaceHitpoints(wndSummary, hitpointsString);
-		end
 	end
 
 	for _,v in pairs(aTraits) do
@@ -985,12 +978,6 @@ end
 function parseSelectSize(wSelection, wList, sSelectionName, wndSummary, bIncrease)
 	CharWizardManager.onSelectionChange(wSelection);
 	wndSummary.summary.subwindow.summary_size.setValue(StringManager.titleCase(sSelectionName));
-end
-
-function updateRaceHitpoints(wndSummary, nodeHp)
-	local sHp = nodeHp:getText():lower();
-	local hitpoints = sHp:match("(%d+)");
-	wndSummary.summary.subwindow.summary_hitpoints.setValue(tonumber(hitpoints));
 end
 
 function updateRaceLanguages(wndSummary, nodeLanguage)

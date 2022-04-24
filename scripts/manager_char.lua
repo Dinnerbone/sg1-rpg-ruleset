@@ -1497,6 +1497,33 @@ function addRaceSelect(aSelection, aTable)
 			end
 		end
 	end
+
+	-- Add hit points based on level added
+	local nHP = DB.getValue(nodeChar, "hp.total", 0);
+	local raceHP = DB.getChild(nodeSource, "hitpoints", "");
+	if raceHP then
+		raceHP = tonumber(raceHP:getText():match("(%d+)"));
+		if raceHP then
+			nHP = nHP + raceHP;
+			CharManager.outputUserMessage("char_abilities_message_hpaddrace", DB.getValue(nodeSource, "name", ""), DB.getValue(nodeChar, "name", ""), raceHP);
+		end
+	end
+	if sSubRace then
+		for _,vSubRace in ipairs(aTable["suboptions"]) do
+			if sSubRace == vSubRace.text then
+				raceHP = DB.getChild(vSubRace.linkrecord, "hitpoints", "");
+				if raceHP then
+					raceHP = tonumber(raceHP:getText():match("(%d+)"));
+					if raceHP then
+						nHP = nHP + raceHP;
+						CharManager.outputUserMessage("char_abilities_message_hpaddrace", DB.getValue(nodeSource, "name", ""), DB.getValue(nodeChar, "name", ""), raceHP);
+					end
+				end
+				break;
+			end
+		end
+	end
+	DB.setValue(nodeChar, "hp.total", "number", nHP);
 end
 
 function getClassSpecializationOptions(nodeClass)
@@ -1526,13 +1553,16 @@ function addClassRef(nodeChar, sClass, sRecord, bWizard)
 	local bHDFound = false;
 	local nHDMult = 1;
 	local nHDSides = 6;
-	local sHD = DB.getText(nodeSource, "hp.hitdice.text");
+	local sHD = DB.getText(nodeSource, "hp.hitdice");
 	if sHD then
-		local sMult, sSides = sHD:match("(%d)d(%d+)");
-		if sMult and sSides then
+		local sMult, sSides = sHD:match("(%d?)d(%d+)");
+		if sSides then
 			nHDMult = tonumber(sMult);
 			nHDSides = tonumber(sSides);
 			bHDFound = true;
+			if not nHDMult then
+				nHDMult = 1;
+			end
 		end
 	end
 	if not bHDFound then
@@ -1589,11 +1619,17 @@ function addClassRef(nodeChar, sClass, sRecord, bWizard)
 	-- Add hit points based on level added
 	local nHP = DB.getValue(nodeChar, "hp.total", 0);
 	local nConBonus = DB.getValue(nodeChar, "abilities.constitution.bonus", 0);
+	local hpPerLevel = DB.getText(nodeSource, "hp.hitpointsathigherlevels");
 	if nTotalLevel == 1 then
 		local nAddHP = math.max((nHDMult * nHDSides) + nConBonus, 1);
 		nHP = nHP + nAddHP;
 
 		CharManager.outputUserMessage("char_abilities_message_hpaddmax", DB.getValue(nodeSource, "name", ""), DB.getValue(nodeChar, "name", ""), nAddHP);
+	elseif hpPerLevel then
+		local nAddHP = math.max(tonumber(hpPerLevel:match("(%d)")) + nConBonus);
+		nHP = nHP + nAddHP;
+
+		CharManager.outputUserMessage("char_abilities_message_hpaddperlevel", DB.getValue(nodeSource, "name", ""), DB.getValue(nodeChar, "name", ""), nAddHP);
 	else
 		local nAddHP = math.max(math.floor(((nHDMult * (nHDSides + 1)) / 2) + 0.5) + nConBonus, 1);
 		nHP = nHP + nAddHP;

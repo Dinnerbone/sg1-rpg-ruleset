@@ -925,9 +925,6 @@ function commitCharacter(identity)
 		w.name.setValue(name.getValue());
 	end
 
-	-- Set Health
-	DB.setValue(nodeChar, "hp.total", "number", summary.subwindow.summary_hitpoints.getValue());
-
 	-- Set Senses
 	DB.setValue(nodeChar, "senses", "string", summary.subwindow.summary_senses.getValue());
 
@@ -1116,6 +1113,16 @@ function setRaceSubRace(nodeChar)
 
 		DB.setValue(nodeChar, "race", "string", summary.subwindow.summary_race.getValue());
 		DB.setValue(nodeChar, "racelink", "windowreference", "reference_race", nodeSource.getParent().getParent().getPath());
+
+		local raceHP = DB.getChild(sSubRaceRecord, "hitpoints", "");
+		if raceHP then
+			raceHP = tonumber(raceHP:getText():match("(%d+)"));
+			if raceHP then
+				local nHP = DB.getValue(nodeChar, "hp.total", 0);
+				DB.setValue(nodeChar, "hp.total", "number", nHP + raceHP);
+				CharManager.outputUserMessage("char_abilities_message_hpaddrace", DB.getValue(sSubRaceRecord, "name", ""), DB.getValue(nodeChar, "name", ""), raceHP);
+			end
+		end
 	else
 		local sRaceClass, sRaceRecord;
 		for _,v in pairs(genraces.subwindow.contents.subwindow.race_window.getWindows()) do

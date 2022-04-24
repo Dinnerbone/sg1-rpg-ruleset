@@ -329,10 +329,12 @@
 
 	<string name="char_abilities_message_abilityadd">Ability adjustment '%s %+d' applied to '%s'.</string>
 	<string name="char_abilities_message_hpaddmax">Maximum hit points for first %s level added to '%s'. (%d)</string>
+	<string name="char_abilities_message_hpaddperlevel">Hit points for additional %s level added to '%s'. (%d)</string>
 	<string name="char_abilities_message_hpaddavg">Average hit points for additional %s level added to '%s'. (%d)</string>
 	<string name="char_abilities_message_hpaddtrait">Hit points for trait '%s' added to '%s'. (%d)</string>
 	<string name="char_abilities_message_hpaddfeature">Hit points for feature '%s' added to '%s'. (%d)</string>
 	<string name="char_abilities_message_hpaddfeat">Hit points for feat '%s' added to '%s'. (%d)</string>
+	<string name="char_abilities_message_hpaddrace">Hit points for race '%s' added to '%s'. (%d)</string>
 	<string name="char_abilities_message_saveadd">Saving throw proficiency '%s' added to '%s'.</string>
 	<string name="char_abilities_message_featureadd">Feature '%s' added to '%s'.</string>
 	<string name="char_abilities_message_skilladd">Skill '%s' added to '%s'.</string>
