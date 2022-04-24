@@ -1950,7 +1950,7 @@ function createFeatureWindows(wSelection, wList, sSelectionName, wndSummary, nod
 
 		for _,vProficiencies in pairs(aProfList) do
 			if DB.getValue(vProficiencies, "name", ""):lower() == "skills" then
-				bChoice, aChoiceSkills, nSkillChoices = CharWizardManager.updateClassSkills(wndSummary, DB.getText(vProficiencies, "text", ""):lower());
+				bChoice, aChoiceSkills, nSkillChoices = CharWizardManager.updateClassSkills(wndSummary, sSelectionName:lower(), DB.getText(vProficiencies, "text", ""):lower());
 				if bChoice then
 					CharWizardManager.createSelectionWindows(wList, sSelectionName:upper() .. " SKILL PROFICIENCY", aChoiceSkills, nSkillChoices);
 				end
@@ -2270,47 +2270,29 @@ function removeFeatures(wSelection, wList, sSelectionName, wndSummary, nodeSourc
 	end
 end
 
-function updateClassSkills(wndSummary, sSkillText)
-	local aSkills = {};
+function updateClassSkills(wndSummary, sSpecialization, sSkillText)
 	local aClassSkills = {};
-	local aChoiceSkills = {};
-	local nSkillChoices = 2;
-	local bChoice = false;
-	local bFreeSkill = false;
-	local aAvailableSkills = wndSummary.getAvailableSkills();
+	local sSkills = {};
+	local aChoiceTools = {};
 
-	if sSkillText:match("four") then
-		nSkillChoices = 4;
-	elseif sSkillText:match("three") then
-		nSkillChoices = 3;
-	end
+	sSkillText = sSkillText:gsub(" or ", ",")
+	sSkills = StringManager.split(sSkillText, ",");
 
-	local sSkills = sSkillText:match("from ([^.]+)");
-
-	if sSkills then
-		sSkills = sSkills:gsub("or ", "");
-		sSkills = sSkills:gsub("and ", "");
-
-		for _,v in pairs(StringManager.split(sSkills, ",")) do
-			v = StringManager.trim(v)
-
-			if aAvailableSkills[v] then
-				aChoiceSkills[v:lower()] = { tooltip = "Select skill." };
-			end
+	for _,v in pairs(sSkills) do
+		v = StringManager.trim(v);
+		if v ~= "none" then
+			table.insert(aClassSkills, v);
 		end
-
-		bChoice = true
 	end
 
-	if sSkillText:match("choose") and sSkillText:match("any") then
-		for k,v in pairs(aAvailableSkills) do
-			aChoiceSkills[k:lower()] = { tooltip = "Select skill." };
-		end
-
-		bChoice = true
+	for _,v in pairs(aClassSkills) do
+		local wSkill = wndSummary.summary.subwindow.summary_skills.createWindow();
+		wSkill.name.setValue(StringManager.trim(StringManager.titleCase(v)));
+		wSkill.type.setValue(sSpecialization);
+		wndSummary.summary.subwindow.summary_skills.applySort();
 	end
 
-	return bChoice, aChoiceSkills, nSkillChoices;
+	return false, aChoiceTools;
 end
 
 function parseClassSkillProficiency(wSelection, wList, sSelectionName, wndSummary, bIncrease)
