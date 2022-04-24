@@ -320,6 +320,10 @@ function parseSelection(wList, wSelection, sSelectionGroup, sSelectionName, bInc
 			parseSpecialization(wSelection, wList, wndSummary, nodeSource, sSelectionName, sSelectionClass);
 		elseif sSelectionKey:match("EXPERTISE") then
 			parseExpertise(wSelection, wList, wndSummary, sSelectionName);
+		elseif sSelectionKey:match("FEAT") then
+			--function parseFeat(wndSummary, wList, sSelectionGroup, sSelectionName, sSelectionRecord, wSelection)
+
+			parseFeat(wndSummary, wList, sSelectionGroup, sSelectionName, sSelectionRecord, wSelection)
 		elseif sSelectionKey:match("ASI CHOICE") then
 			parseASIChoice(wSelection, wList, wndSummary, nodeSource, sSelectionName);
 		end
@@ -2151,7 +2155,16 @@ function createFeatureWindows(wSelection, wList, sSelectionName, wndSummary, nod
 							CharWizardManager.createSelectionWindows(wList, sSelectionName:upper() .. " LANGUAGE", aChoiceLang, CharWizardDataAction.parsedata[sFeatureType].languages.choice);
 						end
 					end
-				end
+					if CharWizardDataAction.parsedata[sFeatureType].feats then
+						if CharWizardDataAction.parsedata[sFeatureType].feats.choice then
+    						local featOptions = {};
+    						for _, v in pairs(CharWizardDataAction.parsedata[sFeatureType].feats.choice_feats) do 
+								featOptions[v] = wndSummary.loaded_feats[v];
+    						end
+				            CharWizardManager.createSelectionWindows(wList, sSelectionName:upper() .. " FEAT", featOptions, CharWizardDataAction.parsedata[sFeatureType].feats.choice, true)
+						end
+					end
+			end
 
 				local bFound = false;
 				for _,vSumFeature in pairs(wndSummary.summary.subwindow.summary_features.getWindows()) do

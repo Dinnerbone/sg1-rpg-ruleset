@@ -33,19 +33,12 @@ ability_stol = {
 
 -- Basic class values (not display values)
 classes = {
-	"artificer",
-	"barbarian",
-	"bard",
-	"cleric",
-	"druid",
-	"fighter",
-	"monk",
-	"paladin",
-	"ranger",
-	"rogue",
-	"sorcerer",
-	"warlock",
-	"wizard",
+	"diplomat",
+	"engineer",
+	"medic",
+	"scientist",
+	"scout",
+	"soldier",
 };
 
 -- Values for wound comparison
@@ -311,34 +304,21 @@ stackablebonustypes = {
 function onInit()
 	-- Classes
 	class_nametovalue = {
-		[Interface.getString("class_value_artificer")] = "artificer",
-		[Interface.getString("class_value_bard")] = "bard",
-		[Interface.getString("class_value_cleric")] = "cleric",
-		[Interface.getString("class_value_druid")] = "druid",
-		[Interface.getString("class_value_fighter")] = "fighter",
-		[Interface.getString("class_value_monk")] = "monk",
-		[Interface.getString("class_value_paladin")] = "paladin",
-		[Interface.getString("class_value_ranger")] = "ranger",
-		[Interface.getString("class_value_rogue")] = "rogue",
-		[Interface.getString("class_value_sorcerer")] = "sorcerer",
-		[Interface.getString("class_value_warlock")] = "warlock",
-		[Interface.getString("class_value_wizard")] = "wizard",
+		[Interface.getString("class_value_diplomat")] = "diplomat",
+		[Interface.getString("class_value_engineer")] = "engineer",
+		[Interface.getString("class_value_medic")] = "medic",
+		[Interface.getString("class_value_scientist")] = "scientist",
+		[Interface.getString("class_value_scout")] = "scout",
+		[Interface.getString("class_value_soldier")] = "soldier",
 	};
 
 	class_valuetoname = {
-		["artificer"] = Interface.getString("class_value_artificer"),
-		["barbarian"] = Interface.getString("class_value_barbarian"),
-		["bard"] = Interface.getString("class_value_bard"),
-		["cleric"] = Interface.getString("class_value_cleric"),
-		["druid"] = Interface.getString("class_value_druid"),
-		["fighter"] = Interface.getString("class_value_fighter"),
-		["monk"] = Interface.getString("class_value_monk"),
-		["paladin"] = Interface.getString("class_value_paladin"),
-		["ranger"] = Interface.getString("class_value_ranger"),
-		["rogue"] = Interface.getString("class_value_rogue"),
-		["sorcerer"] = Interface.getString("class_value_sorcerer"),
-		["warlock"] = Interface.getString("class_value_warlock"),
-		["wizard"] = Interface.getString("class_value_wizard"),
+		["diplomat"] = Interface.getString("class_value_diplomat"),
+		["engineer"] = Interface.getString("class_value_engineer"),
+		["medic"] = Interface.getString("class_value_medic"),
+		["scientist"] = Interface.getString("class_value_scientist"),
+		["scout"] = Interface.getString("class_value_scout"),
+		["soldier"] = Interface.getString("class_value_soldier"),
 	};
 
 	-- Skills

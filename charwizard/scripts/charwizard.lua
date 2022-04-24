@@ -276,49 +276,21 @@ function collectFeats()
 
 			if not loaded_feats[sRestFeatName] then
 				local sModule = vFeat.getModule();
-				local sTooltip = "";
 
-				if sModule == nil then
-					sTooltip = StringManager.titleCase(sRestFeatName) .. ": Campaign";
-				else
-					sTooltip = StringManager.titleCase(sRestFeatName) .. ": " .. sModule;
-				end
-
-				loaded_feats[sRestFeatName] =  { tooltip = sTooltip, class = "reference_feat", record = sFeatLink, prereq = sPrereq};
+				loaded_feats[sRestFeatName] =  { tooltip = sPrereq, class = "reference_feat", record = sFeatLink, prereq = sPrereq};
 			end
 		end
 	end
 end
 
 function getPrequisite(sText)
-	local sPrerequisite = "";
-	local aPrerequisite = {};
-
-	if string.match(sText, "Prerequisite:") then
-		sPrerequisite = sText:match("Prerequisite: ([^.]+)");
-
-		if not sPrerequisite then
-			return false;
-		end
-
-		sPrerequisite = sPrerequisite:gsub(" or ", ",");
-		sPrerequisite = sPrerequisite:gsub(",%s", ",");
-		sPrerequisite = sPrerequisite:gsub(",,", ",");
-		sPrerequisite = sPrerequisite:gsub("<(.*)", "");
-
-		if sPrerequisite:match("(%d+)") then
-			sPrerequisite = sPrerequisite:gsub("%d(.*)", "");
-			sPrerequisite = sPrerequisite:gsub("%s", "");
-
-			return sPrerequisite;
-		elseif sPrerequisite:match("Proficiency") then
-			return sPrerequisite;
-		elseif sPrerequisite:match("cast") then
-			return sPrerequisite;
-		elseif sPrerequisite:match("Dwarf") then
-			return sPrerequisite;
-		end
+	local requirements = sText:match("(Requirement: .+)");
+	if requirements then
+		requirements = requirements:gsub("<(.*)", "");
+		return requirements;
 	end
+
+	return "";
 end
 
 --
@@ -957,6 +929,7 @@ function commitCharacter(identity)
 	-- Set Class Text and Link
 	if genclass.subwindow and summary.subwindow.summary_class.getWindowCount() > 0 then
 		setClasses(nodeChar);
+		addClassFeats(nodeChar);
 
 		-- Add Spell Slots
 		local aSpellCasters = CharWizardManager.retrieveCasterClasses(self);
@@ -1055,6 +1028,8 @@ function levelupCharacter(identity)
 		if genfeats.subwindow then
 			addFeats(nodeChar);
 		end
+
+		addClassFeats(nodeChar);
 	end
 
 	-- Add Spells
@@ -1699,6 +1674,28 @@ function getSpellcastingAbility(sClass)
 	return sAbility;
 end
 
+function addClassFeats(nodeChar)
+	local aFeats = {};
+
+	for _,v in pairs(genclass.subwindow.contents.subwindow.class_window.getWindows()) do
+		if v.group_name.getValue():match(" FEAT") then
+			if v.selection_name.getValue() ~= "" then
+				local sClass,sRecord = v.selection_shortcut.getValue()
+
+				table.insert(aFeats, {name = v.selection_name.getValue(), record = sRecord} )
+			end
+		end
+	end
+
+	for _,v in pairs(aFeats) do
+		if v.record == "" then
+			return
+		end
+
+		CharManager.addFeatDB(nodeChar, "reference_feat", v.record, true);
+	end
+end
+
 function addFeats(nodeChar)
 	local aFeats = {};
 
@@ -1716,8 +1713,6 @@ function addFeats(nodeChar)
 		end
 
 		CharManager.addFeatDB(nodeChar, "reference_feat", v.record, true);
-
-		CharManager.outputUserMessage("char_abilities_message_featadd", StringManager.titleCase(v.name), DB.getValue(nodeChar, "name", ""));
 	end
 end
 

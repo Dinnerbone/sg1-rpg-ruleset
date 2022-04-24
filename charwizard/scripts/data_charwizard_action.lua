@@ -35,6 +35,12 @@
 	},
 --]]
 parsedata = {
+    ["procedures"] = {
+        ["feats"] = {
+            choice = 1,
+            choice_feats = {"biohazard disposal", "crash training", "controlled stimulants", "embolism", "improvised medicine", "pharmaceuticals", "sedatives", "urgent care", "vital organ trauma"},
+        }
+    },
 	--
 	-- CLASSES
 	--

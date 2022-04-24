@@ -452,32 +452,18 @@
 	<string name="background_label_tools">Tools</string>
 
 	<!-- Classes -->
-	<string name="class_value_artificer">Artificer</string>
-	<string name="class_value_barbarian">Barbarian</string>
-	<string name="class_value_bard">Bard</string>
-	<string name="class_value_cleric">Cleric</string>
-	<string name="class_value_druid">Druid</string>
-	<string name="class_value_fighter">Fighter</string>
-	<string name="class_value_monk">Monk</string>
-	<string name="class_value_paladin">Paladin</string>
-	<string name="class_value_ranger">Ranger</string>
-	<string name="class_value_rogue">Rogue</string>
-	<string name="class_value_sorcerer">Sorcerer</string>
-	<string name="class_value_warlock">Warlock</string>
-	<string name="class_value_wizard">Wizard</string>
-	<string name="class_short_artificer">Art</string>
-	<string name="class_short_barbarian">Brb</string>
-	<string name="class_short_bard">Brd</string>
-	<string name="class_short_cleric">Cle</string>
-	<string name="class_short_druid">Drd</string>
-	<string name="class_short_fighter">Ftr</string>
-	<string name="class_short_monk">Mnk</string>
-	<string name="class_short_paladin">Pal</string>
-	<string name="class_short_ranger">Rng</string>
-	<string name="class_short_rogue">Rog</string>
-	<string name="class_short_sorcerer">Sor</string>
-	<string name="class_short_warlock">War</string>
-	<string name="class_short_wizard">Wiz</string>
+	<string name="class_value_diplomat">Diplomat</string>
+	<string name="class_value_engineer">Engineer</string>
+	<string name="class_value_medic">Medic</string>
+	<string name="class_value_scientist">Scientist</string>
+	<string name="class_value_scout">Scout</string>
+	<string name="class_value_soldier">Soldier</string>
+	<string name="class_short_diplomat">Dip</string>
+	<string name="class_short_engineer">Eng</string>
+	<string name="class_short_medic">Med</string>
+	<string name="class_short_scientist">Sci</string>
+	<string name="class_short_scout">Sct</string>
+	<string name="class_short_soldier">Sld</string>
 
 	<string name="class_label_hitpointsat1stlevel">HP At Lvl 1</string>
 	<string name="class_label_hitpointsathigherlevels">HP Higher Lvls</string>
