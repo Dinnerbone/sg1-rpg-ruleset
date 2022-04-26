@@ -241,9 +241,9 @@ function addInfoDB(nodeChar, sClass, sRecord)
 		return false;
 	end
 	
-	if sClass == "reference_background" then
-		CharManager.addBackgroundRef(nodeChar, sClass, sRecord);
-	elseif sClass == "reference_backgroundfeature" then
+	if sClass == "reference_origin" then
+		CharManager.addOriginRef(nodeChar, sClass, sRecord);
+	elseif sClass == "reference_originfeature" then
 		CharManager.addClassFeatureDB(nodeChar, sClass, sRecord);
 	elseif sClass == "reference_race" or sClass == "reference_subrace" then
 		CharManager.addRaceRef(nodeChar, sClass, sRecord);
@@ -1297,21 +1297,26 @@ function addLanguageDB(nodeChar, sLanguage)
 	return true;
 end
 
-function addBackgroundRef(nodeChar, sClass, sRecord)
+function addOriginRef(nodeChar, sClass, sRecord)
 	local nodeSource = CharManager.resolveRefNode(sRecord);
 	if not nodeSource then
 		return;
 	end
 
 	-- Notify
-	CharManager.outputUserMessage("char_abilities_message_backgroundadd", DB.getValue(nodeSource, "name", ""), DB.getValue(nodeChar, "name", ""));
+	CharManager.outputUserMessage("char_abilities_message_originadd", DB.getValue(nodeSource, "name", ""), DB.getValue(nodeChar, "name", ""));
 
 	-- Add the name and link to the main character sheet
-	DB.setValue(nodeChar, "background", "string", DB.getValue(nodeSource, "name", ""));
-	DB.setValue(nodeChar, "backgroundlink", "windowreference", sClass, nodeSource.getPath());
+	if DB.getValue(nodeChar, "origin_a", "") ~= "" then
+		DB.setValue(nodeChar, "origin_b", "string", DB.getValue(nodeSource, "name", ""));
+		DB.setValue(nodeChar, "origin_b_link", "windowreference", sClass, nodeSource.getPath());
+	else
+		DB.setValue(nodeChar, "origin_a", "string", DB.getValue(nodeSource, "name", ""));
+		DB.setValue(nodeChar, "origin_a_link", "windowreference", sClass, nodeSource.getPath());
+	end
 		
 	for _,v in pairs(DB.getChildren(nodeSource, "features")) do
-		CharManager.addClassFeatureDB(nodeChar, "reference_backgroundfeature", v.getPath());
+		CharManager.addClassFeatureDB(nodeChar, "reference_originfeature", v.getPath());
 	end
 
 	local sSkills = DB.getValue(nodeSource, "skill", "");

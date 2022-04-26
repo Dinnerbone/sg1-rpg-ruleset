@@ -12,7 +12,7 @@
 				if draginfo.isType("shortcut") then
 					local sClass, sRecord = draginfo.getShortcutData();
 
-					if StringManager.contains({"reference_class", "reference_race", "reference_subrace", "reference_background"}, sClass) then
+					if StringManager.contains({"reference_class", "reference_race", "reference_subrace", "reference_origin"}, sClass) then
 						CharManager.addInfoDB(getDatabaseNode(), sClass, sRecord);
 						return true;
 					end
@@ -67,19 +67,22 @@
 					end
 				</script>
 			</number_linked>
-
-			<label_charframetop name="backgroundtitle">
+ 
+			<label_charframetop name="origintitle">
 				<anchored height="20">
 					<top offset="65" />
 					<left offset="15" />
 					<right anchor="center" offset="-15" />
 				</anchored>
-				<icons>char_background</icons>
-				<static textres="char_label_background" />
+				<icons>char_origin</icons>
+				<static textres="char_label_origins" />
 			</label_charframetop>
-			<linkfield name="backgroundlink">
-				<anchored to="backgroundtitle" position="belowright" offset="-10,5" width="20" height="20" />
-				<description field="background" />
+			<linkfield name="origin_a_link">
+				<anchored width="20" height="20">
+				  <right parent="origintitle" anchor="center" offset="0" />
+				  <top parent="origintitle" anchor="below" offset="5" />
+				</anchored>
+				<description field="origin_a" />
 				<closetoggle />
 				<invisible />
 				<script>
@@ -88,16 +91,41 @@
 					end
 					function onValueChanged()
 						if isEmpty() then
-							setVisible(false);
+							setVisible(true); ------
 						else
 							setVisible(true);
 						end
 					end
 				</script>
 			</linkfield>
-			<stringu name="background">
-				<anchored to="backgroundtitle" position="belowleft" offset="-5,5" height="20">
-					<right parent="backgroundlink" anchor="left" offset="-5" />
+			<stringu name="origin_a">
+				<anchored to="origintitle" position="belowleft" offset="-5,5" height="20">
+					<right parent="origin_a_link" anchor="left" offset="-5" />
+				</anchored>
+			</stringu>
+			<linkfield name="origin_b_link">
+				<anchored to="origintitle" position="belowright" offset="-10,5" width="20" height="20" />
+				<description field="origin_b" />
+				<closetoggle />
+				<invisible />
+				<script>
+					function onInit()
+						onValueChanged();
+					end
+					function onValueChanged()
+						if isEmpty() then
+							setVisible(true); ------
+						else
+							setVisible(true);
+						end
+					end
+				</script>
+			</linkfield>
+			<stringu name="origin_b">
+				<anchored height="20">
+				  <left parent="origin_a_link" anchor="right" offset="8" />
+				  <right parent="origin_b_link" anchor="left" offset="-5" />
+				  <top parent="origintitle" anchor="below" offset="5" />
 				</anchored>
 			</stringu>
 

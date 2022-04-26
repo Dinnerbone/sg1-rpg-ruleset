@@ -300,7 +300,7 @@ function onDrop(x, y, draginfo)
 		
 		if sClass == "reference_spell" or sClass == "power" then
 			addSpellDrop(nodeSource);
-		elseif sClass == "reference_backgroundfeature" then
+		elseif sClass == "reference_originfeature" then
 			addAction(DB.getValue(nodeSource, "name", ""), DB.getText(nodeSource, "text", ""));
 		elseif sClass == "reference_classfeature" then
 			addAction(DB.getValue(nodeSource, "name", ""), DB.getText(nodeSource, "text", ""));

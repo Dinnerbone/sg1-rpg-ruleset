@@ -81,7 +81,7 @@
 	<includefile source="campaign/record_itemtemplate.xml" />
 	<includefile source="campaign/record_quest.xml" />
 
-	<includefile source="campaign/record_background.xml" />
+	<includefile source="campaign/record_origin.xml" />
 	<includefile source="campaign/record_class.xml" />
 	<includefile source="campaign/record_feat.xml" />
 	<includefile source="campaign/record_power.xml" />

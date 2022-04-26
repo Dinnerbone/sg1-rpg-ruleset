@@ -51,7 +51,7 @@
 	<icon name="char_weapon_handoff" file="graphics/icons/char_weapon_handoff.png" />	
 	<icon name="char_name" file="graphics/icons/char_name.png" />	
 	<icon name="char_race" file="graphics/icons/char_race.png" />
-	<icon name="char_background" file="graphics/icons/char_background.png" />
+	<icon name="char_origin" file="graphics/icons/char_background.png" />
 	<icon name="char_class" file="graphics/icons/char_class.png" />
 	<icon name="char_stats" file="graphics/icons/char_stats.png" />
 	<icon name="char_defenses" file="graphics/icons/char_defenses.png" />		

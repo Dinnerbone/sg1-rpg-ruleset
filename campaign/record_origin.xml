@@ -6,7 +6,7 @@
 -->
 
 <root>
-	<windowclass name="reference_background">
+	<windowclass name="reference_origin">
 		<frame>recordsheet</frame>
 		<placement>
 			<size width="350" height="350" />
@@ -23,7 +23,7 @@
 		<script file="common/scripts/record_window.lua" />
 		<sheetdata>
 			<sub_record_header name="header">
-				<class>ref_background_header</class>
+				<class>ref_origin_header</class>
 			</sub_record_header>
 
 			<frame_record_content_tabbed name="contentframe" />
@@ -33,7 +33,7 @@
 				<invisible />
 			</ft_record>
 			<subwindow_record name="content">
-				<class>ref_background_stats</class>
+				<class>ref_origin_stats</class>
 			</subwindow_record>
 
 			<scrollbar_record>
@@ -59,7 +59,7 @@
 		</sheetdata>
 	</windowclass>
 	
-	<windowclass name="ref_background_header">
+	<windowclass name="ref_origin_header">
 		<margins control="0,0,0,2" />
 		<script file="common/scripts/record_header.lua" />
 		<sheetdata>
@@ -74,7 +74,7 @@
 		</sheetdata>
 	</windowclass>
 	
-	<windowclass name="ref_background_stats">
+	<windowclass name="ref_origin_stats">
 		<margins control="0,0,0,7" />
 		<script>
 			function onInit()
@@ -82,38 +82,32 @@
 			end
 			function update()
 				local bReadOnly = WindowManager.getReadOnlyState(getDatabaseNode());
-				skill.update(bReadOnly);
-				languages.update(bReadOnly);
-				tool.update(bReadOnly);
-				equipment.update(bReadOnly);
+				bonus_proficiency.update(bReadOnly);
+				attribute.update(bReadOnly);
+				required_race.update(bReadOnly);
 				features.update(bReadOnly);
 			end
 		</script>
 		<sheetdata>
 			<anchor_column name="columnanchor" />
 			
-			<label_column name="skill_label">
-				<static textres="background_label_skills" />
+			<label_column name="bonus_proficiency_label">
+				<static textres="origin_label_bonus_proficiency" />
 			</label_column>
-			<string_columnh name="skill" />
+			<string_columnh name="bonus_proficiency" />
 			
-			<label_column name="languages_label">
-				<static textres="background_label_languages" />
+			<label_column name="attribute_label">
+				<static textres="origin_label_attribute" />
 			</label_column>
-			<string_columnh name="languages" />
+			<string_columnh name="attribute" />
 			
-			<label_column name="tool_label">
-				<static textres="background_label_tools" />
+			<label_column name="required_race_label">
+				<static textres="origin_label_required_race" />
 			</label_column>
-			<string_columnh name="tool" />
-			
-			<label_column name="equipment_label">
-				<static textres="background_label_equipment" />
-			</label_column>
-			<string_columnh name="equipment" />
+			<string_columnh name="required_race" />
 			
 			<header_column name="features_header">
-				<static textres="background_header_features"/>
+				<static textres="origin_header_features"/>
 				<center />
 			</header_column>
 			<button_iedit name="features_iedit">
@@ -126,27 +120,27 @@
 			</button_iadd>
 			<list_column name="features">
 				<datasource>.features</datasource>
-				<class>ref_background_feature</class>
+				<class>ref_origin_feature</class>
 			</list_column>
 		</sheetdata>
 	</windowclass>
 
-	<windowclass name="ref_background_feature">
+	<windowclass name="ref_origin_feature">
 		<margins control="0,0,0,2" />
 		<sheetdata>
 			<anchor_listitem_column_right name="rightanchor" />
 			<link_listitem_column name="shortcut">
-				<class>reference_backgroundfeature</class>
+				<class>reference_originfeature</class>
 			</link_listitem_column>
 			<button_listitem_column_delete name="idelete" />
 
 			<string_listitem_column_name name="name">
-				<empty textres="library_recordtype_empty_backgroundfeature" />
+				<empty textres="library_recordtype_empty_originfeature" />
 			</string_listitem_column_name>
 		</sheetdata>
 	</windowclass>
 	
-	<windowclass name="reference_backgroundfeature">
+	<windowclass name="reference_originfeature">
 		<frame>recordsheet</frame>
 		<placement>
 			<size width="350" height="350" />
@@ -160,7 +154,7 @@
 		<script file="common/scripts/record_window.lua" />
 		<sheetdata>
 			<sub_record_header name="header">
-				<class>ref_backgroundfeature_header</class>
+				<class>ref_originfeature_header</class>
 			</sub_record_header>
 
 			<frame_record_content />
@@ -177,12 +171,12 @@
 			<close_recordsheet />
 		</sheetdata>
 	</windowclass>
-	<windowclass name="ref_backgroundfeature_header">
+	<windowclass name="ref_originfeature_header">
 		<margins control="0,0,0,2" />
 		<script file="common/scripts/record_header_simple.lua" />
 		<sheetdata>
 			<link_record_header name="link">
-				<class>reference_backgroundfeature</class>
+				<class>reference_originfeature</class>
 			</link_record_header>
 
 			<anchor_record_header_right />
@@ -190,10 +184,10 @@
 			<button_record_locked />
 
 			<string_record_name name="name">
-				<empty textres="library_recordtype_empty_backgroundfeature" />
+				<empty textres="library_recordtype_empty_originfeature" />
 			</string_record_name>
 			<label_recordtype name="recordtype_label">
-				<static textres="ref_type_backgroundfeature" />
+				<static textres="ref_type_originfeature" />
 			</label_recordtype>	
 		</sheetdata>
 	</windowclass>

@@ -52,7 +52,7 @@
 	<string name="savingthrow">Saving Throw</string>
 	<string name="racial">Racial</string>
 	<string name="subracial">Race Option</string>
-	<string name="background">Background</string>
+	<string name="origin">Origins</string>
 	<string name="2nd">2nd</string>
 
 	<string name="menu_rest">Rest</string>
@@ -214,7 +214,7 @@
 	<string name="char_button_levelup">LVL UP</string>
 	<string name="char_tooltip_levelup">Open Character Wizard and Level Up this Character</string>	
 	<string name="char_label_profbonus">PROF</string>
-	<string name="char_label_background">BACKGROUND</string>
+	<string name="char_label_origins">ORIGINS</string>
 	<string name="char_label_race">RACE</string>
 
 	<string name="char_label_stats">ABILITIES</string>
@@ -325,7 +325,7 @@
 	
 	<string name="char_abilities_message_classadd">One level of class '%s' added to '%s'.</string>
 	<string name="char_abilities_message_raceadd">Race '%s' added to '%s'.</string>
-	<string name="char_abilities_message_backgroundadd">Background '%s' added to '%s'.</string>
+	<string name="char_abilities_message_originadd">Origin '%s' added to '%s'.</string>
 
 	<string name="char_abilities_message_abilityadd">Ability adjustment '%s %+d' applied to '%s'.</string>
 	<string name="char_abilities_message_hpaddmax">Maximum hit points for first %s level added to '%s'. (%d)</string>
@@ -441,15 +441,14 @@
 	<!-- Pregens -->
 	<string name="pregen_label_race">Race</string>
 	<string name="pregen_label_class">Class</string>
-	<string name="pregen_label_background">Background</string>
+	<string name="pregen_label_origins">Origins</string>
 	<string name="pregen_error_missingdata">[ERROR] One or more data records (features, traits, inventory, spells) were unable to be loaded. Please ensure that your Player's Handbook or Basic Rules - Player modules are loaded; and re-add the pregen character.</string>
 
-	<!-- Backgrounds -->
-	<string name="background_header_features">FEATURES</string>
-	<string name="background_label_equipment">Equipment</string>
-	<string name="background_label_languages">Languages</string>
-	<string name="background_label_skills">Skills</string>
-	<string name="background_label_tools">Tools</string>
+	<!-- origins -->
+	<string name="origin_header_features">FEATURES</string>
+	<string name="origin_label_bonus_proficiency">Proficiency</string>
+	<string name="origin_label_attribute">Attribute</string>
+	<string name="origin_label_required_race">Required Race</string>
 
 	<!-- Classes -->
 	<string name="class_value_diplomat">Diplomat</string>
@@ -699,7 +698,7 @@
 	<string name="ref_label_duration">Duration</string>
 	
 	<string name="ref_type_adventure">Adventure</string>
- 	<string name="ref_type_backgroundfeature">Background Feature</string>
+ 	<string name="ref_type_originfeature">Origin Feature</string>
 	<string name="ref_type_classproficiency">Class Proficiency</string>
 	<string name="ref_type_classability">Class Specialization</string>
 	<string name="ref_type_proficiency">Proficiency</string>
@@ -808,7 +807,10 @@
 	<!-- Library - Master Index -->
 	<string name="library_recordtype_value_spell_level_0">Cantrip</string>
 
-	<string name="library_recordtype_empty_backgroundfeature">&#171; New Background Feature &#187;</string>
+	<string name="library_recordtype_label_origin">Origins</string>
+	<string name="library_recordtype_empty_origin">&#171; New Origin &#187;</string>
+
+	<string name="library_recordtype_empty_originfeature">&#171; New Origin Feature &#187;</string>
 	<string name="library_recordtype_empty_subrace">&#171; New Race Option &#187;</string>
 	<string name="library_recordtype_empty_racialtrait">&#171; New Racial Trait &#187;</string>
 	<string name="library_recordtype_empty_subracialtrait">&#171; New Race Option Trait &#187;</string>

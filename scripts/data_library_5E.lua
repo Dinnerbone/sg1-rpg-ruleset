@@ -140,10 +140,11 @@ aRecordOverrides = {
 			["Type"] = { sField = "type" },
 		},
 	},
-	["background"] = {
+	["origin"] = {
 		bExport = true, 
-		aDataMap = { "background", "reference.backgrounddata" }, 
-		sRecordDisplayClass = "reference_background", 
+		aDataMap = { "origin", "reference.origindata" }, 
+		sRecordDisplayClass = "reference_origin", 
+		sSidebarCategory = "create", 
 	},
 	["class"] = {
 		bExport = true, 
