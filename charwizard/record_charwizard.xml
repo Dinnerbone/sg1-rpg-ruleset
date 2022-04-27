@@ -138,24 +138,24 @@
 					<top offset="0" />
 					<left anchor="right" relation="relative" offset="10" />
 				</anchored>
-				<state textres="charwizard_backgroundcheck_label" />
+				<state textres="charwizard_origincheck_label" />
 				<script>
 					function onButtonPress()
 						window.tabs.activateTab(4);
 
-						if window.genback.subwindow then
-							CharWizardManager.getAlerts(window, window.genback.subwindow.contents.subwindow.background_window)
+						if window.genorigin.subwindow then
+							CharWizardManager.getAlerts(window, window.genorigin.subwindow.contents.subwindow.origin_window)
 						end
 					end
 				</script>
 			</button_charwizard_tab>
-			<buttoncontrol name="background_GateCheck">
+			<buttoncontrol name="origin_GateCheck">
 				<anchored to="charwizard_backtab" position="insidebottomright" offset="-5,-5" width="20" height="20" />
 				<static textres="charwizard_backcheck_label" />
-				<state icon="button_dialog_cancel_down" tooltipres="charwizard_backgroundcheckfail_tooltip" />
-				<state icon="button_dialog_ok_down" tooltipres="charwizard_backgroundcheckpass_tooltip" />
+				<state icon="button_dialog_cancel_down" tooltipres="charwizard_origincheckfail_tooltip" />
+				<state icon="button_dialog_ok_down" tooltipres="charwizard_origincheckpass_tooltip" />
 			</buttoncontrol>
-			<buttoncontrol name="background_alert">
+			<buttoncontrol name="origin_alert">
 				<anchored to="charwizard_backtab" position="insidebottomleft" offset="-5,-5" width="20" height="20" />
 				<icon normal="button_alert" />
 				<static textres="charwizard_backcheck_label" />
@@ -305,8 +305,8 @@
 			<sub_charsheet name="genclass">
 				<class>charsheet_charwizard_classalt</class>
 			</sub_charsheet>
-			<sub_charsheet name="genback">
-				<class>charsheet_charwizard_backgroundalt</class>
+			<sub_charsheet name="genorigin">
+				<class>charsheet_charwizard_originalt</class>
 			</sub_charsheet>
 			<sub_charsheet name="geninv">
 				<class>charsheet_charwizard_inventory</class>
@@ -342,7 +342,7 @@
 				</tab>
 				<tab>
 					<icon>tab_back</icon>
-					<subwindow>genback</subwindow>
+					<subwindow>genorigin</subwindow>
 				</tab>
 				<tab>
 					<icon>tab_inventory</icon>
@@ -393,7 +393,7 @@
 
 			<hlink name="summary_race_link" />
 			<hlink name="summary_subrace_link" />
-			<hlink name="summary_background_link" />
+			<hlink name="summary_origin_link" />
 
 			<anchor_title_charsheet name="summaryanchor" />
 
@@ -445,15 +445,15 @@
 				<readonly />
 			</stringcu>
 
-			<label name="summary_backgroundtitle">
+			<label name="summary_originstitle">
 				<anchored to="summaryanchor" height="20" width="160" >
 					<top anchor="bottom" offset="12" />
 					<left offset="330" />
 				</anchored>
-				<static textres="char_label_background" />
+				<static textres="char_label_origins" />
 			</label>
-			<stringcu name="summary_background">
-				<anchored to="summary_backgroundtitle" position="insidetop" offset="0,15" height="20" />
+			<stringcu name="summary_origins">
+				<anchored to="summary_originstitle" position="insidetop" offset="0,15" height="20" />
 				<readonly />
 			</stringcu>
 
@@ -934,7 +934,7 @@
 					<right anchor="left" relation="relative" offset="-10" />
 				</anchored>
 				<!--anchored position="insidetopright" relation="relative" offset="10,10" width="20" height="20" /-->
-				<class>reference_background</class>
+				<class>reference_origin</class>
 				<readonly />
 				<invisible />
 			</linkcontrol>
@@ -972,13 +972,6 @@
 				<readonly />
 				<invisible />
 			</basicnumber>
-
-			<!--label name="level_label">
-				<anchored position="insidetopright" relation="relative" offset="160,10" />
-				<static textres="charwizard_background_level" />
-				<readonly />
-				<invisible />
-			</label-->
 
 			<label name="selection_name">
 				<anchored to="rightanchor">
@@ -1034,76 +1027,6 @@
 		</sheetdata>
 	</windowclass>
 
-	<!--windowclass name="charwizard_window_item">
-		<margins control="0,0,10,10" />
-		<frame>groupbox</frame>
-		<sheetdata>
-			<hnc name="order" />
-			<hsc name="ability" />
-
-			<label name="group_name">
-				<anchored position="insidetopleft" offset="40,10" />
-				<readonly />
-			</label>
-			<windowlist name="selection_window">
-				<anchored position="insidetopleft" offset="5,35">
-					<right />
-				</anchored>
-				<columns width="135" fillwidth="true" />
-				<skipempty />
-				<noscroll />
-				<class>charwizard_selection_item</class>
-			</windowlist>
-			<windowlist name="subselection_window">
-				<anchored position="insidetopleft" offset="5,35">
-					<right />
-				</anchored>
-				<columns width="135" fillwidth="true" />
-				<skipempty />
-				<noscroll />
-				<class>charwizard_selection_item</class>
-				<invisible />
-			</windowlist>
-			<label name="level_label">
-				<anchored position="insidetopright" relation="relative" offset="160,10" />
-				<static textres="charwizard_background_level" />
-				<readonly />
-				<invisible />
-			</label>
-			<basicnumber name="level">
-				<anchored position="insidetopright" relation="relative" offset="140,10" width="30" height="20" />
-				<readonly />
-				<invisible />
-			</basicnumber>
-			<button_charwizard_level_genvalup name="level_up">
-				<anchored to="level" />
-			</button_charwizard_level_genvalup>
-			<button_charwizard_level_genvaldown name="level_down">
-				<anchored to="level" />
-			</button_charwizard_level_genvaldown>
-			<label name="selection_name">
-				<anchored position="insidetopright" relation="relative" offset="40,10" />
-				<readonly />
-				<invisible />
-			</label>
-			<linkcontrol name="selection_shortcut">
-				<anchored position="insidetopright" relation="relative" offset="10,10" width="20" height="20" />
-				<class>reference_background</class>
-				<readonly />
-				<invisible />
-			</linkcontrol>
-			<basicnumber name="selection_count">
-				<anchored position="insidetopright" relation="relative" offset="10,10" width="20" height="20" />
-				<readonly />
-				<invisible />
-			</basicnumber>
-			<button_charwizard_expand_window name="button_expand">
-				<anchored position="insidetopleft" offset="10,10" />
-				<target>selection_window</target>
-			</button_charwizard_expand_window>
-		</sheetdata>
-	</windowclass-->
-
 	<windowclass name="charwizard_selection_item">
 		<margins control="0,0,0,10" />
 		<sheetdata>
@@ -1121,7 +1044,7 @@
 					<top offset="5" />
 					<right anchor="left" relation="relative" offset="-110" />
 				</anchored>
-				<class>reference_background</class>
+				<class>reference_origin</class>
 				<readonly />
 				<invisible />
 			</linkcontrol>
@@ -1888,8 +1811,8 @@
 		</sheetdata>
 	</windowclass>
 
-	<!-- Backgrounds -->
-	<windowclass name="charsheet_charwizard_backgroundalt">
+	<!-- Origins -->
+	<windowclass name="charsheet_charwizard_originalt">
 		<sheetdata>
 			<subwindow name="contents">
 				<anchored>
@@ -1898,30 +1821,30 @@
 					<left offset="0" />
 					<right offset="-535" />
 				</anchored>
-				<class>charwizard_backgroundwindow_contents</class>
+				<class>charwizard_originwindow_contents</class>
 				<activate />
 				<fastinit />
 			</subwindow>
 		</sheetdata>
 	</windowclass>
 
-	<windowclass name="charwizard_backgroundwindow_contents">
+	<windowclass name="charwizard_originwindow_contents">
 		<sheetdata>
 			<anchor_column name="columnanchor" />
 
-			<label_charframetop name="background_label">
+			<label_charframetop name="origin_label">
 				<anchored height="20">
 					<top parent="columnanchor" anchor="bottom" relation="relative" offset="15" />
 					<left offset="15" />
 					<right offset="-50" />
 				</anchored>
-				<icons>char_background</icons>
-				<static textres="charwizard_label_background" />
+				<icons>char_origin</icons>
+				<static textres="charwizard_label_origin" />
 			</label_charframetop>
 
-			<windowlist name="background_window">
+			<windowlist name="origin_window">
 				<anchored>
-					<top parent="background_label" anchor="bottom" relation="relative" offset="10" />
+					<top parent="origin_label" anchor="bottom" relation="relative" offset="10" />
 					<left offset="15" />
 					<right offset="-50" />
 					<bottom offset="-42" />
@@ -1934,15 +1857,15 @@
 					function onInit()
 						local wndSummary = UtilityManager.getTopWindow(window);
 
-						CharWizardManager.createSelectionWindows(window.background_window, "SELECT BACKGROUND", wndSummary.loaded_backgrounds, 1, true);
+						CharWizardManager.createSelectionWindows(window.origin_window, "SELECT ORIGINS", wndSummary.loaded_origins, 2, true);
 						CharWizardManager.getAlerts(wndSummary, self);
 					end
 				</script>
 			</windowlist>
 
 			<scrollbar>
-				<anchored to="background_window" />
-				<target>background_window</target>
+				<anchored to="origin_window" />
+				<target>origin_window</target>
 			</scrollbar>
 		</sheetdata>
 	</windowclass>
@@ -2013,7 +1936,6 @@
 						end
 
 						CharWizardManager.createStartingKit(sClass, window.kitlist)
-						CharWizardManager.parseBackgroundKit(wndSummary, window.kitlist);
 					end
 				</script>
 			</button_charwizard_choice>
@@ -2124,7 +2046,6 @@
 					function onInit()
 						local wndSummary = UtilityManager.getTopWindow(window);
 						local sClass = "";
-						local bBackground = false;
 
 						if wndSummary.summary.subwindow.summary_class.getWindowCount() > 0 then
 							for _,v in pairs(wndSummary.genclass.subwindow.contents.subwindow.class_window.getWindows()) do
@@ -2137,19 +2058,7 @@
 								end
 							end
 
-							for _,v in pairs(getWindows()) do
-								if v.group_name.getValue():lower():match("background") then
-									bBackground = true;
-
-									break
-								end
-							end
-
 							CharWizardManager.createStartingKit(sClass, self);
-
-							if not bBackground then
-								CharWizardManager.parseBackgroundKit(wndSummary, self);
-							end
 						end
 					end
 				</script>

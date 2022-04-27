@@ -18,7 +18,7 @@ impskills = {};
 
 loaded_races = {};
 loaded_classes = {};
-loaded_backgrounds = {};
+loaded_origins = {};
 loaded_spells = {};
 loaded_feats = {};
 loaded_items = {};
@@ -29,12 +29,13 @@ loaded_items = {};
 
 proficiencies_race = {};
 proficiencies_class = {};
-proficiencies_background = {};
+proficiencies_origin = {};
 
 spellslots = {};
 pactslots = {};
 spelllist = {};
 innatespells = {};
+origins = {};
 
 inventory = {};
 gold = 0;
@@ -44,7 +45,7 @@ function onInit()
 
 	collectRaces();
 	collectClasses();
-	collectBackgrounds();
+	collectOrigins();
 	collectSpells();
 	collectFeats();
 end
@@ -175,32 +176,24 @@ function collectClasses()
 	return loaded_classes;
 end
 
-function collectBackgrounds()
-	local aPHBBackgrounds = {};
-	local aRestBackgrounds = {};
+function collectOrigins()
+	local aOrigins = {};
 
-	local aMappings = LibraryData.getMappings("background");
+	local aMappings = LibraryData.getMappings("origin");
 	for _,vMapping in ipairs(aMappings) do
-		for _,vBackground in pairs(DB.getChildrenGlobal(vMapping)) do
-			local sModule = vBackground.getModule();
-			local sBackground = DB.getValue(vBackground, "name", ""):lower();
+		for _,vOrigin in pairs(DB.getChildrenGlobal(vMapping)) do
+			local sModule = vOrigin.getModule();
+			local sOrigin = DB.getValue(vOrigin, "name", ""):lower();
 
-			if sBackground == "" then--set to empty string
-				sBackground = vBackground.getName();
+			if sOrigin == "" then
+				sOrigin = vOrigin.getName();
 			end
-			if sBackground:lower() ~= "general background template" and sBackground:lower() ~= "house agent" then
-				sBackground = StringManager.trim(sBackground):lower();
-
-				if sModule == "DD PHB Deluxe" then
-					aPHBBackgrounds[sBackground] = vBackground;
-				else
-					aRestBackgrounds[sBackground] = vBackground;
-				end
-			end
+			aOrigins[sOrigin] = vOrigin;
 		end
 	end
 
-	for k,v in pairs(aPHBBackgrounds) do
+
+	for k,v in pairs(aOrigins) do
 		local sModule = v.getModule();
 		local sTooltip = "";
 
@@ -210,22 +203,7 @@ function collectBackgrounds()
 			sTooltip = StringManager.titleCase(k) .. ": " .. sModule;
 		end
 
-		loaded_backgrounds[k] = { tooltip = sTooltip, class = "reference_background", record = v.getPath() };
-	end
-
-	for k,v in pairs(aRestBackgrounds) do
-		if not aPHBBackgrounds[k] then
-			local sModule = v.getModule();
-			local sTooltip = "";
-
-			if sModule == nil then
-				sTooltip = StringManager.titleCase(k) .. ": Campaign";
-			else
-				sTooltip = StringManager.titleCase(k) .. ": " .. sModule;
-			end
-
-			loaded_backgrounds[k] = { tooltip = sTooltip, class = "reference_background", record = v.getPath() };
-		end
+		loaded_origins[k] = { tooltip = sTooltip, class = "reference_origin", record = v.getPath() };
 	end
 end
 
@@ -379,6 +357,28 @@ function calcSummaryStats()
 		end
 	end
 
+	for _, origin in pairs(origins) do
+		local attribute = DB.getValue(origin.nodeSource, "attribute", "");
+		local sAbility, sAmount = attribute:match("(%w+) %+(%d+)");
+		if sAbility then
+			sAbility = sAbility:lower();
+			sAmount = tonumber(sAmount);
+			if sAbility == "strength" then
+				nFeatStr = nFeatStr + sAmount;
+			elseif sAbility == "dexterity" then
+				nFeatDex = nFeatDex + sAmount;
+			elseif sAbility == "constitution" then
+				nFeatCon = nFeatCon + sAmount;
+			elseif sAbility == "intelligence" then
+				nFeatInt = nFeatInt + sAmount;
+			elseif sAbility == "wisdom" then
+				nFeatWis = nFeatWis + sAmount;
+			elseif sAbility == "charisma" then
+				nFeatCha = nFeatCha + sAmount;
+			end
+		end
+	end
+
 	summary.subwindow.summary_strength.setValue(nStr + nRaceStr + nASIStr + nFeatStr);
 	summary.subwindow.summary_dexterity.setValue(nDex + nRaceDex + nASIDex + nFeatDex);
 	summary.subwindow.summary_constitution.setValue(nCon + nRaceCon + nASICon + nFeatCon);
@@ -500,7 +500,7 @@ function updateProficiencies()
 	local aCurProfs = {};
 	local aRaceProfs = {};
 	local aClassProfs = {};
-	local aBackgroundProfs = {};
+	local aOriginProfs = {};
 
 	for k,v in pairs(proficiencies_race) do
 		if k:lower() == "all armor" then
@@ -522,13 +522,13 @@ function updateProficiencies()
 			aCurProfs[k:lower()] = v;
 		end
 	end
-	for k,v in pairs(proficiencies_background) do
+	for k,v in pairs(proficiencies_origin) do
 		if k:lower() == "all armor" then
 			for t,_ in pairs(CharWizardData.aAllArmor) do
 				aCurProfs[t] = "";
 			end
 		else
-			aBackgroundProfs[k:lower()] = v;
+			aOriginProfs[k:lower()] = v;
 			aCurProfs[k:lower()] = v;
 		end
 	end
@@ -630,6 +630,19 @@ function updateExpertise()
 	end
 end
 
+function updateOrigins()
+	local text = "";
+
+	for _, origin in pairs(origins) do
+		if text ~= "" then
+			text = text .. " / ";
+		end
+		text = text .. DB.getValue(origin.nodeSource, "name", "");
+	end
+
+	summary.subwindow.summary_origins.setValue(text);
+end
+
 function getAvailableLanguages()
 	local aLanguages = {};
 	local aAvailableLanguages = {};
@@ -703,9 +716,8 @@ end
 
 function checkFeatSpellInv()
 	local nClassCount = summary.subwindow.summary_class.getWindowCount();
-	local sBackground = summary.subwindow.summary_background.getValue();
 	local sRace = summary.subwindow.summary_race.getValue();
-	local bInv = (nClassCount > 0) and (sBackground ~= "");
+	local bInv = (nClassCount > 0);
 	local bSpell = false;
 
 	for _,v in pairs(summary.subwindow.summary_class.getWindows()) do
@@ -795,7 +807,7 @@ end
 function checkCompletion()
 	local wndSummary = Interface.findWindow("charwizard", "");
 	_tWarnings = {};
-	local aCurRaceWarnings, aCurClassWarnings, aCurBackgroundWarnings;
+	local aCurRaceWarnings, aCurClassWarnings, aCurOriginWarnings;
 	local bImport = wndSummary.import == 1;
 
 	if genraces.subwindow then
@@ -811,11 +823,11 @@ function checkCompletion()
 	else
 		table.insert(_tWarnings, {warning = "Select Class", severity = 2, group1 = "class", group2 = "class", order = 3, grouporder = 2});
 	end
-	if genback.subwindow then
-		aCurBackgroundWarnings = CharWizardManager.getAlerts(wndSummary, genback.subwindow.contents.subwindow.background_window);
+	if genorigin.subwindow then
+		aCurOriginWarnings = CharWizardManager.getAlerts(wndSummary, genorigin.subwindow.contents.subwindow.origin_window);
 	else
 		if not bImport then
-			table.insert(_tWarnings, {warning = "Select Background", severity = 2, group1 = "background", group2 = "background", order = 4, grouporder = 3});
+			table.insert(_tWarnings, {warning = "Select Origins", severity = 2, group1 = "origin", group2 = "origin", order = 4, grouporder = 3});
 		end
 	end
 
@@ -833,9 +845,9 @@ function checkCompletion()
 		end
 	end
 	if not bImport then
-		if aCurBackgroundWarnings then
-			for _,vBackgroundAlerts in pairs(aCurBackgroundWarnings) do
-				table.insert(_tWarnings, {warning = StringManager.titleCase(vBackgroundAlerts .. " (BACKGROUND)"), severity = 2, group1 = "background", group2 = "background", order = 4, grouporder = 3});
+		if aCurOriginWarnings then
+			for _,vOriginAlerts in pairs(aCurOriginWarnings) do
+				table.insert(_tWarnings, {warning = StringManager.titleCase(vOriginAlerts .. " (ORIGIN)"), severity = 2, group1 = "origin", group2 = "origin", order = 4, grouporder = 3});
 			end
 		end
 		if geninv.subwindow then
@@ -906,9 +918,9 @@ function commitCharacter(identity)
 	-- Set Ability Scores
 	setAbilityScores(nodeChar)
 
-	-- Set Background Text and Link
-	if summary.subwindow.summary_background.getValue() ~= "" then
-		setBackground(nodeChar)
+	-- Set Origin Text and Link
+	if summary.subwindow.summary_origins.getValue() ~= "" then
+		setOrigins(nodeChar)
 	end
 
 	-- Set Race or Subrace Text and Link
@@ -1052,28 +1064,35 @@ function setAbilityScores(nodeChar)
 	end
 end
 
-function setBackground(nodeChar)
-	local sBackground = summary.subwindow.summary_background.getValue()
-	local sBackgroundClass, sBackgroundRecord;
+function setOrigins(nodeChar)
+	local originA, originB;
 
-	for _,v in pairs(genback.subwindow.contents.subwindow.background_window.getWindows()) do
-		if v.group_name.getValue() == "BACKGROUND" then
-			sBackgroundClass, sBackgroundRecord = v.selection_shortcut.getValue();
+	for _,v in pairs(origins) do
+		if originA then
+			originB = v.nodeSource;
 			break
+		else
+			originA = v.nodeSource;
 		end
 	end
 
-	local nodeSource = CharManager.resolveRefNode(sBackgroundRecord);
-	if not nodeSource then
-		return;
+	if originA then
+		-- Notify
+		CharManager.outputUserMessage("char_abilities_message_originadd", DB.getValue(originA, "name", ""), DB.getValue(nodeChar, "name", ""));
+
+		-- Add the name and link to the main character sheet
+		DB.setValue(nodeChar, "origin_a", "string", DB.getValue(originA, "name", ""));
+		DB.setValue(nodeChar, "origin_a_link", "windowreference", "reference_origin", originA.getPath());
 	end
 
-	-- Notify
-	CharManager.outputUserMessage("char_abilities_message_backgroundadd", DB.getValue(nodeSource, "name", ""), DB.getValue(nodeChar, "name", ""));
+	if originB then
+		-- Notify
+		CharManager.outputUserMessage("char_abilities_message_originadd", DB.getValue(originB, "name", ""), DB.getValue(nodeChar, "name", ""));
 
-	-- Add the name and link to the main character sheet
-	DB.setValue(nodeChar, "background", "string", DB.getValue(nodeSource, "name", ""));
-	DB.setValue(nodeChar, "backgroundlink", "windowreference", "reference_background", nodeSource.getPath());
+		-- Add the name and link to the main character sheet
+		DB.setValue(nodeChar, "origin_b", "string", DB.getValue(originB, "name", ""));
+		DB.setValue(nodeChar, "origin_b_link", "windowreference", "reference_origin", originB.getPath());
+	end
 end
 
 function setRaceSubRace(nodeChar)
@@ -1153,8 +1172,8 @@ function addTraits(nodeChar)
 			DB.setValue(vNew, "type", "string", "racial");
 		elseif sTraitClass == "reference_subracialtrait" then
 			DB.setValue(vNew, "type", "string", "subracial");
-		elseif sTraitClass == "reference_backgroundtrait" then
-			DB.setValue(vNew, "type", "string", "background");
+		elseif sTraitClass == "reference_origintrait" then
+			DB.setValue(vNew, "type", "string", "origin");
 		end
 
 		CharManager.outputUserMessage("char_abilities_message_traitadd", DB.getValue(vNew, "name", ""), DB.getValue(nodeChar, "name", ""));

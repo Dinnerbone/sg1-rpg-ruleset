@@ -24,7 +24,7 @@ function impCharacter(nodeChar)
 	wndWizard.name.setValue(DB.getValue(nodeChar, "name", ""));
 	wndWizard.summary.subwindow.summary_name.setValue(DB.getValue(nodeChar, "name", ""));
 	wndWizard.summary.subwindow.summary_race.setValue(StringManager.titleCase(DB.getValue(nodeChar, "race", "")));
-	wndWizard.summary.subwindow.summary_background.setValue(StringManager.titleCase(DB.getValue(nodeChar, "background", "")));
+	wndWizard.summary.subwindow.summary_origins.setValue(StringManager.titleCase(DB.getValue(nodeChar, "origin_a", "")) .. " / " .. StringManager.titleCase(DB.getValue(nodeChar, "origin_b", "")));
 	wndWizard.summary.subwindow.summary_senses.setValue(DB.getValue(nodeChar, "senses", ""));
 	wndWizard.summary.subwindow.summary_size.setValue(DB.getValue(nodeChar, "size", ""));
 
@@ -36,8 +36,8 @@ function impCharacter(nodeChar)
 	wndWizard.class_alert.setVisible(false);
 	wndWizard.class_GateCheck.setVisible(false);
 	wndWizard.charwizard_backtab.setVisible(false);
-	wndWizard.background_alert.setVisible(false);
-	wndWizard.background_GateCheck.setVisible(false);
+	wndWizard.origin_alert.setVisible(false);
+	wndWizard.origin_GateCheck.setVisible(false);
 	wndWizard.charwizard_invtab.setVisible(false);
 	wndWizard.charwizard_spelltab.setVisible(true);
 	wndWizard.charwizard_feattab.setVisible(true);
@@ -329,9 +329,9 @@ function parseSelection(wList, wSelection, sSelectionGroup, sSelectionName, bInc
 		end
 
 		CharWizardManager.getAlerts(wndSummary, wList)
-	elseif sType == "background" then
-		if sSelectionKey == "BACKGROUND" then
-			parseBackground(wSelection, wList, wndSummary, sSelectionName, nodeSource)
+	elseif sType == "origin" then
+		if sSelectionKey == "ORIGINS" then
+			parseOrigin(wSelection, wList, wndSummary, sSelectionName, nodeSource, bIncrease)
 		elseif sSelectionKey == "SKILL PROFICIENCY" then
 			parseBackgroundSkillProf(wSelection, wndSummary, sSelectionName, bIncrease, nodeSource)
 		elseif sSelectionKey == "LANGUAGES" then
@@ -354,11 +354,7 @@ function parseSelection(wList, wSelection, sSelectionGroup, sSelectionName, bInc
 			end
 		end
 
-		if sSelectionGroup:match("BACKGROUND") then
-			table.insert(wndSummary.inventory, {record = sSelectionRecord, carried = 0, count = 1, source = "background"})
-		else
-			table.insert(wndSummary.inventory, {record = sSelectionRecord, carried = 0, count = 1, source = "class"})
-		end
+		table.insert(wndSummary.inventory, {record = sSelectionRecord, carried = 0, count = 1, source = "class"})
 	elseif sType == "feat" then
 		if sSelectionGroup:match("FEAT") then
 			parseFeat(wndSummary, wList, sSelectionGroup, sSelectionName, sSelectionRecord, wSelection)
@@ -441,7 +437,7 @@ function clearSummary(wndSummary, sType, sSubType, nLevel)
 		local aNewProfList = {};
 		local sProfSummaryList = "";
 
-		if not StringManager.contains({"race", "background"}, sType:gsub("_choice", "")) then
+		if not StringManager.contains({"race", "origin"}, sType:gsub("_choice", "")) then
 			sProfSummaryList = "proficiencies_class";
 		else
 			sProfSummaryList = "proficiencies_" .. sType:gsub("_choice", "");
@@ -2587,184 +2583,57 @@ function updateFeats()
 end
 
 --
--- Background
+-- Origins
 --
 
-function parseBackground(wSelection, wList, wndSummary, sSelectionName, nodeSource)
-	CharWizardManager.closeListWindowsExcept(wList, { "BACKGROUND" });
-	CharWizardManager.onSelectionChange(wSelection, "reference_background", nodeSource.getPath());
+function parseOrigin(wSelection, wList, wndSummary, sSelectionName, nodeSource, bIncrease)
+	CharWizardManager.onSelectionChange(wSelection, "reference_origin", nodeSource.getPath());
 
-	wndSummary.summary.subwindow.summary_background.setValue(StringManager.titleCase(sSelectionName));
-	CharWizardManager.clearSummary(wndSummary, "background", "all")
-	CharWizardManager.clearSummary(wndSummary, "background_choice", "all")
+	if wSelection.selection_count.isVisible() then
+		local nCount = wSelection.selection_count.getValue();
 
-	if wndSummary.geninv.subwindow then
-		local aCloseWin = {}
+		if bIncrease then
+			table.insert(wndSummary.origins, {name = sSelectionName, nodeSource = nodeSource})
+		else
+			local oldOrigins = wndSummary.origins;
+			local origins = {};
 
-		for _,v in pairs(wndSummary.geninv.subwindow.contents.subwindow.kitlist.getWindows()) do
-			if v.group_name.getValue():match("BACKGROUND") then
-				table.insert(aCloseWin, v)
+			for _,v in pairs(oldOrigins) do
+				if v.name:lower() ~= sSelectionName:lower() then
+					table.insert(origins, v)
+				end
+			end
+
+			wndSummary.origins = origins;
+		end
+
+		CharWizardManager.clearSummary(wndSummary, "origin", "all")
+		CharWizardManager.clearSummary(wndSummary, "origin_choice", "all")
+
+		if nCount > 0 then
+			CharWizardManager.closeListWindowsExcept(wList, { "ORIGINS" });
+		end
+
+		for _, origin in pairs(wndSummary.origins) do
+			for _,v in pairs(DB.getChildren(origin.nodeSource, "features")) do
+				local wndTrait = wndSummary.summary.subwindow.summary_traits.createWindow();
+				wndTrait.name.setValue(DB.getValue(v, "name", ""));
+				wndTrait.link.setValue("reference_originfeature", v.getPath());
+				wndTrait.type.setValue("origin");
+
+				if DB.getValue(origin.nodeSource, "bonus_proficiency", "") ~= "" then
+					local aBackgroundTools, bChoice, aItemTools, nToolChoices = updateOriginProficiency(wndSummary, DB.getValue(origin.nodeSource, "bonus_proficiency", ""):lower());
+					-- if bChoice then
+					-- 	CharWizardManager.createSelectionWindows(wList, "SELECT TOOL PROFICIENCY", aItemTools, nToolChoices);
+					-- end
+				end
 			end
 		end
-
-		for _,v in pairs(aCloseWin) do
-			v.close();
-		end
-
-		local aFinalInv = {};
-		for _,v in pairs(wndSummary.inventory) do
-			if v.source ~= "background" then
-				table.insert(aFinalInv, v)
-			end
-		end
-
-		wndSummary.inventory = aFinalInv;
-		wndSummary.geninv.subwindow.contents.subwindow.kitlist.parseBackground();
-	end
-
-	if DB.getValue(nodeSource, "skill", "") ~= "" then
-		aBackgroundSkills, bChoice, aChoiceSkills, nSkillChoices = updateBackgroundSkills(wndSummary, DB.getValue(nodeSource, "skill", ""):lower());
-		if bChoice then
-			CharWizardManager.createSelectionWindows(wList, "SELECT SKILL PROFICIENCY", aChoiceSkills, nSkillChoices);
-		end
-		wndSummary.summary.subwindow.summary_skills.applySort();
-		wndSummary.updateExpertise()
-	end
-	if DB.getValue(nodeSource, "languages", "") ~= "" then
-		local aBackgroundLanguages, bChoice, aChoiceLanguages, nLanguageChoices = updateBackgroundLanguages(wndSummary, DB.getValue(nodeSource, "languages", ""):lower());
-		if bChoice then
-			CharWizardManager.createSelectionWindows(wList, "SELECT LANGUAGES", aChoiceLanguages, nLanguageChoices);
-		end
-		wndSummary.summary.subwindow.summary_languages.applySort();
-	end
-	if DB.getValue(nodeSource, "tool", "") ~= "" then
-		-- House Agent needs attention
-		local aBackgroundTools, bChoice, aItemTools, nToolChoices = updateBackgroundTools(wndSummary, DB.getValue(nodeSource, "tool", ""):lower());
-		if bChoice then
-			CharWizardManager.createSelectionWindows(wList, "SELECT TOOL PROFICIENCY", aItemTools, nToolChoices);
-		end
-	end
-
-	for _,v in pairs(DB.getChildren(nodeSource, "features")) do
-		local wndTrait = wndSummary.summary.subwindow.summary_traits.createWindow();
-		wndTrait.name.setValue(DB.getValue(v, "name", ""));
-		wndTrait.link.setValue("reference_backgroundfeature", v.getPath());
-		wndTrait.type.setValue("background");
 
 		wndSummary.summary.subwindow.summary_traits.applySort();
+		wndSummary.updateOrigins();
+		wndSummary.calcSummaryStats();
 	end
-
-	wndSummary.updateProficiencies(wndSummary);
-	wndSummary.checkFeatSpellInv();
-end
-
-function updateBackgroundSkills(wndSummary, sSkillText)
-	CharWizardManager.clearSummary(wndSummary, "background", "skills")
-
-	local aSkills = {};
-	local aBackgroundSkills = {};
-	local aChoiceSkills = {};
-	local nSkillChoices = 1;
-	local bChoice = false;
-	local bFreeSkill = false;
-	local aSelectedSkills = wndSummary.getAvailableSkills();
-
-	if sSkillText:lower():match("two") then
-		nSkillChoices = 2;
-	end
-
-	local sFreeSkill,sSkills = sSkillText:match("(.-) and one (.-) skill of your choice");
-
-	if not sSkills then
-		sFreeSkill = sSkillText:match("(.-), plus one");
-		sSkills = sSkillText:match("of your choice from among ([^.]+)");
-	end
-
-	if not sSkills then
-		sFreeSkill = sSkillText:match("(.-), plus your choice")
-		sSkills = sSkillText:match("of one from among ([^.]+)");
-	end
-
-	if not sSkills then
-		sSkills = sSkillText:match("choose two from among ([^.]+)");
-	end
-
-	if not sSkills then
-		aBackgroundSkills = StringManager.split(sSkillText, ",");
-	end
-
-	sFreeSkill = StringManager.trim(sFreeSkill);
-	if (sFreeSkill or "") ~= "" then
-		table.insert(aBackgroundSkills, sFreeSkill)
-	end
-
-	if sSkills ~= nil then
-		if sSkills:match("intelligence") then
-			for k,v in pairs(DataCommon.skilldata) do
-				if v.stat == "intelligence" or v.stat == "wisdom" or v.stat == "charisma" then
-					table.insert(aChoiceSkills, k:lower());
-				end
-			end
-		else
-			local tSkillParse = StringManager.splitByPattern(sSkills, ",");
-			for _,v in pairs(tSkillParse) do
-				v = StringManager.trim(v);
-				v = v:gsub("^and ", "");
-				if aSelectedSkills[v] then
-					table.insert(aChoiceSkills, v:lower());
-				end
-			end
-		end
-
-		bChoice = true;
-	end
-
-	for _,v in pairs(aBackgroundSkills) do
-		v = StringManager.trim(v);
-
-		if not aSelectedSkills[v:lower()] then
-			if wndSummary.genclass.subwindow then
-				local aCloseWin = {};
-
-				for _,vClass in pairs(wndSummary.genclass.subwindow.contents.subwindow.class_window.getWindows()) do
-					if vClass.group_name.getValue():lower():match("skill proficiency") then
-						for _,vSelect in pairs(vClass.selection_window.getWindows()) do
-							if vSelect.name.getValue():lower() == v:lower() then
-								if vSelect.value.getValue() == "1" then
-									vSelect.bname.onButtonPress();
-								end
-
-								table.insert(aCloseWin, vSelect);
-								vClass.selection_window.setVisible(true);
-								vClass.button_expand.setValue(1);
-							end
-						end
-					end
-				end
-
-				for _,vClose in pairs(aCloseWin) do
-					vClose.close();
-				end
-
-				CharWizardManager.getAlerts(wndSummary, wndSummary.genclass.subwindow.contents.subwindow.class_window);
-				wndSummary.updateExpertise();
-			end
-		end
-
-		local wndSkillList = wndSummary.summary.subwindow.summary_skills.createWindow();
-		wndSkillList.name.setValue(StringManager.trim(StringManager.titleCase(v)));
-		wndSkillList.type.setValue("background");
-		wndSummary.summary.subwindow.summary_skills.applySort();
-	end
-
-	aFinalChoiceSkills = {};
-	if #aChoiceSkills > 0 then
-		for _,v in pairs(aChoiceSkills) do
-			aFinalChoiceSkills[v:lower()] = { tooltip = "Select skill" };
-		end
-	end
-
-	return aBackgroundSkills, bChoice, aFinalChoiceSkills, nSkillChoices;
 end
 
 function parseBackgroundSkillProf(wSelection, wndSummary, sSelectionName, bIncrease, nodeSource)
@@ -2807,81 +2676,18 @@ function parseBackgroundSkillProf(wSelection, wndSummary, sSelectionName, bIncre
 	wndSummary.updateExpertise()
 end
 
-function updateBackgroundTools(wndSummary, sToolText, aIncomingTools)
-	CharWizardManager.clearSummary(wndSummary, "background", "proficiencies")
+function updateOriginProficiency(wndSummary, sToolText, aIncomingTools)
+	CharWizardManager.clearSummary(wndSummary, "origin", "proficiencies");
 
-	local aBackgroundTools = {};
-	local aItemTools = {};
-	local nToolChoices = 1;
-	local bChoice = false;
+	if sToolText:lower():match("choose") then
 
-	if sToolText:lower():match("two") then
-		nToolChoices = 2;
+	else
+		local wSkill = wndSummary.summary.subwindow.summary_skills.createWindow();
+
+		wSkill.name.setValue(StringManager.titleCase(sToolText:lower()));
+		wSkill.type.setValue("origin");
+		wndSummary.summary.subwindow.summary_skills.applySort();
 	end
-
-	local sTools = sToolText:match("choose two from among ([^.]+)");
-
-	if not sTools then
-		sTools = sToolText:gsub(", likely something native to your homeland", "");
-
-		if sTools:match(" or") then
-			sTools = sTools:gsub(" or", ",");
-			bChoice = true;
-		end
-	end
-
-	sTools = sTools:gsub("and", "");
-	aBackgroundTools = StringManager.split(sTools, ",");
-
-	for _,vTools in pairs(aBackgroundTools) do
-		vTools = StringManager.trim(vTools);
-
-		if vTools:match("type") or vTools:match("choice") or nToolChoices > 1 then
-			bChoice = true;
-
-			if vTools:match("thieves%'") then
-				table.insert(aItemTools, "thieves' tools");
-			end
-		end
-
-		if vTools:match("gaming") or vTools:match("musical") or vTools:match("artisan") then
-			local aToolGroups = {};
-			local sChoiceTools = vTools:match("type of (.+)");
-
-			if vTools:match("gaming") then
-				table.insert(aToolGroups, "gaming set");
-			end
-
-			if vTools:match("musical") then
-				table.insert(aToolGroups, "musical instrument");
-			end
-
-			if vTools:match("artisan") then
-				table.insert(aToolGroups, "artisan's tools");
-			end
-
-			for _,v in pairs(aToolGroups) do
-				local a = wndSummary.getToolType(v);
-
-				for _,i in pairs(a) do
-					table.insert(aItemTools, i);
-				end
-			end
-		else
-			if not bChoice then
-				wndSummary.proficiencies_background[vTools:lower()] = { type = "background", expertise = 0 };
-			end
-		end
-	end
-
-	aChoiceTools = {};
-	if #aItemTools > 0 then
-		for _,v in pairs(aItemTools) do
-			aChoiceTools[v:lower()] = { tooltip = "Select proficiency" };
-		end
-	end
-
-	return aBackgroundTools, bChoice, aChoiceTools, nToolChoices;
 end
 
 function parseBackgroundToolProf(wSelection, wndSummary, sSelectionName, bIncrease, nodeSource)
