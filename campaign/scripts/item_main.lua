@@ -58,7 +58,10 @@ function update()
 	if updateControl("weight", bReadOnly, bID) then bSection3 = true; end
 	
 	local bSection4 = false;
-	if updateControl("bonus", bReadOnly, bID and (bWeapon or bArmor or bArcaneFocus)) then bSection4 = true; end
+	if updateControl("range", bReadOnly, bID and bWeapon) then bSection4 = true; end
+	if updateControl("capacity", bReadOnly, bID and bWeapon) then bSection4 = true; end
+	if updateControl("reload", bReadOnly, bID and bWeapon) then bSection4 = true; end
+	if updateControl("damagetype", bReadOnly, bID and bWeapon) then bSection4 = true; end
 	if updateControl("damage", bReadOnly, bID and bWeapon) then bSection4 = true; end
 	
 	if updateControl("ac", bReadOnly, bID and bArmor) then bSection4 = true; end

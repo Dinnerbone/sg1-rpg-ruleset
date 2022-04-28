@@ -577,7 +577,10 @@
 	<string name="item_label_type">Type</string>
 	<string name="item_label_subtype">Subtype</string>
 	<string name="item_label_techlevel">Tech Level</string>
-	<string name="item_label_bonus">Bonus</string>
+	<string name="item_label_range">Range</string>
+	<string name="item_label_capacity">Capacity</string>
+	<string name="item_label_reload">Reload</string>
+	<string name="item_label_damagetype">Damage Type</string>
 	<string name="item_label_damage">Damage</string>
 	<string name="item_label_critical">Critical</string>
 	<string name="item_label_ac">AC Base</string>

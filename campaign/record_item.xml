@@ -110,13 +110,34 @@
 
 			<line_column name="divider3" />
 
-			<label_column name="bonus_label">
-				<static textres="item_label_bonus" />
+			<label_column name="range_label">
+				<static textres="item_label_range" />
 			</label_column>
-			<number_columnh name="bonus">
+			<string_columnh name="range">
+				<delaykeyupdate />
+			</string_columnh>
+
+			<label_column name="capacity_label">
+				<static textres="item_label_capacity" />
+			</label_column>
+			<number_columnh name="capacity">
 				<delaykeyupdate />
 				<displaysign />
 			</number_columnh>
+
+			<label_column name="reload_label">
+				<static textres="item_label_reload" />
+			</label_column>
+			<string_columnh name="reload">
+				<delaykeyupdate />
+			</string_columnh>
+
+			<label_column name="damagetype_label">
+				<static textres="item_label_damagetype" />
+			</label_column>
+			<string_columnh name="damagetype">
+				<delaykeyupdate />
+			</string_columnh>
 			
 			<label_column name="damage_label">
 				<static textres="item_label_damage" />
