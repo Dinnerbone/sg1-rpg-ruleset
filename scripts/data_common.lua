@@ -43,8 +43,8 @@ classes = {
 
 -- Values for wound comparison
 healthstatusfull = "healthy";
-healthstatushalf = "bloodied";
-healthstatuswounded = "wounded";
+healthstatushalf = "wounded";
+healthstatuswounded = "scuffed";
 
 -- Values for alignment comparison
 alignment_lawchaos = {
