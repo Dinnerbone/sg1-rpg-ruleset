@@ -155,7 +155,6 @@
 			<hsx name="senses" />
 			<hsx name="type" />
 			<hsx name="size" />
-			<hsx name="alignment" />
 			<hnx name="deathsavesuccess" />
 			<hnx name="deathsavefail">
 				<script>

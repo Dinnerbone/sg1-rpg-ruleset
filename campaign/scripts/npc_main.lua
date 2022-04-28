@@ -10,8 +10,6 @@ end
 
 function onSummaryChanged()
 	local sSize = size.getValue();
-	local sType = type.getValue();
-	local sAlign = alignment.getValue();
 	
 	local aText = {};
 	if sSize ~= "" then
@@ -21,14 +19,6 @@ function onSummaryChanged()
 		table.insert(aText, sType);
 	end
 	local sText = table.concat(aText, " ");
-
-	if sAlign ~= "" then
-		if sText ~= "" then
-			sText = sText .. ", " .. sAlign;
-		else
-			sText = sAlign;
-		end
-	end
 	
 	summary_label.setValue(sText);
 end
@@ -56,7 +46,6 @@ function update()
 
 	updateControl("size", bReadOnly, bReadOnly);
 	updateControl("type", bReadOnly, bReadOnly);
-	updateControl("alignment", bReadOnly, bReadOnly);
 	summary_label.setVisible(bReadOnly);
 	
 	ac.setReadOnly(bReadOnly);

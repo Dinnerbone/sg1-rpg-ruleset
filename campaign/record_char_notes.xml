@@ -79,15 +79,6 @@
 					<right offset="-10" />
 				</anchored>
 			</metalplate>
-			<stringu name="alignment">
-				<anchored to="detailstitle2" position="belowleft" offset="0,5" height="20">
-					<right anchor="center" offset="-5" />
-				</anchored>
-			</stringu>
-			<label_charfieldtop>
-				<anchored to="alignment" offset="0,5" />
-				<static textres="char_label_alignment" />
-			</label_charfieldtop>
 			<stringu name="deity">
 				<anchored to="detailstitle2" position="belowright" offset="0,5" height="20">
 					<left anchor="center" offset="5" />

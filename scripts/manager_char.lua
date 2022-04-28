@@ -764,9 +764,6 @@ function addTraitDB(nodeChar, sClass, sRecord)
 	elseif sTraitType == "age" then
 		return false;
 
-	elseif sTraitType == "alignment" then
-		return false;
-
 	elseif sTraitType == "size" then
 		local sSize = DB.getText(nodeSource, "text");
 		sSize = sSize:match("[Yy]our size is (%w+)");

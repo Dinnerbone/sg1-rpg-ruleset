@@ -148,7 +148,6 @@ aRaceLanguages = {
 aRaceNonParse = {
 	["age"] = "",
 	["subrace"] = "",
-	["alignment"] = "",
 	["abilityscoreincrease"] = "",
 	["abilityscoreincreases"] = "",
 }

@@ -937,16 +937,10 @@ function checkConditional(rActor, nodeEffect, aConditions, rTarget, aIgnore)
 				break;
 			end
 		else
-			local sAlignCheck = sLower:match("^align%s*%(([^)]+)%)$");
 			local sSizeCheck = sLower:match("^size%s*%(([^)]+)%)$");
 			local sTypeCheck = sLower:match("^type%s*%(([^)]+)%)$");
 			local sCustomCheck = sLower:match("^custom%s*%(([^)]+)%)$");
-			if sAlignCheck then
-				if not ActorManager5E.isAlignment(rActor, sAlignCheck) then
-					bReturn = false;
-					break;
-				end
-			elseif sSizeCheck then
+			if sSizeCheck then
 				if not ActorManager5E.isSize(rActor, sSizeCheck) then
 					bReturn = false;
 					break;

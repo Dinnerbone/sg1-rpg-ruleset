@@ -46,28 +46,6 @@ healthstatusfull = "healthy";
 healthstatushalf = "wounded";
 healthstatuswounded = "scuffed";
 
--- Values for alignment comparison
-alignment_lawchaos = {
-	["lawful"] = 1,
-	["chaotic"] = 3,
-	["lg"] = 1,
-	["ln"] = 1,
-	["le"] = 1,
-	["cg"] = 3,
-	["cn"] = 3,
-	["ce"] = 3,
-};
-alignment_goodevil = {
-	["good"] = 1,
-	["evil"] = 3,
-	["lg"] = 1,
-	["le"] = 3,
-	["ng"] = 1,
-	["ne"] = 3,
-	["cg"] = 1,
-	["ce"] = 3,
-};
-
 -- Values for size comparison
 creaturesize = {
 	["tiny"] = 1,

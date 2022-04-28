@@ -175,7 +175,6 @@ function linkPCFields()
 
 		type.setLink(nodeChar.createChild("race", "string"));
 		size.setLink(nodeChar.createChild("size", "string"));
-		alignment.setLink(nodeChar.createChild("alignment", "string"));
 		
 		strength.setLink(nodeChar.createChild("abilities.strength.score", "number"), true);
 		dexterity.setLink(nodeChar.createChild("abilities.dexterity.score", "number"), true);

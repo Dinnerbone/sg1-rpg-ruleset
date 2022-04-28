@@ -98,17 +98,6 @@
 				</script>
 			</string_columnh>
 			
-			<label_column name="alignment_label">
-				<static textres="npc_label_alignment" />
-			</label_column>
-			<string_columnh name="alignment">
-				<script>
-					function onValueChanged()
-						window.onSummaryChanged();
-					end
-				</script>
-			</string_columnh>
-			
 			<label_column name="summary_label">
 				<anchored>
 					<top relation="relative" />

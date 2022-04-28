@@ -373,7 +373,6 @@
 	<string name="char_label_notes_bonds">BONDS</string>
 	<string name="char_label_notes_flaws">FLAWS</string>
 	<string name="char_label_size">SIZE</string>
-	<string name="char_label_alignment">ALIGNMENT</string>
 	<string name="char_label_deity">DEITY</string>
 	<string name="char_label_appearance">APPEARANCE</string>
 	<string name="char_label_notes">NOTES</string>
@@ -522,7 +521,6 @@
 	<string name="npc_label_skills">Skills</string>
 	<string name="npc_label_challenge">Challenge</string>
 	<string name="npc_label_profbonus">Proficiency Bonus</string>
-	<string name="npc_label_alignment">Alignment</string>
 	<string name="npc_label_languages">Languages</string>
 	<string name="npc_label_savingthrows">Saving Throws</string>
 	<string name="npc_label_damagevulnerabilities">Damage Vuln.</string>
