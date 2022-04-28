@@ -34,7 +34,7 @@ function update()
 	local bSection = false;
 	if updateControl("type", bReadOnly, true) then bSection = true; end
 	if updateControl("subtype", bReadOnly, true) then bSection = true; end
-	if updateControl("rarity", bReadOnly, true) then bSection = true; end
+	if updateControl("techlevel", bReadOnly, true) then bSection = true; end
 	
 	local bSection2 = false;
 	if updateControl("cost", bReadOnly, true) then bSection2 = true; end

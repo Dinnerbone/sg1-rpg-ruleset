@@ -576,7 +576,7 @@
 	<string name="item_button_forge">Forge</string>
 	<string name="item_label_type">Type</string>
 	<string name="item_label_subtype">Subtype</string>
-	<string name="item_label_rarity">Rarity</string>
+	<string name="item_label_techlevel">Tech Level</string>
 	<string name="item_label_bonus">Bonus</string>
 	<string name="item_label_damage">Damage</string>
 	<string name="item_label_critical">Critical</string>

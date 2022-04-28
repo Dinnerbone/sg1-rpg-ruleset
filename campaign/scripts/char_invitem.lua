@@ -10,7 +10,7 @@ function onInit()
 
 	local node = getDatabaseNode();
 	DB.addHandler(DB.getPath(node, "isidentified"), "onUpdate", onAttuneRelatedAttributeUpdate);
-	DB.addHandler(DB.getPath(node, "rarity"), "onUpdate", onAttuneRelatedAttributeUpdate);
+	DB.addHandler(DB.getPath(node, "techlevel"), "onUpdate", onAttuneRelatedAttributeUpdate);
 	onAttuneRelatedAttributeUpdate();
 end
 
@@ -21,7 +21,7 @@ function onClose()
 
 	local node = getDatabaseNode();
 	DB.removeHandler(DB.getPath(node, "isidentified"), "onUpdate", onAttuneRelatedAttributeUpdate);
-	DB.removeHandler(DB.getPath(node, "rarity"), "onUpdate", onAttuneRelatedAttributeUpdate);
+	DB.removeHandler(DB.getPath(node, "techlevel"), "onUpdate", onAttuneRelatedAttributeUpdate);
 end
 
 function onAttuneRelatedAttributeUpdate(nodeAttribute)

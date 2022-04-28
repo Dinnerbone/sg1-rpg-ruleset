@@ -86,8 +86,8 @@ end
 --
 
 function doesItemAllowAttunement(nodeItem)
-	local sRarityLower = DB.getValue(nodeItem, "rarity", ""):lower();
-	if not sRarityLower:match("requires?%s+attunement") then
+	local sTechLevelLower = DB.getValue(nodeItem, "techlevel", ""):lower();
+	if not sTechLevelLower:match("requires?%s+attunement") then
 		return false;
 	end
 	local nIsIdentified = DB.getValue(nodeItem, "isidentified", 1);

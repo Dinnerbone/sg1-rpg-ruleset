@@ -89,10 +89,10 @@
 				</script>
 			</string_columnh>
 
-			<label_column name="rarity_label">
-				<static textres="item_label_rarity" />
+			<label_column name="techlevel_label">
+				<static textres="item_label_techlevel" />
 			</label_column>
-			<string_columnh name="rarity">
+			<string_columnh name="techlevel">
 				<delaykeyupdate />
 			</string_columnh>
 

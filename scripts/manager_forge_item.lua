@@ -6,12 +6,12 @@
 local FORGE_PATH_BASE_ITEMS = "forge.magicitem.baseitems";
 local FORGE_PATH_TEMPLATES = "forge.magicitem.templates";
 
-local RARITY_UNKNOWN = 1;
-local RARITY_COMMON = 2;
-local RARITY_UNCOMMON = 3;
-local RARITY_RARE = 4;
-local RARITY_VERY_RARE = 5;
-local RARITY_LEGENDARY = 6;
+local TECH_LEVEL_PRIMITIVE = 0;
+local TECH_LEVEL_EARLY = 1;
+local TECH_LEVEL_DATA = 2;
+local TECH_LEVEL_SPACE = 3;
+local TECH_LEVEL_ADVANCED = 4;
+local TECH_LEVEL_WONDEROUS = 5;
 
 local items = {};
 local templates = {};
@@ -79,7 +79,7 @@ end
 function getDisplayType(node)
 	local sIcon = "";
 	
-	local bMagicItem = (DB.getValue(node, "rarity", "") ~= "");
+	local bMagicItem = (DB.getValue(node, "techlevel", "") ~= "");
 
 	local sTypeLower = StringManager.trim(DB.getValue(node, "type", ""):lower());
 	if StringManager.contains({"armor", "weapon", "tool"}, sTypeLower) then
@@ -230,9 +230,9 @@ function createMagicItem()
 				rMagicItem.sProperties = table.concat(aProperties, ", ");
 			end
 		               
-			-- Rarity Adjustment
-			if getItemRarityValue(rMagicItem.sRarity) < getItemRarityValue(rTemplate.sRarity) then
-				rMagicItem.sRarity = rTemplate.sRarity;
+			-- TechLevel Adjustment
+			if getItemTechLevelValue(rMagicItem.sTechLevel) < getItemTechLevelValue(rTemplate.sTechLevel) then
+				rMagicItem.sTechLevel = rTemplate.sTechLevel;
 			end
 		
 			-- Bonus Adjustment
@@ -382,7 +382,7 @@ function createMagicItem()
 		-- Cost Adjustment
 		local sCost = rMagicItem.sCost:match("(%d+)%s[c|s|e|g|p]p");
 		if sCost then
-			rMagicItem.sCost = getMagicItemValue(sCost, rMagicItem.sRarity);
+			rMagicItem.sCost = getMagicItemValue(sCost, rMagicItem.sTechLevel);
 		end
 
 		-- Now that we've built the item, add it to the campaign
@@ -404,21 +404,23 @@ function getItemDescBonus(sDesc)
 	return tonumber(sBonus) or 0;
 end
 
-function getItemRarityValue(sRarity)
-	local sRarityLower = (sRarity or ""):lower();
+function getItemTechLevelValue(sTechLevel)
+	local sTechLevelLower = (sTechLevel or ""):lower();
 	
-	local nResult = RARITY_UNKNOWN;
-	if sRarityLower:match("legendary") then
-		nResult = RARITY_LEGENDARY;
-	elseif sRarityLower:match("very rare") then
-		nResult = RARITY_VERY_RARE;
-	elseif sRarityLower:match("rare") then
-		nResult = RARITY_RARE;
-	elseif sRarityLower:match("uncommon") then
-		nResult = RARITY_UNCOMMON;
-	elseif sRarityLower:match("common") then
-		nResult = RARITY_COMMON;
-	end	
+	local nResult = TECH_LEVEL_PRIMITIVE;
+	if sTechLevelLower:match("primitive") then
+		nResult = TECH_LEVEL_PRIMITIVE;
+	elseif sTechLevelLower:match("early") then
+		nResult = TECH_LEVEL_EARLY;
+	elseif sTechLevelLower:match("data") then
+		nResult = TECH_LEVEL_DATA;
+	elseif sTechLevelLower:match("space") then
+		nResult = TECH_LEVEL_SPACE;
+	elseif sTechLevelLower:match("advanced") then
+		nResult = TECH_LEVEL_ADVANCED;
+	elseif sTechLevelLower:match("wonderous") then
+		nResult = TECH_LEVEL_WONDEROUS;
+	end
 	
 	return nResult;
 end
@@ -436,7 +438,7 @@ end
 -- 		sStealth
 -- 		sDamage
 -- 		sProperties
---		sRarity	
+--		sTechLevel	
 --		sSpells;
 
 function getItemStats(node)
@@ -448,7 +450,7 @@ function getItemStats(node)
 	rItemRecord.sCost = DB.getValue(node, "cost", "");
 	rItemRecord.sDescription = DB.getValue(node, "description", "");
 	rItemRecord.nWeight = DB.getValue(node, "weight", 0);
-	rItemRecord.sRarity = DB.getValue(node, "rarity", "");
+	rItemRecord.sTechLevel = DB.getValue(node, "techlevel", "");
 
 	local aSpells = {};
 	for _,v in pairs(DB.getChildren(node, "spells")) do
@@ -489,24 +491,26 @@ function getItemStats(node)
 	return rItemRecord;
 end
 
-function getMagicItemValue(sCost, sRarity) 
-	if sRarity == "" then
+function getMagicItemValue(sCost, sTechLevel) 
+	if sTechLevel == "" then
 		return sCost .. " gp";
 	end
 	
 	local nValue = 0;
 	
-	local nRarity = getItemRarityValue(sRarity);
-	if nRarity == RARITY_LEGENDARY then
+	local nTechLevel = getItemTechLevelValue(sTechLevel);
+	if nTechLevel == TECH_LEVEL_WONDEROUS then
 		nValue = math.random(50001, 100000);
-	elseif nRarity == RARITY_VERY_RARE then
+	elseif nTechLevel == TECH_LEVEL_ADVANCED then
 		nValue = math.random(5001, 50000);
-	elseif nRarity == RARITY_RARE then
+	elseif nTechLevel == TECH_LEVEL_SPACE then
 		nValue = math.random(501, 5000);
-	elseif nRarity == RARITY_UNCOMMON then
+	elseif nTechLevel == TECH_LEVEL_DATA then
 		nValue = math.random(101, 500);
-	elseif nRarity == RARITY_COMMON then
+	elseif nTechLevel == TECH_LEVEL_EARLY then
 		nValue = math.random(50, 100);
+	elseif nTechLevel == TECH_LEVEL_PRIMITIVE then
+		nValue = math.random(5, 10);
 	end
 
 	nValue = nValue + (tonumber(sCost) or 0);
@@ -533,7 +537,7 @@ function addMagicItemToCampaign(rMagicItem)
 	DB.setValue(nodeTarget, "name", "string", rMagicItem.sName);
 	DB.setValue(nodeTarget, "type", "string", rMagicItem.sType);
 	DB.setValue(nodeTarget, "subtype", "string", rMagicItem.sSubType);
-	DB.setValue(nodeTarget, "rarity", "string", rMagicItem.sRarity);
+	DB.setValue(nodeTarget, "techlevel", "string", rMagicItem.sTechLevel);
 	DB.setValue(nodeTarget, "weight", "number", rMagicItem.nWeight);
 	DB.setValue(nodeTarget, "cost", "string", rMagicItem.sCost);
 	DB.setValue(nodeTarget, "description", "formattedtext", rMagicItem.sDescription);

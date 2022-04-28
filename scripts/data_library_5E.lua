@@ -35,8 +35,8 @@ function getNPCTypeValue(vNode)
 	return v;
 end
 
-function getItemRarityValue(vNode)
-	local v = StringManager.trim(DB.getValue(vNode, "rarity", ""));
+function getItemTechLevelValue(vNode)
+	local v = StringManager.trim(DB.getValue(vNode, "techlevel", ""));
 	local sType = v:match("^[^(]+");
 	if sType then
 		v = StringManager.trim(sType);
@@ -46,7 +46,7 @@ function getItemRarityValue(vNode)
 end
 
 function getItemAttunementValue(vNode)
-	local v = StringManager.trim(DB.getValue(vNode, "rarity", "")):lower();
+	local v = StringManager.trim(DB.getValue(vNode, "techlevel", "")):lower();
 	if v:match("%(requires attunement") then
 		return LibraryData.sFilterValueYes;
 	end
@@ -125,8 +125,7 @@ aRecordOverrides = {
 		aPlayerListButtons = { "button_item_armor", "button_item_weapons" },
 		aCustomFilters = {
 			["Type"] = { sField = "type" },
-			["Rarity"] = { sField = "rarity", fGetValue = getItemRarityValue },
-			["Attunement?"] = { sField = "rarity", fGetValue = getItemAttunementValue },
+			["Tech Level"] = { sField = "techlevel", fGetValue = getItemTechLevelValue },
 		},
 	},
 	

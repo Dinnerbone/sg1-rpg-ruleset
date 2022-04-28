@@ -8,8 +8,10 @@ function onInit()
 	
 	local sType = DB.getValue(node, "type", "");
 	local sSubType = DB.getValue(node, "subtype", "");
-	local sRarity = DB.getValue(node, "rarity", "");
+	local sTechLevel = DB.getValue(node, "techlevel", "");
 	local nTemplate = DB.getValue(node, "istemplate", 0);
+	Debug.console(node);
+	Debug.console(sTechLevel);
 
 	local aValues = {};
 
@@ -23,8 +25,8 @@ function onInit()
 		sType = sType .. "(" .. sSubType .. ")";
 	end
 	table.insert(aValues, sType);
-	if sRarity ~= "" then
-		table.insert(aValues, sRarity);
+	if sTechLevel ~= "" then
+		table.insert(aValues, sTechLevel);
 	end
 
 	setValue(table.concat(aValues, ", "));
