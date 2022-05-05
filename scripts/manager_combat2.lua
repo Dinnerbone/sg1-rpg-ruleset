@@ -150,10 +150,12 @@ function addNPC(sClass, nodeNPC, sName)
 	end
 	DB.setValue(nodeEntry, "hptotal", "number", nHP);
 	
-	-- Set initiative from Dexterity modifier
+	-- Set initiative from Dexterity or Wisdom modifier
 	local nDex = DB.getValue(nodeNPC, "abilities.dexterity.score", 10);
 	local nDexMod = math.floor((nDex - 10) / 2);
-	DB.setValue(nodeEntry, "init", "number", nDexMod);
+	local nWis = DB.getValue(nodeNPC, "abilities.dexterity.score", 10);
+	local nWisMod = math.floor((nDex - 10) / 2);
+	DB.setValue(nodeEntry, "init", "number", math.max(nDexMod, nWisMod));
 	
 	-- Track additional damage types and intrinsic effects
 	local aEffects = {};

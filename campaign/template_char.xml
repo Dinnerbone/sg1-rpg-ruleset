@@ -433,8 +433,16 @@
 			<modifiersize>mini</modifiersize>
 			<modifierfield>initiative.temporary</modifierfield>
 			<source><name>initiative.misc</name><op>+</op></source>
-			<source><name>abilities.dexterity.bonus</name><op>+</op></source>
 			<script>
+				function onInit()
+					super.onInit();
+					DB.addHandler(DB.getPath(window.getDatabaseNode(), "abilities"), "onChildUpdate", onSourceUpdate);
+				end
+				
+				function onClose()
+					DB.removeHandler(DB.getPath(window.getDatabaseNode(), "abilities"), "onChildUpdate", onSourceUpdate);
+				end
+
 				function action(draginfo)
 					local rActor = ActorManager.resolveActor(window.getDatabaseNode());
 					ActionInit.performRoll(draginfo, rActor);
@@ -447,6 +455,58 @@
 					
 				function onDoubleClick(x,y)
 					return action();
+				end
+				
+				function onSourceUpdate()
+					local rActor = ActorManager.resolveActor(window.getDatabaseNode());
+					
+					local dexBonus = ActorManager5E.getAbilityBonus(rActor, "dexterity");
+					local wisBonus = ActorManager5E.getAbilityBonus(rActor, "wisdom");
+
+					setValue(calculateSources() + math.max(dexBonus, wisBonus));
+				end
+			</script>
+		</number_chartotal>
+	</template>
+	<template name="number_charmoxie">
+		<number_chartotal>
+			<font>reference-b-large</font>
+			<rollable />
+			<displaysign />
+			<modifiersize>mini</modifiersize>
+			<modifierfield>moxie.temporary</modifierfield>
+			<source><name>moxie.misc</name><op>+</op></source>
+			<script>
+				function onInit()
+					super.onInit();
+					DB.addHandler(DB.getPath(window.getDatabaseNode(), "abilities"), "onChildUpdate", onSourceUpdate);
+				end
+				
+				function onClose()
+					DB.removeHandler(DB.getPath(window.getDatabaseNode(), "abilities"), "onChildUpdate", onSourceUpdate);
+				end
+
+				function action(draginfo)
+					local rActor = ActorManager.resolveActor(window.getDatabaseNode());
+					ActionInit.performRoll(draginfo, rActor);
+					return true;
+				end
+				
+				function onDragStart(button, x, y, draginfo)
+					return action(draginfo);
+				end
+					
+				function onDoubleClick(x,y)
+					return action();
+				end
+				
+				function onSourceUpdate()
+					local rActor = ActorManager.resolveActor(window.getDatabaseNode());
+					
+					local intBonus = ActorManager5E.getAbilityBonus(rActor, "intelligence");
+					local chaBonus = ActorManager5E.getAbilityBonus(rActor, "charisma");
+
+					setValue(calculateSources() + math.max(intBonus, chaBonus));
 				end
 			</script>
 		</number_chartotal>

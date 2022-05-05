@@ -528,7 +528,7 @@
 			<number_chartotalac name="ac" source="defenses.ac.total">
 				<anchored to="combattitle" width="30" height="40">
 					<top anchor="bottom" offset="10" />
-					<left anchor="center" offset="-70" />
+					<left anchor="center" offset="-90" />
 				</anchored>
 				<frame name="acicon" offset="2,0,2,4" />
 			</number_chartotalac>
@@ -542,15 +542,22 @@
 			<number_charinit name="initiative" source="initiative.total">
 				<anchored to="combattitle" width="40" height="30">
 					<top anchor="bottom" relation="relative" offset="15" />
-					<left anchor="center" offset="-20" />
+					<left anchor="center" offset="-40" />
 				</anchored>
 			</number_charinit>
 			<label_charfieldtop>
 				<anchored to="initiative" offset="0,15" />
 				<static textres="char_label_initiative" />
 			</label_charfieldtop>
-			<number_charspeed name="speed" source="speed.total">
+			<number_charmoxie name="moxie" source="moxie.total">
 				<anchored to="initiative" position="righthigh" offset="20,0" width="40" height="30" />
+			</number_charmoxie>
+			<label_charfieldtop>
+				<anchored to="moxie" offset="0,15" />
+				<static textres="char_label_moxie" />
+			</label_charfieldtop>
+			<number_charspeed name="speed" source="speed.total">
+				<anchored to="moxie" position="righthigh" offset="20,0" width="40" height="30" />
 			</number_charspeed>
 			<label_charfieldtop>
 				<anchored to="speed" offset="0,15" />
