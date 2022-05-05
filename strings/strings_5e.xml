@@ -213,6 +213,7 @@
 	<string name="char_label_classlevel">CLASS &amp; LEVEL</string>
 	<string name="char_button_levelup">LVL UP</string>
 	<string name="char_tooltip_levelup">Open Character Wizard and Level Up this Character</string>	
+	<string name="char_label_determination">DET</string>
 	<string name="char_label_profbonus">PROF</string>
 	<string name="char_label_origins">ORIGINS</string>
 	<string name="char_label_race">RACE</string>

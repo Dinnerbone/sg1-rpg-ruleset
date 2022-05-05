@@ -129,7 +129,29 @@ function rest(nodeChar, bLong)
 	CharManager.resetHealth(nodeChar, bLong);
 	if bLong then
 		CombatManager2.reduceExhaustion(ActorManager.getCTNode(nodeChar));
+		CharManager.resetDetermination(nodeChar);
 	end
+end
+
+function resetDetermination(nodeChar, bLong)
+	local result = DB.getValue(nodeChar, "profbonus", 0);
+	for _,vClass in pairs(DB.getChildren(nodeChar, "classes")) do
+		local sClassRef, sClassRecord = DB.getValue(vClass, "shortcut", "");
+		local classNode = DB.findNode(sClassRecord);
+		local dp = DB.getText(classNode, "determinationpoints");
+		if dp then
+			local sign, amount = dp:match("([%+%-–]?)%s*(%d+)");
+			if amount then
+				amount = tonumber(amount) or 0;
+				if sign == "-" or sign == "–" then
+					amount = 0 - amount;
+				end
+				result = result + amount;
+			end
+		end
+	end
+
+	DB.setValue(nodeChar, "determination", "number", result);
 end
 
 function resetHealth(nodeChar, bLong)
