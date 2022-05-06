@@ -122,7 +122,6 @@
 			</label_column>
 			<number_columnh name="capacity">
 				<delaykeyupdate />
-				<displaysign />
 			</number_columnh>
 
 			<label_column name="reload_label">

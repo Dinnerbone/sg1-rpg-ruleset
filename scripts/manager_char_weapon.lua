@@ -3,7 +3,8 @@
 -- attribution and copyright information.
 --
 
-WEAPON_TYPE_RANGED = "ranged";
+WEAPON_TYPE_RANGED = {"bow", "crossbow", "sling", "chain gun", "flamethrower", "grenade launcher", "rpg", "sidearm", "shotgun", "ma’tok", "zat’nik’tel"};
+WEAPON_TYPE_THROWN = {};
 
 WEAPON_PROP_AMMUNITION = "ammunition";
 WEAPON_PROP_CRITRANGE = "crit range %(?(%d+)%)?";
@@ -13,7 +14,6 @@ WEAPON_PROP_LIGHT = "light";
 WEAPON_PROP_MAGIC = "magic";
 WEAPON_PROP_REACH = "reach";
 WEAPON_PROP_REROLL = "reroll %(?(%d+)%)?";
-WEAPON_PROP_THROWN = "thrown";
 WEAPON_PROP_TWOHANDED = "two-handed";
 WEAPON_PROP_VERSATILE = "versatile %(?%d?(d%d+)%)?";
 
@@ -66,13 +66,13 @@ function addToWeaponDB(nodeItem)
 	-- Handle special weapon properties
 	local sProps = DB.getValue(nodeItem, "properties", "");
 	
-	local bThrown = checkProperty(sProps, WEAPON_PROP_THROWN);
 	local bMagic = checkProperty(sProps, WEAPON_PROP_MAGIC);
 	
 	local sType = DB.getValue(nodeItem, "subtype", ""):lower();
+	local bThrown = StringManager.contains(WEAPON_TYPE_THROWN, sType);
 	local bMelee = true;
 	local bRanged = false;
-	if sType:find(WEAPON_TYPE_RANGED) then
+	if StringManager.contains(WEAPON_TYPE_RANGED, sType) then
 		bMelee = false;
 		bRanged = true;
 	end
@@ -164,6 +164,8 @@ function addToWeaponDB(nodeItem)
 
 			DB.setValue(nodeWeapon, "attackstat", "string", sAttackAbility);
 			DB.setValue(nodeWeapon, "attackbonus", "number", nBonus);
+
+			DB.setValue(nodeWeapon, "maxammo", "number", DB.getValue(nodeItem, "capacity", 0));
 
 			local nodeDmgList = DB.createChild(nodeWeapon, "damagelist");
 			if nodeDmgList then
